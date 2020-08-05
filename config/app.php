@@ -15,6 +15,10 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'compFName' => 'Cititrust',
+    'compLName' => 'Holdings',
+    'compName' => 'Cititrust Holdings PLC',
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
