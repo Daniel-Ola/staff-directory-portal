@@ -61,8 +61,6 @@ class HomeController extends Controller
         $data = array_merge($data, ['dp' => $dp]);
         $updateDetails = User::where('id', Auth::user()->id)->update($data);
         return back();
-        // assets/media/avatars/avatar15.jpg
-        // {"_token":"KSxmkru8tqJRpGDbAmBScV2lPBtV5SovkEyWDhN8","email":"dolanrewaju@cititrustholdings.com","firstname":"Daniel","lastname":"Olanrewaju","phone":"08167500725","designation":"Dev","subsidiary":"Holdings","dp":{}}
     }
 
     public function getProfile(Request $request) {
@@ -72,16 +70,17 @@ class HomeController extends Controller
     }
 
     public function updateProfile(Request $request) {
-        return $request;
+        // return $request;
         $id = $request->id;
-        $data = $request->except(['id', '_token']);
+        $data = $request->except(['id', '_token', 'name']);
         $data = array_merge($data, ['updated_by' => Auth::user()->id]);
         User::find($id)->update($data);
         return User::find($id);
     }
 
-    public function deleteUser(Request $request) {
-        $id = null;
-        User::find($id);
+    public function deleteProfile(Request $request) {
+        $id = $request->id;
+        User::find($id)->delete();
+        return true;
     }
 }

@@ -18,35 +18,35 @@
                                 </button>
                                 <div class="dropdown-menu min-width-300" aria-labelledby="page-header-options-dropdown">
                                     <h5 class="h6 text-center py-10 mb-10 border-b text-uppercase">Settings</h5>
-                                    <h6 class="dropdown-header">Color Themes</h6>
-                                    <div class="row no-gutters text-center mb-5">
+                                    <h6 class="dropdown-header d-none">Color Themes</h6>
+                                    <div class="row no-gutters text-center mb-5 d-none">
                                         <div class="col-2 mb-5">
                                             <a class="text-default" data-toggle="theme" data-theme="default" href="javascript:void(0)">
                                                 <i class="fa fa-2x fa-circle"></i>
                                             </a>
                                         </div>
                                         <div class="col-2 mb-5">
-                                            <a class="text-elegance" data-toggle="theme" data-theme="assets/css/themes/elegance.min.css" href="javascript:void(0)">
+                                            <a class="text-elegance" data-toggle="theme" data-theme="{{ asset('assets/css/themes/elegance.min.css') }}" href="javascript:void(0)">
                                                 <i class="fa fa-2x fa-circle"></i>
                                             </a>
                                         </div>
                                         <div class="col-2 mb-5">
-                                            <a class="text-pulse" data-toggle="theme" data-theme="assets/css/themes/pulse.min.css" href="javascript:void(0)">
+                                            <a class="text-pulse" data-toggle="theme" data-theme="{{ asset('assets/css/themes/pulse.min.css') }}" href="javascript:void(0)">
                                                 <i class="fa fa-2x fa-circle"></i>
                                             </a>
                                         </div>
                                         <div class="col-2 mb-5">
-                                            <a class="text-flat" data-toggle="theme" data-theme="assets/css/themes/flat.min.css" href="javascript:void(0)">
+                                            <a class="text-flat" data-toggle="theme" data-theme="{{ asset('assets/css/themes/flat.min.css') }}" href="javascript:void(0)">
                                                 <i class="fa fa-2x fa-circle"></i>
                                             </a>
                                         </div>
                                         <div class="col-2 mb-5">
-                                            <a class="text-corporate" data-toggle="theme" data-theme="assets/css/themes/corporate.min.css" href="javascript:void(0)">
+                                            <a class="text-corporate" data-toggle="theme" data-theme="{{ asset('assets/css/themes/corporate.min.c') }}ss" href="javascript:void(0)">
                                                 <i class="fa fa-2x fa-circle"></i>
                                             </a>
                                         </div>
                                         <div class="col-2 mb-5">
-                                            <a class="text-earth" data-toggle="theme" data-theme="assets/css/themes/earth.min.css" href="javascript:void(0)">
+                                            <a class="text-earth" data-toggle="theme" data-theme="{{ asset('assets/css/themes/earth.min.css') }}" href="javascript:void(0)">
                                                 <i class="fa fa-2x fa-circle"></i>
                                             </a>
                                         </div>
@@ -73,19 +73,7 @@
                                         <h6 class="dropdown-header">Main Content</h6>
                                         <button type="button" class="btn btn-sm btn-block btn-alt-secondary mb-10" data-toggle="layout" data-action="content_layout_toggle">Toggle Layout</button>
                                     </div>
-                                    <div class="dropdown-divider"></div>
-                                    <div class="row gutters-tiny text-center">
-                                        <div class="col-6">
-                                            <a class="dropdown-item mb-0" href="be_layout_api.html">
-                                                <i class="si si-chemistry mr-5"></i> Layout API
-                                            </a>
-                                        </div>
-                                        <div class="col-6">
-                                            <a class="dropdown-item mb-0" href="be_ui_color_themes.html">
-                                                <i class="fa fa-paint-brush mr-5"></i> Color Themes
-                                            </a>
-                                        </div>
-                                    </div>
+                                    {{-- <div class="dropdown-divider"></div> --}}
                                 </div>
                             </div>
                             <!-- END Layout Options -->
@@ -103,7 +91,7 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right min-width-200" aria-labelledby="page-header-user-dropdown">
                                     <h5 class="h6 text-center py-10 mb-5 border-b text-uppercase">User</h5>
-                                    <a class="dropdown-item" href="be_pages_generic_profile.html">
+                                    <a class="dropdown-item" href="{{ route('profile.view') }}">
                                         <i class="si si-user mr-5"></i> Profile
                                     </a>    
             
@@ -122,9 +110,9 @@
             
                             <!-- Toggle Side Overlay -->
                             <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-                            <button type="button" class="btn btn-circle btn-dual-secondary" data-toggle="layout" data-action="side_overlay_toggle">
+                            {{-- <button type="button" class="btn btn-circle btn-dual-secondary" data-toggle="layout" data-action="side_overlay_toggle">
                                 <i class="fa fa-tasks"></i>
-                            </button>
+                            </button> --}}
                             <!-- END Toggle Side Overlay -->
                         </div>
                         <!-- END Right Section -->

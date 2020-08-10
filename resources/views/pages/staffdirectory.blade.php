@@ -23,7 +23,9 @@
                             <th class="d-none d-sm-table-cell">Designation</th>
                             <th class="d-none d-sm-table-cell">Subsidiary</th>
                             <th class="text-center" style="width: 15%;">Profile</th>
-                            <th class="text-center" style="width: 15%;">Action</th>
+                            @if (Auth::user()->access == '1')
+                                <th class="text-center" style="width: 15%;">Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -34,7 +36,7 @@
                     @php
                         $count ++;
                     @endphp
-                        <tr>
+                        <tr id="user{{ $staff->id }}">
                             <form id="editUser{{$count}}" method="post">
                                 {{-- <input type="hidden" value="" name="_token"> --}}
                             <td class="text-center">
@@ -42,41 +44,43 @@
                                 <input type="hidden" class="form-control editable" value="{{ $staff->id }}" name="id" readonly form="editUser{{$count}}">
                             </td>
                             <td class="font-w600">
-                                <span id="name{{ $count }}" class="noEdit output{{ $count }}" inId="#inputId{{ $count }}" in=".input{{ $count }}" out=".output{{ $count }}">{{ $staff->firstname.' '.$staff->lastname }}</span>
+                                <span id="name{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->firstname.' '.$staff->lastname }}</span>
                                 <input type="text" class="form-control editable input{{ $count }}" value="{{ $staff->firstname.' '.$staff->lastname }}" readonly name="name" style="display: none;" form="editUser{{$count}}">
                             </td>
                             <td class="d-none d-sm-table-cell">
-                                <span id="email{{ $count }}" class="noEdit output{{ $count }}" inId="#inputId{{ $count }}" in=".input{{ $count }}" out=".output{{ $count }}">{{ $staff->email }}</span>
+                                <span id="email{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->email }}</span>
                                 <input type="text" id="inputId{{ $count }}" class="form-control editable input{{ $count }}" value="{{ $staff->email }}" name="email" style="display: none;" form="editUser{{$count}}">
                             </td>
                             <td class="d-none d-sm-table-cell">
-                                <span id="phone{{ $count }}" class="noEdit output{{ $count }}" inId="#inputId{{ $count }}" in=".input{{ $count }}" out=".output{{ $count }}">{{ $staff->phone }}</span>
+                                <span id="phone{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->phone }}</span>
                                 <input type="text" class="form-control editable input{{ $count }}" value="{{ $staff->phone }}" name="phone" style="display: none;" form="editUser{{$count}}">
                             </td>
                             <td class="d-none d-sm-table-cell">
-                                <span id="desig{{ $count }}" class="noEdit output{{ $count }}" inId="#inputId{{ $count }}" in=".input{{ $count }}" out=".output{{ $count }}">{{ $staff->designation ?? 'Staff' }}</span>
+                                <span id="desig{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->designation ?? 'Staff' }}</span>
                                 <input type="text" class="form-control editable input{{ $count }}" value="{{ $staff->designation }}" name="designation" style="display: none;" form="editUser{{$count}}">
                             </td>
                             <td class="d-none d-sm-table-cell">
-                                <span id="sub{{ $count }}" class="noEdit output{{ $count }}" in=".input{{ $count }}" out=".output{{ $count }}">{{ $staff->subsidiary ?? 'CFS Group' }}</span>
+                                <span id="sub{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->subsidiary ?? 'CFS Group' }}</span>
                                 <input type="text" class="form-control editable input{{ $count }}" value="{{ $staff->subsidiary }}" name="subsidiary" style="display: none;" form="editUser{{$count}}">
                             </td>
                             <td class="text-center">
                                 <button type="button" class="btn btn-sm btn-secondary fetchProfile" user="{{ $staff->id }}" title="View Profile">
-                                     {{-- data-toggle="modal" data-target="#myModal" --}}
                                     <i class="fa fa-user"></i>
                                 </button>
                             </td>
-                            <td class="text-center">
-                                <button type="submit" form="editUser{{ $count }}" class="btn btn-sm btn-primary updateProfile m-1" count="{{ $count }}" title="Update Profile">
-                                     {{-- data-toggle="modal" data-target="#myModal" --}}
-                                    <i class="fa fa-save"></i>
+                            @if (Auth::user()->access == '1')
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-sm btn-primary noEdit m-1" inId="#inputId{{ $count }}" in=".input{{ $count }}" out=".output{{ $count }}" count="{{ $count }}" title="Edit Profile">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button type="submit" form="editUser{{ $count }}" class="btn btn-sm btn-primary updateProfile m-1" count="{{ $count }}" title="Update Profile">
+                                        <i class="fa fa-save"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger deleteProfile m-1" user="{{ $staff->id }}" title="Delete User" remove="#user{{ $staff->id }}">
+                                    <i class="fa fa-trash"></i>
                                 </button>
-                                <button type="submit" form="editUser{{ $count }}" class="btn btn-sm btn-danger deleteProfile m-1" user="{{ $staff->id }}" title="Delete Profile">
-                                    {{-- data-toggle="modal" data-target="#myModal" --}}
-                                   <i class="fa fa-trash"></i>
-                               </button>
-                            </td>
+                                </td>
+                            @endif
                             </form>
                         </tr>
                     @endforeach

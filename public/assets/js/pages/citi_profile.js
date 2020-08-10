@@ -97,40 +97,77 @@ $(function() {
 
      // profile update function
      $(document).on('click', '.updateProfile', function(e){
+        e.preventDefault();
+       let btn = $(this);
+       let count = btn.attr('count');
+       let form = $('#'+btn.attr('form'));
+       let id = form.find('input[name="id"]').val();
+       let spin = '<i class="fa fa-spin fa-cog"></i>';
+       let save = '<i class="fa fa-save"></i>';
+       let url = '/updateProfile';
+       let token = $("meta[name='csrf-token']").attr('content');
+       let data = form.serializeFormJSON();
+       data._token = token;
+       console.log(data);
+       $(this).html(spin);
+       $.post(url, data).done(function(data){
+           email = data.email;
+           phone = data.phone ? data.phone : '' ;
+           sub = data.subsidiary ? data.subsidiary : '';
+           desig = data.designation ? data.designation : '';
+           $('#email'+count).text(email);
+           $('#sub'+count).text(sub);
+           $('#desig'+count).text(desig);
+           $('#phone'+count).text(phone);
+           btn.html(save);
+       });
+   });
+
+     // profile delete function
+     $(document).on('click', '.deleteProfile', function(e){
          e.preventDefault();
-        let btn = $(this);
-        let count = btn.attr('count');
-        let form = $('#'+btn.attr('form'));
-        let id = form.find('input[name="id"]').val();
-        let spin = '<i class="fa fa-spin fa-cog"></i>';
-        let save = '<i class="fa fa-save"></i>';
-        let url = '/updateProfile';
-        let token = $("meta[name='csrf-token']").attr('content');
-        let data = form.serializeFormJSON();
-        data._token = token;
-        console.log(data);
-        $(this).html(spin);
-        $.post(url, data).done(function(data){
-            email = data.email;
-            phone = data.phone ? data.phone : '' ;
-            sub = data.subsidiary ? data.subsidiary : '';
-            desig = data.designation ? data.designation : '';
-            $('#email'+count).text(email);
-            $('#sub'+count).text(sub);
-            $('#desig'+count).text(desig);
-            $('#phone'+count).text(phone);
-            btn.html(save);
-        });
+        let ask = confirm('This user will be deleted permanently. Do you still want to continue?');
+        if(ask == true) {
+            let btn = $(this);
+            let count = btn.attr('count');
+            let id = $(this).attr('user');
+            let form = $('#'+btn.attr('form'));
+            let spin = '<i class="fa fa-spin fa-cog"></i>';
+            let del = '<i class="fa fa-trash"></i>';
+            let url = '/deleteProfile';
+            let token = $("meta[name='csrf-token']").attr('content');
+            let data = form.serializeFormJSON();
+            data._token = token;
+            console.log(data);
+            $(this).html(spin);
+            $.post(url, {
+                'id': id,
+                '_token': token
+            }).done(function(data){
+                $(btn.attr('remove')).remove();
+                btn.html(del);
+            });
+
+        }
     });
 
-    $(document).on('dblclick', '.noEdit', function(e) {
+    $(document).on('click', '.noEdit', function(e) {
         let td = $(this);
+        // td.hasClass('fa-pencil')
+        //     ?
+        //         td.removeClass
+        //     :
+        //         $(inId).focus();
+        let fa = td.find('i.fa');
+        fa.toggleClass('fa-times');
+        fa.toggleClass('fa-pencil');
         let input = td.attr('in');
         let output = td.attr('out');
         $(input).toggle();
         $(output).toggle();
         let inId = td.attr('inId');
-        $(inId).focus();
+        fa.hasClass('fa-pencil') ? $(inId).blur() : $(inId).focus();
+        // $(inId).focus();
         // console.log(input+' '+output);
     });
 

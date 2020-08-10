@@ -24,9 +24,9 @@
 
                 <!-- Logo -->
                 <div class="content-header-item">
-                    <a class="link-effect font-w700" href="index.html">
-                        <i class="si si-fire text-primary"></i>
-                        <span class="font-size-xl text-dual-primary-dark">code</span><span class="font-size-xl text-primary">base</span>
+                    <a class="link-effect font-w700" href="{{ route('home') }}">
+                        <i class="si si-trophy text-primary"></i>
+                        <span class="font-size-xl text-dual-primary-dark">Cititrust</span><span class="font-size-xl text-danger" style="color: #c10;">Holdings</span>
                     </a>
                 </div>
                 <!-- END Logo -->

@@ -12,7 +12,7 @@
                         <div class="hero-static col-md-6 col-xl-8 d-none d-md-flex align-items-md-end">
                             <div class="p-30 invisible" data-toggle="appear">
                                 <p class="font-size-h3 font-w600 text-white">
-                                    CITITRUST GROUP STAFF DIRECTORY
+                                    {{ env('APP_NAME') }}
                                 </p>
                                 <p class="font-italic text-white-op">
                                     Copyright &copy; <span class="js-year-copy"></span>
@@ -75,6 +75,9 @@
                                             <i class="si si-login mr-10"></i> Sign In
                                         </button>
                                         <div class="mt-30">
+                                            <a class="btn btn-link" href="{{ route('password.request') }}">
+                                                {{ __('First Login?') }}
+                                            </a><span style="color: #c10;">|</span>
                                             @if (Route::has('password.request'))
                                                 <a class="btn btn-link" href="{{ route('password.request') }}">
                                                     {{ __('Forgot Your Password?') }}
@@ -143,7 +146,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
@@ -156,6 +158,7 @@
                                     </a>
                                 @endif
                             </div>
+                            
                         </div>
                     </form>
                 </div>

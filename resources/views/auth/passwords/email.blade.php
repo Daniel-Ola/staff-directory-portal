@@ -12,7 +12,7 @@
                         <div class="hero-static col-md-6 col-xl-8 d-none d-md-flex align-items-md-end">
                             <div class="p-30 invisible" data-toggle="appear">
                                 <p class="font-size-h3 font-w600 text-white">
-                                    CITITRUST GROUP STAFF DIRECTORY
+                                    {{ env('APP_NAME') }}
                                 </p>
                                 <p class="font-italic text-white-op">
                                     Copyright &copy; <span class="js-year-copy"></span>

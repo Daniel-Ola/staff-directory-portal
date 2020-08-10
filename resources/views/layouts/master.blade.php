@@ -10,22 +10,22 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('_assets/bootstrap/css/bootstrap.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('_assets/bootstrap/css/bootstrap.min.css') }}"> --}}
     {{-- <!-- <link rel="stylesheet" href="{{ asset('_assets/fonts/ionicons.min.css') }}"> --> --}}
     <link rel="stylesheet" href="{{ asset('assets/css/codebase.min.css') }}">
     {{-- <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --> --}}
     
     @if (Request::segment('1') == 'staffs' && Request::segment('2') == 'view')
-    <link rel="stylesheet" href="{{ asset('assets/js/plugins/datatables/dataTables.bootstrap4.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/citi_profile.css') }}">
-@endif
+        {{-- <link rel="stylesheet" href="{{ asset('assets/js/plugins/datatables/dataTables.bootstrap4.css') }}"> --}}
+        <link rel="stylesheet" href="{{ asset('assets/css/citi_profile.css') }}">
+    @endif
 </head>
 <body>
     <div id="app">
@@ -67,8 +67,8 @@
     </div>
 </body>
 
-    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script> --}}
 
     <script src="{{ asset('assets/js/codebase.core.min.js') }}"></script>
 
@@ -81,11 +81,15 @@
         <script src="{{ asset('assets/js/codebase.app.min.js') }}"></script>
 
         <!-- Page JS Plugins -->
-        <script src="{{ asset('assets/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
+        {{-- <script src="{{ asset('assets/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
 
         <!-- Page JS Code -->
-        <script src="{{ asset('assets/js/pages/op_auth_signin.min.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/op_auth_signin.min.js') }}"></script> --}}
         
+
+        <!-- Page JS Helpers (Table Tools helper) -->
+        <script>jQuery(function(){ Codebase.helpers('table-tools'); });</script>
+
         @if (Request::segment('1') == 'staffs' && Request::segment('2') == 'view')
             <script src="{{ asset('assets/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
             <script src="{{ asset('assets/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>

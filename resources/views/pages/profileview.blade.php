@@ -39,7 +39,7 @@
 
         <!-- Colleagues -->
         <h2 class="content-heading">
-            <a href="{{ route('staffs.view') }}" class="btn btn-sm btn-rounded btn-alt-secondary float-right">View More..</a>
+            {{-- <a href="{{ route('staffs.view') }}" class="btn btn-sm btn-rounded btn-alt-secondary float-right">View More..</a> --}}
             <i class="si si-users mr-5"></i> Colleagues
         </h2>
         <div class="row items-push">

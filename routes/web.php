@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +15,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return redirect() //view('welcome');
+    if (Auth::check()) {
+        return redirect('home');
+    } else {
+        return redirect('login');
+    }
 });
 
 Route::get('/auth-login/with-phone', function(){ return 'hello phone'; })->name('auth.phone');
@@ -35,3 +41,5 @@ Route::group(['prefix' => 'staffs'], function () {
 Route::post('getProfile', 'HomeController@getProfile')->name('get.profile');
 
 Route::post('updateProfile', 'HomeController@updateProfile')->name('up.profile');
+
+Route::post('deleteProfile', 'HomeController@deleteProfile')->name('del.profile');

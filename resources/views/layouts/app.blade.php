@@ -17,8 +17,8 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('_assets/bootstrap/css/bootstrap.min.css') }}">
-    <!-- <link rel="stylesheet" href="{{ asset('_assets/fonts/ionicons.min.css') }}"> -->
+    <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
+    <!-- <link rel="stylesheet" href="{{ asset('assets/fonts/ionicons.min.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('assets/css/codebase.min.css') }}">
     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
 </head>
@@ -51,4 +51,6 @@
         <script src="{{ asset('assets/js/pages/op_auth_signin.min.js') }}"></script>
         <script src="{{ asset('assets/js/custom.js') }}"></script>
 
+        <!-- Page JS Helpers (Table Tools helper) -->
+        <script>jQuery(function(){ Codebase.helpers('table-tools'); });</script>
 </html>
