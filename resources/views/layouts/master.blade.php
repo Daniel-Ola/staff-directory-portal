@@ -17,13 +17,9 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    {{-- <link rel="stylesheet" href="{{ asset('_assets/bootstrap/css/bootstrap.min.css') }}"> --}}
-    {{-- <!-- <link rel="stylesheet" href="{{ asset('_assets/fonts/ionicons.min.css') }}"> --> --}}
     <link rel="stylesheet" href="{{ asset('assets/css/codebase.min.css') }}">
-    {{-- <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --> --}}
     
     @if (Request::segment('1') == 'staffs' && Request::segment('2') == 'view')
-        {{-- <link rel="stylesheet" href="{{ asset('assets/js/plugins/datatables/dataTables.bootstrap4.css') }}"> --}}
         <link rel="stylesheet" href="{{ asset('assets/css/citi_profile.css') }}">
     @endif
 </head>
