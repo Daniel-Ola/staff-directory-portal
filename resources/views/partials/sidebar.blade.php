@@ -24,9 +24,8 @@
 
                 <!-- Logo -->
                 <div class="content-header-item">
-                    <a class="link-effect font-w700" href="{{ route('home') }}">
-                        <i class="si si-trophy text-primary"></i>
-                        <span class="font-size-xl text-dual-primary-dark">Cititrust</span><span class="font-size-xl text-danger" style="color: #c10;">Holdings</span>
+                    <a class="font-w700" href="{{ route('home') }}">
+                        <img src="{{ asset('assets/media/citi_assets/logo.png') }}" alt="CITITRUST" class="img-fluid" />
                     </a>
                 </div>
                 <!-- END Logo -->
@@ -45,12 +44,12 @@
 
             <!-- Visible only in normal mode -->
             <div class="sidebar-mini-hidden-b text-center">
-                <a class="img-link" href="be_pages_generic_profile.html">
+                <a class="img-link" href="/profile/view">
                     <img class="img-avatar" src="{{ asset('assets/media/avatars/avatar15.jpg') }}" alt="">
                 </a>
                 <ul class="list-inline mt-10">
                     <li class="list-inline-item">
-                        <a class="link-effect text-dual-primary-dark font-size-sm font-w600 text-uppercase" href="be_pages_generic_profile.html">{{ substr(Auth::user()->firstname, 0, 1) }}. {{ Auth::user()->lastname }}</a>
+                        <a class="link-effect text-dual-primary-dark font-size-sm font-w600 text-uppercase" href="/profile/view">{{ substr(Auth::user()->firstname, 0, 1) }}. {{ Auth::user()->lastname }}</a>
                     </li>
                     <li class="list-inline-item">
                         <!-- Layout API, functionality initialized in Template._uiApiLayout() -->

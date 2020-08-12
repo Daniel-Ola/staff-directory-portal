@@ -24,17 +24,31 @@
                                 <!-- Header -->
                                 <div class="px-30 py-10">
                                     <a class="link-effect font-w700" href="index.html">
-                                        <i class="si si-trophy"></i>
-                                        <span class="font-size-xl text-primary-dark">{{ config('app.compFName') }}</span><span class="font-size-xl text-danger" style="color: #c10 !important;">{{ config('app.compLName') }}</span>
+                                        <!--<i class="si si-trophy"></i>-->
+                                        <div style="margin-bottom: 5px;">
+                                            <img src="{{ asset('assets/media/citi_assets/logo.png') }}" alt="CITITRUST" class="img-fluid" />
+                                        </div>
+                                        
+                                        
                                     </a>
-                                    <h1 class="h3 font-w700 mt-30 mb-10">Don’t worry, we’ve got your back</h1>
-                                    <h2 class="h5 font-w400 text-muted mb-0">Please enter your email</h2>
+                                    <div>
+                                    @if (session('status'))
+                                        <div class="alert alert-success" role="alert">
+                                            {{ session('status') }}
+                                        </div>
+                                    @else
+                                        <!--<h1 class="h3 font-w700 mt-30 mb-10">Don’t worry, we’ve got your back</h1>-->
+                                        <h2 class="h5 font-w400 text-muted mb-0">Please enter your email to continue</h2>
+                                    @endif
+                                    </div>
+                                    
                                 </div
 >                                <!-- END Header -->
 
                                 <!-- Sign In Form -->
                                 <!-- jQuery Validation functionality is initialized with .js-validation-signin class in js/pages/op_auth_signin.min.js which was auto compiled from _es6/pages/op_auth_signin.js -->
                                 <!-- For more examples you can check out https://github.com/jzaefferer/jquery-validation -->
+                                @if (!session('status'))
                                 <form class="js-validation-reminder px-30" method="POST" action="{{ route('password.email') }}">
                                     @csrf
                                     <div class="form-group row">
@@ -59,6 +73,7 @@
                                         </div>
                                     </div>
                                 </form>
+                                @endif
                                 <!-- END Sign In Form -->
                             </div>
                         </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Gufy\PdfToHtml\Pdf;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -82,5 +83,12 @@ class HomeController extends Controller
         $id = $request->id;
         User::find($id)->delete();
         return true;
+    }
+
+    public function pdfhtml() {
+        // return view('pages.pdf');
+        $file = 'http://localhost:8000/assets/book/User_Download_21072020_222331.pdf';
+        $pdf = new Pdf($file);
+        return $pdf->html();
     }
 }

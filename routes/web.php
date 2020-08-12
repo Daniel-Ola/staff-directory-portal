@@ -43,3 +43,5 @@ Route::post('getProfile', 'HomeController@getProfile')->name('get.profile');
 Route::post('updateProfile', 'HomeController@updateProfile')->name('up.profile');
 
 Route::post('deleteProfile', 'HomeController@deleteProfile')->name('del.profile');
+
+Route::get('pdf', 'HomeController@pdfhtml')->name('pdf.html');

@@ -16,6 +16,10 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
+    <link rel="icon" href="{{ asset('assets/media/citi_assets/favicon-192x192.png') }}" sizes="192x192" />
+<link rel="apple-touch-icon" href="{{ asset('assets/media/citi_assets/apple-touch-icon-180x180.png') }}" />
+<meta name="msapplication-TileImage" content="{{ asset('assets/media/citi_assets/favicon.png') }}" />
+
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('assets/css/codebase.min.css') }}">
     
@@ -63,18 +67,30 @@
     </div>
 </body>
 
-    {{-- <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script> --}}
 
-    <script src="{{ asset('assets/js/codebase.core.min.js') }}"></script>
+<script src="{{ asset('assets/js/codebase.core.min.js') }}"></script>
 
-        <!--
-            Codebase JS
+<!--
+    Codebase JS
+    
+    Custom functionality including Blocks/Layout API as well as other vital and optional helpers
+    webpack is putting everything together at assets/_es6/main/app.js
+-->
+<script src="{{ asset('assets/js/codebase.app.min.js') }}"></script>
+<script src="{{ asset('assets/js/pdfobject.js') }}"></script>
 
-            Custom functionality including Blocks/Layout API as well as other vital and optional helpers
-            webpack is putting everything together at assets/_es6/main/app.js
-        -->
-        <script src="{{ asset('assets/js/codebase.app.min.js') }}"></script>
+<script>PDFObject.embed("http://localhost:8000/assets/book/User_Download_21072020_222331.pdf", "#pdfRendered");</script>
+
+{{-- <script>
+    var pdf = new PDFObject({
+        url: "http://localhost:8000/assets/book/User_Download_21072020_222331.pdf",
+        id: "pdfRendered",
+        pdfOpenParams: {
+            view: "FitH"
+        }
+    }).embed("pdfRenderer");
+</script> --}}
 
         <!-- Page JS Plugins -->
         {{-- <script src="{{ asset('assets/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
