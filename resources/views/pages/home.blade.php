@@ -1,3 +1,6 @@
+@php
+    use Carbon\Carbon;
+@endphp
 @extends('layouts.master')
 
 @section('content')
@@ -95,146 +98,31 @@
                         <!-- Checkable Table (.js-table-checkable class is initialized in Helpers.tableToolsCheckable()) -->
                         <table class="js-table-checkable table table-hover table-vcenter">
                             <tbody>
+                            @forelse ($anns as $ann)
+                                @php
+                                    $brief = substr($ann->details, 0, 50).'...';
+                                    $rawDate = Carbon::parse($ann->created_at);
+                                    $date = $rawDate->toFormattedDateString();
+                                @endphp
                                 <tr>
                                     <td class="text-center d-none" style="width: 40px;">
-                                        <label class="css-control css-control-primary css-checkbox">
+                                        <label class="css-control css-control-primary css-checkboxs">
                                             <input type="checkbox" class="css-control-input">
                                             <span class="css-control-indicator"></span>
                                         </label>
                                     </td>
-                                    <td class="d-none d-sm-table-cell font-w600" style="width: 140px;">Laura Carr</td>
+                                    <td class="font-w600" style="width: 140px;">{{ $ann->firstname.' '.$ann->lastname }}</td>
                                     <td>
-                                        <a class="font-w600" data-toggle="modal" data-target="#modal-message" href="#">Welcome to our service</a>
-                                        <div class="text-muted mt-5">It's a pleasure to have you on our service..</div>
+                                        <a class="font-w600" data-toggle="modal" data-target="#modal-message{{ $ann->id }}" href="#">{{ $ann->subject }}</a>
+                                        <div class="text-muted mt-5">{{ $brief }}</div>
                                     </td>
-                                    <td class="d-none d-xl-table-cell font-w600 font-size-sm text-muted" style="width: 120px;">WED</td>
+                                    <td class="d-none d-xl-table-cell font-w600 font-size-sm text-muted" style="width: 120px;">{{ $date }}</td>
                                 </tr>
+                            @empty
                                 <tr>
-                                    <td class="text-center d-none">
-                                        <label class="css-control css-control-primary css-checkbox">
-                                            <input type="checkbox" class="css-control-input">
-                                            <span class="css-control-indicator"></span>
-                                        </label>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell font-w600">Lisa Jenkins</td>
-                                    <td>
-                                        <a class="font-w600" data-toggle="modal" data-target="#modal-message" href="#">Your subscription was updated</a>
-                                        <div class="text-muted mt-5">We are glad you decided to go with a vip..</div>
-                                    </td>
-                                    <td class="d-none d-xl-table-cell font-w600 font-size-sm text-muted">WED</td>
+                                    <td>No announcement</td>
                                 </tr>
-                                <tr>
-                                    <td class="text-center d-none">
-                                        <label class="css-control css-control-primary css-checkbox">
-                                            <input type="checkbox" class="css-control-input">
-                                            <span class="css-control-indicator"></span>
-                                        </label>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell font-w600">Brian Stevens</td>
-                                    <td>
-                                        <a class="font-w600" data-toggle="modal" data-target="#modal-message" href="#">Update is available</a>
-                                        <div class="text-muted mt-5">An update is under way for your app..</div>
-                                    </td>
-                                    <td class="d-none d-xl-table-cell font-w600 font-size-sm text-muted">FRI</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center d-none">
-                                        <label class="css-control css-control-primary css-checkbox">
-                                            <input type="checkbox" class="css-control-input">
-                                            <span class="css-control-indicator"></span>
-                                        </label>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell font-w600">Brian Cruz</td>
-                                    <td>
-                                        <a class="font-w600" data-toggle="modal" data-target="#modal-message" href="#">New Sale!</a>
-                                        <div class="text-muted mt-5">You had a new sale and earned..</div>
-                                    </td>
-                                    <td class="d-none d-xl-table-cell font-w600 font-size-sm text-muted">THU</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center d-none">
-                                        <label class="css-control css-control-primary css-checkbox">
-                                            <input type="checkbox" class="css-control-input">
-                                            <span class="css-control-indicator"></span>
-                                        </label>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell font-w600">Jack Estrada</td>
-                                    <td>
-                                        <a class="font-w600" data-toggle="modal" data-target="#modal-message" href="#">Action Required for your account!</a>
-                                        <div class="text-muted mt-5">Your account is inactive for a long time and..</div>
-                                    </td>
-                                    <td class="d-none d-xl-table-cell font-w600 font-size-sm text-muted">MON</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center d-none">
-                                        <label class="css-control css-control-primary css-checkbox">
-                                            <input type="checkbox" class="css-control-input">
-                                            <span class="css-control-indicator"></span>
-                                        </label>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell font-w600">Lori Moore</td>
-                                    <td>
-                                        <a class="font-w600" data-toggle="modal" data-target="#modal-message" href="#">New Photo Pack!</a>
-                                        <div class="text-muted mt-5">Our new photo pack is available now! You..</div>
-                                    </td>
-                                    <td class="d-none d-xl-table-cell font-w600 font-size-sm text-muted">MON</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center d-none">
-                                        <label class="css-control css-control-primary css-checkbox">
-                                            <input type="checkbox" class="css-control-input">
-                                            <span class="css-control-indicator"></span>
-                                        </label>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell font-w600">Alice Moore</td>
-                                    <td>
-                                        <a class="font-w600" data-toggle="modal" data-target="#modal-message" href="#">Product is released!</a>
-                                        <div class="text-muted mt-5">This is a notification about our new product..</div>
-                                    </td>
-                                    <td class="d-none d-xl-table-cell font-w600 font-size-sm text-muted">TUE</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center d-none">
-                                        <label class="css-control css-control-primary css-checkbox">
-                                            <input type="checkbox" class="css-control-input">
-                                            <span class="css-control-indicator"></span>
-                                        </label>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell font-w600">Barbara Scott</td>
-                                    <td>
-                                        <a class="font-w600" data-toggle="modal" data-target="#modal-message" href="#">Now on Sale!</a>
-                                        <div class="text-muted mt-5">Our Book is out! You can buy a copy and..</div>
-                                    </td>
-                                    <td class="d-none d-xl-table-cell font-w600 font-size-sm text-muted">WED</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center d-none">
-                                        <label class="css-control css-control-primary css-checkbox">
-                                            <input type="checkbox" class="css-control-input">
-                                            <span class="css-control-indicator"></span>
-                                        </label>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell font-w600">Lisa Jenkins</td>
-                                    <td>
-                                        <a class="font-w600" data-toggle="modal" data-target="#modal-message" href="#">Monthly Report</a>
-                                        <div class="text-muted mt-5">The monthly report you requested for..</div>
-                                    </td>
-                                    <td class="d-none d-xl-table-cell font-w600 font-size-sm text-muted">SAT</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center d-none">
-                                        <label class="css-control css-control-primary css-checkbox">
-                                            <input type="checkbox" class="css-control-input">
-                                            <span class="css-control-indicator"></span>
-                                        </label>
-                                    </td>
-                                    <td class="d-none d-sm-table-cell font-w600">Helen Jacobs</td>
-                                    <td>
-                                        <a class="font-w600" data-toggle="modal" data-target="#modal-message" href="#">Trial Started!</a>
-                                        <div class="text-muted mt-5">You 30-day trial has now started and..</div>
-                                    </td>
-                                    <td class="d-none d-xl-table-cell font-w600 font-size-sm text-muted">SUN</td>
-                                </tr>
+                            @endforelse
                             </tbody>
                         </table>
                         <!-- END Messages -->
@@ -243,7 +131,16 @@
                 <!-- END Message List -->
             </div>
             <div class="col-md-5 col-xl-3">
-                <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal-book">View Handbook</button>
+                @forelse ($pols as $pol)
+                    <a class="btn btn-primary btn-lg" href="{{ asset($pol->path) }}">{{ $pol->title }}</a>
+                @empty
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <strong>Stay tuned for our handbooks</strong> 
+                    </div>
+                @endforelse
             </div>
         </div>
     </div>
@@ -252,6 +149,5 @@
 
 
 @include('modals.news')
-@include('modals.book')
 
 @endsection

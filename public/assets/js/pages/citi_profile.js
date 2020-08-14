@@ -80,18 +80,6 @@ $(function() {
             return o;
         };
     })(jQuery);
-    
-    // $('form').submit(function (e) {
-    //     e.preventDefault();
-    //     var data = $(this).serializeFormJSON();
-    //     console.log(data);
-    
-    //     /* Object
-    //         email: "value"
-    //         name: "value"
-    //         password: "value"
-    //      */
-    // });
 
 
 
@@ -171,8 +159,55 @@ $(function() {
         // console.log(input+' '+output);
     });
 
-    // $(document).on('blur', '.form-control', function(e) {
-    //     $('.editable').hide();
-    //     $('.noEdit').show();
-    // });
+    let doc = $(document);
+
+    doc.on('click', '.deleteAnn', function(e) {
+        const form = $(this);
+        const formId = '#'+form.attr('form');
+        const question = form.attr('subject')+ "\r\n\r\nDo you really want to delete this anouncement?\r\nYou cannot undo this action.";
+        let ask = confirm(question);
+        if(ask) {
+            $(formId).submit();
+        } else {
+            e.preventDefault();
+        }
+    });
+
+    doc.on('click', '.deleteAnn', function(e) {
+        const form = $(this);
+        const formId = '#'+form.attr('form');
+        const question = form.attr('subject')+ "\r\n\r\nDo you really want to delete this anouncement?\r\nYou cannot undo this action.";
+        let ask = confirm(question);
+        if(ask) {
+            $(formId).submit();
+        } else {
+            e.preventDefault();
+        }
+    });
+
+    doc.on('click', '.deletePol', function(e) {
+        const form = $(this);
+        const formId = '#'+form.attr('form');
+        const question = form.attr('subject')+ "\r\n\r\nDo you really want to delete this policy?\r\nYou cannot undo this action.";
+        let ask = confirm(question);
+        if(ask) {
+            $(formId).submit();
+        } else {
+            e.preventDefault();
+        }
+    });
+
+    doc.on('click', '.removeRole', function(e) {
+        const form = $(this);
+        const formId = '#'+form.attr('form');
+        const user = form.attr('user');
+        let ask = confirm('Remove '+ user+ ' from admin list?\r\nYou can set it back later');
+        if(ask) {
+            $(formId).submit();
+        } else {
+            e.preventDefault();
+        }
+    });
+
+// end of document.ready
 });

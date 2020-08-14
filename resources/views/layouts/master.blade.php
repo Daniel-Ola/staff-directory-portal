@@ -67,46 +67,17 @@
     </div>
 </body>
 
-{{-- <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script> --}}
 
 <script src="{{ asset('assets/js/codebase.core.min.js') }}"></script>
-
-<!--
-    Codebase JS
-    
-    Custom functionality including Blocks/Layout API as well as other vital and optional helpers
-    webpack is putting everything together at assets/_es6/main/app.js
--->
 <script src="{{ asset('assets/js/codebase.app.min.js') }}"></script>
-<script src="{{ asset('assets/js/pdfobject.js') }}"></script>
+<script src="{{ asset('assets/js/pages/citi_profile.js') }}"></script>
 
-<script>PDFObject.embed("http://localhost:8000/assets/book/User_Download_21072020_222331.pdf", "#pdfRendered");</script>
-
-{{-- <script>
-    var pdf = new PDFObject({
-        url: "http://localhost:8000/assets/book/User_Download_21072020_222331.pdf",
-        id: "pdfRendered",
-        pdfOpenParams: {
-            view: "FitH"
-        }
-    }).embed("pdfRenderer");
-</script> --}}
-
-        <!-- Page JS Plugins -->
-        {{-- <script src="{{ asset('assets/js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
-
-        <!-- Page JS Code -->
-        <script src="{{ asset('assets/js/pages/op_auth_signin.min.js') }}"></script> --}}
-        
-
-        <!-- Page JS Helpers (Table Tools helper) -->
         <script>jQuery(function(){ Codebase.helpers('table-tools'); });</script>
 
         @if (Request::segment('1') == 'staffs' && Request::segment('2') == 'view')
             <script src="{{ asset('assets/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
             <script src="{{ asset('assets/js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
             <script src="{{ asset('assets/js/pages/be_tables_datatables.min.js') }}"></script>
-            <script src="{{ asset('assets/js/pages/citi_profile.js') }}"></script>
         @endif
 
 </html>

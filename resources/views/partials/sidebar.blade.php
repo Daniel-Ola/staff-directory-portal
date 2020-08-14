@@ -1,3 +1,6 @@
+@php
+    $access = Auth::user()->access;
+@endphp
 <nav id="sidebar">
     <!-- Sidebar Content -->
     <div class="sidebar-content">
@@ -77,22 +80,54 @@
         <div class="content-side content-side-full">
             <ul class="nav-main">
                 <li>
-                    <a href="/home"><i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span></a>
+                    <a href="/"><i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span></a>
                 </li>
                 <li>
-                    <a href="/staffs/view"><i class="si si-cup"></i><span class="sidebar-mini-hide">Staff Directory</span></a>
+                    <a href="{{ route('staffs.view') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Staff Directory</span></a>
                 </li>
+            @if ($access == '1')
+                <li>
+                    <a href="{{ route('staffs.add') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Add User</span></a>
+                </li>
+                <li>
+                    <a href="{{ route('pol.view') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Policy</span></a>
+                </li>
+                <li>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Admin</span></a>
+                    <ul>
+                        <li>
+                            <a class="" data-toggle="" href="{{ route('admin.add') }}"><span class="sidebar-mini-hide">Add new</span></a>
+                        </li>
+                        <li>
+                            <a class="" data-toggle="" href="{{ route('admin.manage') }}"><span class="sidebar-mini-hide">Manage Admins</span></a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
                 <li>
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Profile</span></a>
                     <ul>
                         <li>
-                            <a class="" data-toggle="" href="/profile/view"><span class="sidebar-mini-hide">View</span></a>
+                            <a class="" data-toggle="" href="{{ route('profile.view') }}"><span class="sidebar-mini-hide">View</span></a>
                         </li>
                         <li>
-                            <a class="" data-toggle="" href="/profile/edit"><span class="sidebar-mini-hide">Edit</span></a>
+                            <a class="" data-toggle="" href="{{ route('profile.edit') }}"><span class="sidebar-mini-hide">Edit</span></a>
                         </li>
                     </ul>
                 </li>
+            @if ($access == '2' || $access == '1')
+                <li>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Announcements</span></a>
+                    <ul>
+                        <li>
+                            <a class="" data-toggle="" href="{{ route('ann.create') }}"><span class="sidebar-mini-hide">Add new</span></a>
+                        </li>
+                        <li>
+                            <a class="" data-toggle="" href="{{ route('ann.manage') }}"><span class="sidebar-mini-hide">Manage</span></a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
             </ul>
         </div>
         <!-- END Side Navigation -->

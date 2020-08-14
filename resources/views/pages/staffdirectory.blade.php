@@ -13,15 +13,15 @@
             </div>
             <div class="block-content block-content-full">
                 <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
-                <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
+                <table class="table table-responsive table-bordered table-striped table-vcenter js-dataTable-full">
                     <thead>
                         <tr>
                             <th class="text-center"></th>
                             <th>Name</th>
-                            <th class="d-none d-sm-table-cell">Email</th>
-                            <th class="d-none d-sm-table-cell">Phone Number</th>
-                            <th class="d-none d-sm-table-cell">Designation</th>
-                            <th class="d-none d-sm-table-cell">Subsidiary</th>
+                            <th>Email</th>
+                            <th>Phone Number</th>
+                            <th>Designation</th>
+                            <th>Subsidiary</th>
                             <th class="text-center" style="width: 15%;">Profile</th>
                             @if (Auth::user()->access == '1')
                                 <th class="text-center" style="width: 15%;">Action</th>
@@ -47,19 +47,19 @@
                                 <span id="name{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->firstname.' '.$staff->lastname }}</span>
                                 <input type="text" class="form-control editable input{{ $count }}" value="{{ $staff->firstname.' '.$staff->lastname }}" readonly name="name" style="display: none;" form="editUser{{$count}}">
                             </td>
-                            <td class="d-none d-sm-table-cell">
+                            <td class="">
                                 <span id="email{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->email }}</span>
                                 <input type="text" id="inputId{{ $count }}" class="form-control editable input{{ $count }}" value="{{ $staff->email }}" name="email" style="display: none;" form="editUser{{$count}}">
                             </td>
-                            <td class="d-none d-sm-table-cell">
+                            <td class="">
                                 <span id="phone{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->phone }}</span>
                                 <input type="text" class="form-control editable input{{ $count }}" value="{{ $staff->phone }}" name="phone" style="display: none;" form="editUser{{$count}}">
                             </td>
-                            <td class="d-none d-sm-table-cell">
+                            <td class="">
                                 <span id="desig{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->designation ?? 'Staff' }}</span>
                                 <input type="text" class="form-control editable input{{ $count }}" value="{{ $staff->designation }}" name="designation" style="display: none;" form="editUser{{$count}}">
                             </td>
-                            <td class="d-none d-sm-table-cell">
+                            <td class="">
                                 <span id="sub{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->subsidiary ?? 'CFS Group' }}</span>
                                 <input type="text" class="form-control editable input{{ $count }}" value="{{ $staff->subsidiary }}" name="subsidiary" style="display: none;" form="editUser{{$count}}">
                             </td>
@@ -134,15 +134,6 @@
                             <a class="mc-btn-action">
                                 <i class="fa fa-bars"></i>
                             </a>
-                            <div class="mc-footer d-none">
-                                <h4>
-                                    Social
-                                </h4>
-                                <a target=_parent href="https://www.wpdownloadmanager.com/" class="fa fa-fw fa-facebook"></a>
-                                <a target=_parent href="https://www.wpdownloadmanager.com/"  class="fa fa-fw fa-twitter"></a>
-                                <a target=_parent href="https://www.wpdownloadmanager.com/"  class="fa fa-fw fa-linkedin"></a>
-                                <a target=_parent href="https://www.wpdownloadmanager.com/"  class="fa fa-fw fa-google-plus"></a>
-                            </div>
                         </article>
                     </div>
                     
