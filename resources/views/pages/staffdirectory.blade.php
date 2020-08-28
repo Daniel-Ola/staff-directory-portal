@@ -56,13 +56,36 @@
                                 <input type="text" class="form-control editable input{{ $count }}" value="{{ $staff->phone }}" name="phone" style="display: none;" form="editUser{{$count}}">
                             </td>
                             <td class="">
-                                <span id="desig{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->designation ?? 'Staff' }}</span>
-                                <input type="text" class="form-control editable input{{ $count }}" value="{{ $staff->designation }}" name="designation" style="display: none;" form="editUser{{$count}}">
+
+
+
+                                <span id="desig{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->desname }}</span>
+                                <select id="profile-desig-edit{{ $count }}" class="form-control editable input{{ $count }} selectable" required style="display: none;">
+                                    <option value="0" selected>Select One</option>
+                                    @foreach ($desigs as $desig)
+                                        <option value="{{ $desig->id }}">{{ $desig->name }}</option>
+                                    @endforeach
+                                </select>
+                                <input type="hidden" id="profile-settings-desig{{ $count }}" value="{{ $staff->designation ?? '0' }}" name="designation" form="editUser{{$count}}">
+
+
+                                
                             </td>
                             <td class="">
-                                <span id="sub{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->subsidiary ?? 'CFS Group' }}</span>
-                                <input type="text" class="form-control editable input{{ $count }}" value="{{ $staff->subsidiary }}" name="subsidiary" style="display: none;" form="editUser{{$count}}">
+
+
+                                <span id="sub{{ $count }}" class="noEdit output{{ $count }}">{{ $staff->subname }}</span>
+                                <select id="profile-sub-edit{{ $count }}" class="form-control editable input{{ $count }} selectable" required style="display: none;" form="editUser{{$count}}">
+                                    <option value="0" selected>Select One</option>
+                                    @foreach ($subs as $sub)
+                                        <option value="{{ $sub->id }}">{{ $sub->name }}</option>
+                                    @endforeach
+                                </select>
+                                <input type="hidden" id="profile-settings-sub{{ $count }}" value="{{ $staff->subsidiary ?? '0' }}" name="subsidiary" form="editUser{{$count}}">
+
+
                             </td>
+
                             <td class="text-center">
                                 <button type="button" class="btn btn-sm btn-secondary fetchProfile" user="{{ $staff->id }}" title="View Profile">
                                     <i class="fa fa-user"></i>
@@ -70,10 +93,25 @@
                             </td>
                             @if (Auth::user()->access == '1')
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-sm btn-primary noEdit m-1" inId="#inputId{{ $count }}" in=".input{{ $count }}" out=".output{{ $count }}" count="{{ $count }}" title="Edit Profile">
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-primary noEditBtn m-1"
+                                        inId="#inputId{{ $count }}"
+                                        in=".input{{ $count }}"
+                                        out=".output{{ $count }}"
+                                        count="{{ $count }}"
+                                        select1="#profile-sub-edit{{ $count }}"
+                                        select2="#profile-settings-sub{{ $count }}"
+                                        deselect1="#profile-desig-edit{{ $count }}"
+                                        deselect2="#profile-settings-desig{{ $count }}"
+                                        title="Edit Profile">
+                                        {{--  --}}
                                         <i class="fa fa-pencil"></i>
+                                        {{--  --}}
                                     </button>
-                                    <button type="submit" form="editUser{{ $count }}" class="btn btn-sm btn-primary updateProfile m-1" count="{{ $count }}" title="Update Profile">
+                                    <button type="submit" style="display: none;" form="editUser{{ $count }}" class="btn btn-sm btn-primary updateProfile m-1" count="{{ $count }}" title="Update Profile"
+                                    in=".input{{ $count }}"
+                                    out=".output{{ $count }}" >
                                         <i class="fa fa-save"></i>
                                     </button>
                                     <button type="button" class="btn btn-sm btn-danger deleteProfile m-1" user="{{ $staff->id }}" title="Delete User" remove="#user{{ $staff->id }}">
@@ -162,3 +200,9 @@
 
 </main>
 @endsection
+
+<script>
+    function setVal(select, input) {
+        console.log(select);
+    }
+</script>

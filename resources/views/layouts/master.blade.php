@@ -22,10 +22,50 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('assets/css/codebase.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/themes/pulse.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/mdb.min.css') }}"> --}}
     
     @if (Request::segment('1') == 'staffs' && Request::segment('2') == 'view')
         <link rel="stylesheet" href="{{ asset('assets/css/citi_profile.css') }}">
     @endif
+
+    <style>
+        /* #sidebar {
+            background-image: url('https://via.placeholder.com/200x1000/bb0903/FFF?text=CITITRUST') center center no-repeat;
+            background-size: cover;
+            color: white !important;
+            -webkit-box-shadow: 1px 0 10px 1px #d23 !important;
+            box-shadow: 1px 0 10px 1px #d23 !important;
+            border-top-right-radius: 100px;
+            border-bottom-right-radius: 100px;
+            border-right: white !important;
+        }
+
+        #sidebar:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image: linear-gradient(to bottom right,#bb0903,#c10);
+            opacity: .7; 
+        }
+
+        .nav-main a {
+            color: #fff;
+        }
+
+        .nav-main a:hover {
+            color: #d23;
+        }
+
+        .nav-main i {
+            color: #fff !important;
+        } */
+    </style>
+
+
 </head>
 <body>
     <div id="app">
@@ -71,6 +111,7 @@
 <script src="{{ asset('assets/js/codebase.core.min.js') }}"></script>
 <script src="{{ asset('assets/js/codebase.app.min.js') }}"></script>
 <script src="{{ asset('assets/js/pages/citi_profile.js') }}"></script>
+{{-- <script src="{{ asset('js/mdb.min.js') }}"></script> --}}
 
         <script>jQuery(function(){ Codebase.helpers('table-tools'); });</script>
 
@@ -80,4 +121,13 @@
             <script src="{{ asset('assets/js/pages/be_tables_datatables.min.js') }}"></script>
         @endif
 
+
+        @if (Request::segment('1') == 'home')
+            <script>
+                let sday = $('#sday').val();
+                document.getElementById('day').selectedIndex = sday;
+                let smon = $('#smon').val();
+                document.getElementById('month').selectedIndex = smon;
+            </script>
+        @endif
 </html>

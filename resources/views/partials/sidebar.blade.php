@@ -90,7 +90,10 @@
                     <a href="{{ route('staffs.add') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Add User</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('pol.view') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Policy</span></a>
+                    <a href="{{ route('subdesig') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Subsidiries and designation</span></a>
+                </li>
+                <li>
+                    <a href="{{ route('fmi') }}"><i class="si si-folder"></i><span class="sidebar-mini-hide">Filemanager</span></a>
                 </li>
                 <li>
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Admin</span></a>
@@ -104,10 +107,10 @@
                     </ul>
                 </li>
             @endif
-                <li>
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Profile</span></a>
-                    <ul>
-                        <li>
+            <li>
+                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Profile</span></a>
+                <ul>
+                    <li>
                             <a class="" data-toggle="" href="{{ route('profile.view') }}"><span class="sidebar-mini-hide">View</span></a>
                         </li>
                         <li>
@@ -115,7 +118,10 @@
                         </li>
                     </ul>
                 </li>
-            @if ($access == '2' || $access == '1')
+                @if ($access == '2' || $access == '1')
+                <li>
+                    <a href="{{ route('pol.view') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Policy</span></a>
+                </li>
                 <li>
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Announcements</span></a>
                     <ul>

@@ -55,12 +55,29 @@
             </div>
             <!-- END Row #1 -->
         </div>
-        <div class="row invisible" data-toggle="appear">
-            <div class="col-md-7 col-xl-9">
-                <!-- Message List -->
-                <div class="block">
-                    <div class="block-header block-header-default">
-                        <div class="block-title">
+    @if (count($bdays) >= 1)
+        <div class="row invisible justify-content-centerd" data-toggle="appear">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h3>Today's Birthday</h3>
+            <strong>
+                <ul>
+                    @foreach ($bdays as $bday)
+                        <li>{{ $bday->firstname.' '.$bday->lastname }}</li>
+                    @endforeach
+                </ul>
+            </strong> 
+            </div>
+        </div>
+    @endif
+    <div class="row invisible" data-toggle="appear">
+        <div class="col-md-7 col-xl-9">
+            <!-- Message List -->
+            <div class="block">
+                <div class="block-header block-header-default">
+                    <div class="block-title">
                             <strong>Anouncements</strong>
                         </div>
                         <div class="block-options">

@@ -40,14 +40,14 @@ $(function() {
             'id': id,
             '_token': token
         }).done(function(data){
-            console.log(data);
+            data = data[0];
             fname = data.firstname;
             lname = data.lastname;
             email = data.email;
             dp = data.dp;
             phone = data.phone ? data.phone : 'not set' ;
-            sub = data.subsidiary ? data.subsidiary : 'not set';
-            desig = data.designation ? data.designation : 'not set';
+            sub = data.subsidiary ? data.subname : 'not set';
+            desig = data.designation ? data.desname : 'not set';
             $('#staffName').text(fname+' '+lname);
             $('#staffMail').text(email);
             $('#staffSub').text(sub);
@@ -87,6 +87,8 @@ $(function() {
      $(document).on('click', '.updateProfile', function(e){
         e.preventDefault();
        let btn = $(this);
+       let input = btn.attr('in');
+       let output = btn.attr('out');
        let count = btn.attr('count');
        let form = $('#'+btn.attr('form'));
        let id = form.find('input[name="id"]').val();
@@ -96,18 +98,24 @@ $(function() {
        let token = $("meta[name='csrf-token']").attr('content');
        let data = form.serializeFormJSON();
        data._token = token;
-       console.log(data);
        $(this).html(spin);
        $.post(url, data).done(function(data){
+           data = data[0];
            email = data.email;
            phone = data.phone ? data.phone : '' ;
-           sub = data.subsidiary ? data.subsidiary : '';
-           desig = data.designation ? data.designation : '';
+           sub = data.subname ? data.subname : '';
+           desig = data.desname ? data.desname : '';
            $('#email'+count).text(email);
            $('#sub'+count).text(sub);
            $('#desig'+count).text(desig);
            $('#phone'+count).text(phone);
            btn.html(save);
+           btn.toggle();
+           let fa = $('.noEditBtn').find('i.fa');
+           fa.toggleClass('fa-times');
+           fa.toggleClass('fa-pencil');
+           $(input).hide();
+           $(output).show();
        });
    });
 
@@ -126,7 +134,6 @@ $(function() {
             let token = $("meta[name='csrf-token']").attr('content');
             let data = form.serializeFormJSON();
             data._token = token;
-            console.log(data);
             $(this).html(spin);
             $.post(url, {
                 'id': id,
@@ -139,24 +146,25 @@ $(function() {
         }
     });
 
-    $(document).on('click', '.noEdit', function(e) {
+    $(document).on('click', '.noEditBtn', function(e) {
         let td = $(this);
-        // td.hasClass('fa-pencil')
-        //     ?
-        //         td.removeClass
-        //     :
-        //         $(inId).focus();
         let fa = td.find('i.fa');
         fa.toggleClass('fa-times');
         fa.toggleClass('fa-pencil');
+
+        $('.updateProfile').toggle();
+
+        $(td.attr('select1')).val($(td.attr('select2')).val());
+        $(td.attr('deselect1')).val($(td.attr('deselect2')).val());
+
+        $('#profile-sub-edit').val($('#profile-settings-sub').val());
+        
         let input = td.attr('in');
         let output = td.attr('out');
         $(input).toggle();
         $(output).toggle();
         let inId = td.attr('inId');
         fa.hasClass('fa-pencil') ? $(inId).blur() : $(inId).focus();
-        // $(inId).focus();
-        // console.log(input+' '+output);
     });
 
     let doc = $(document);
@@ -208,6 +216,30 @@ $(function() {
             e.preventDefault();
         }
     });
+
+    // getName
+    $('.editsubdesig').on('click', function (e) {
+        $('#getName').val($(this).attr('target-name'));
+        $('#getType').val($(this).attr('target-type'));
+        $('#getId').val($(this).attr('target-id'));
+    })
+
+    $('#modal-subdesigedit').on('shown.bs.modal', function () {
+        $('#getName').trigger('focus');
+    })
+
+    doc.on('change', '.selectable', function(e) {
+        let input = $(this).next();
+        input.val($(this).val());
+    });
+    // $('#profile-desig-edit').val($('#profile-settings-desig').val());
+
+    // $('#profile-sub-edit').val($('#profile-settings-sub').val());
+
+    
+
+
+
 
 // end of document.ready
 });

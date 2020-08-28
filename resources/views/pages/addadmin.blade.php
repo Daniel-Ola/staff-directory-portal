@@ -30,9 +30,14 @@
                             <div class="form-group row">
                                 <div class="col-12">
                                     <div class="form-material floating">
-                                        <input type="text" class="form-control" name="email" required>
+                                        <input type="text" class="form-control" name="email" list="email" required>
                                         <label for="contact3-firstname">Email</label>
                                     </div>
+                                    <datalist id="email">
+                                        @foreach ($emails as $email)
+                                            <option value="{{ $email->email }}">{{ $email->email }}</option>
+                                        @endforeach
+                                    </datalist>
                                 </div>
                             </div>
                             <div class="row">

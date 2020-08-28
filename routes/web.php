@@ -60,16 +60,16 @@ Route::group(['middleware' => 'superadmin'], function () {
         Route::get('manage', 'HomeController@adminManage')->name('admin.manage');
         Route::post('remove', 'HomeController@adminRemove')->name('admin.remove');
     });
-    
-    // policies
-    Route::get('/policies', 'HomeController@policy')->name('pol.view');
-    Route::post('/policies/add', 'HomeController@policyAdd')->name('pol.add');
-    Route::post('/policies/delete', 'HomeController@policyDel')->name('pol.del');
 
     // profile
     Route::post('deleteProfile', 'HomeController@deleteProfile')->name('del.profile');
     Route::post('updateProfile', 'HomeController@updateProfile')->name('up.profile');
 
+    Route::get('sub-desig', 'HomeController@subDesig')->name('subdesig');
+
+    Route::post('sub-desig', 'HomeController@saveSubDesig')->name('subdesig');
+
+    Route::post('edit-sub-desig', 'HomeController@editSubDesig')->name('editsubdesig');
 
 });
 
@@ -79,8 +79,31 @@ Route::group(['prefix' => 'announcements', 'middleware' => 'admins'], function (
     Route::post('create', 'AnnouncementController@store')->name('ann.store');
     Route::get('manage', 'AnnouncementController@index')->name('ann.manage');
     Route::post('delete', 'AnnouncementController@destroy')->name('ann.del');
+    
+    // policies
+    Route::get('/policies', 'HomeController@policy')->name('pol.view');
+    Route::post('/policies/add', 'HomeController@policyAdd')->name('pol.add');
+    Route::post('/policies/delete', 'HomeController@policyDel')->name('pol.del');
 });
 
+
+
+// filemanager
+Route::get('/filemanagement', 'FilemanagerController@index')->name('fmi');
+
+Route::post('/createfolder', 'FilemanagerController@createFolder')->name('folder.create');
+
+Route::post('/createfile', 'FilemanagerController@createFile')->name('file.create');
+
+Route::post('/gobackfolder', 'FilemanagerController@gobackfolder')->name('folder.goback');
+
+Route::post('/filedownload', 'FilemanagerController@download')->name('file.download');
+
+Route::post('/filedelete', 'FilemanagerController@delete')->name('file.delete');
+
+Route::post('/folderdelete', 'FilemanagerController@folderDelete')->name('folder.delete');
+
+Route::get('/myfolder/{slug}', 'FilemanagerController@getFolder')->name('folder.get');
 
 
 // Route::get('pdf', 'HomeController@pdfhtml')->name('pdf.html');

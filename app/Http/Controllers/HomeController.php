@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Announcement;
+use App\Designation;
 use App\Policy;
+use App\Subsidiary;
 use App\User;
 use Illuminate\Http\Request;
 use Gufy\PdfToHtml\Pdf;
@@ -34,6 +36,12 @@ class HomeController extends Controller
         $now = Carbon::now();
         $week = $now->copy()->subDays(7);
         $policies = Policy::all();
+        $day = $now->day;
+        $month = $now->month;
+        $birthdays = User::where([
+            ['day', $day],
+            ['month', $month],
+        ])->get();
         $announcements = Announcement::join('users as u', 'u.id', 'announcements.user_id')
                             ->whereBetween('announcements.created_at', [$week, $now])
                             ->select('firstname', 'lastname', 'announcements.created_at as created_at', 'details', 'subject', 'email', 'announcements.id as id')
@@ -41,6 +49,7 @@ class HomeController extends Controller
         return view('pages.home')->with([
             'anns' => $announcements,
             'pols' => $policies,
+            'bdays' => $birthdays,
         ]);
     }
 
@@ -52,13 +61,26 @@ class HomeController extends Controller
     }
 
     public function profileEdit() {
-        return view('pages.profileedit');
+        $subs = Subsidiary::all();
+        $desigs = Designation::all();
+        return view('pages.profileedit')->with([
+            'subs' => $subs,
+            'desigs' => $desigs
+        ]);
     }
 
     public function staffView() {
-        $allStaff = User::all();
+        $allStaff = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
+                        ->leftjoin('designations as des', 'designation', 'des.id')
+                        ->select('users.*', 'sub.name as subname', 'des.name as desname')->get() ; //User::all();
+        $subs = Subsidiary::all();
+        $desigs = Designation::all();
         return view('pages.staffdirectory')
-                ->with('staffs', $allStaff);
+                ->with([
+                    'staffs' => $allStaff,
+                    'subs' => $subs,
+                    'desigs' => $desigs,
+                ]);
     }
 
     public function profileDoEdit(Request $request) {
@@ -81,7 +103,10 @@ class HomeController extends Controller
 
     public function getProfile(Request $request) {
         // return $request;
-        $profile = User::find($request->id);
+        $profile = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
+                        ->leftjoin('designations as des', 'designation', 'des.id')
+                        ->where('users.id', $request->id)
+                        ->select('users.*', 'sub.name as subname', 'des.name as desname')->get() ; //User::all();
         return $profile;
     }
 
@@ -91,7 +116,11 @@ class HomeController extends Controller
         $data = $request->except(['id', '_token', 'name']);
         $data = array_merge($data, ['updated_by' => Auth::user()->id]);
         User::find($id)->update($data);
-        return User::find($id);
+        return User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
+                        ->leftjoin('designations as des', 'designation', 'des.id')
+                        ->where('users.id', $id)
+                        ->select('users.*', 'sub.name as subname', 'des.name as desname')->get() ; //User::all();
+        // return User::find($id);
     }
 
     public function deleteProfile(Request $request) {
@@ -132,7 +161,8 @@ class HomeController extends Controller
     }
 
     public function adminAdd() {
-        return view('pages.addadmin');
+        $emails = User::select('email')->get();
+        return view('pages.addadmin')->with('emails', $emails);
     }
 
     public function adminCreate(Request $request) {
@@ -218,5 +248,38 @@ class HomeController extends Controller
         } catch (Exception $e) {
             return back()->with('status', 'Policy could not be deleted');
         }
+    }
+
+    public function subDesig() {
+        $subs = Subsidiary::all();
+        $desigs = Designation::all();
+        return view('pages.subdeg')->with([
+            'subs' => $subs,
+            'desigs' => $desigs
+        ]);
+    }
+
+    public function saveSubDesig(Request $request) {
+        // return $request;
+        $type = $request->type;
+        $name = $request->only('name');
+        if($type == 1) {
+            Designation::create($name);
+        } else if($type == 0) {
+            Subsidiary::create($name);
+        }
+        return back()->with('status', 'Item Added Successfully');
+    }
+
+    public function editSubDesig(Request $request) {
+        $type = $request->type;
+        $name = $request->only('name');
+        $id = $request->id;
+        if($type == 1) {
+            Designation::find($id)->update($name);
+        } else if($type == 0) {
+            Subsidiary::find($id)->update($name);
+        }
+        return back()->with('status', 'Item Updated Successfully');
     }
 }

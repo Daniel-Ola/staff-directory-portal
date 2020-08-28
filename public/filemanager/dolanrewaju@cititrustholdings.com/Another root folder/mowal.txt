@@ -1,0 +1,13 @@
+Login system to Embeded Links requirements..
+
+User:
+Can Login to see the embeded links on (https://livejobcam.com/mowal/)
+
+Admin:
+Logs in to see Dashboard
+Can create user (Name, Email, Phone, Password)
+Can edit User
+View all users
+View logs of user (TImes of Login, Who logs in)
+Can send an email to that person
+Can Disable a user and Enable him
