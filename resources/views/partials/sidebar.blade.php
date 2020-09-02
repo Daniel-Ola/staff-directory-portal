@@ -41,14 +41,14 @@
         <div class="content-side content-side-full content-side-user px-10 align-parent">
             <!-- Visible only in mini mode -->
             <div class="sidebar-mini-visible-b align-v animated fadeIn">
-                <img class="img-avatar img-avatar32" src="{{ asset('assets/media/avatars/avatar15.jpg') }}" alt="">
+                <img class="img-avatar img-avatar32" src="{{ asset(Auth::user()->dp) }}" alt="">
             </div>
             <!-- END Visible only in mini mode -->
 
             <!-- Visible only in normal mode -->
             <div class="sidebar-mini-hidden-b text-center">
                 <a class="img-link" href="/profile/view">
-                    <img class="img-avatar" src="{{ asset('assets/media/avatars/avatar15.jpg') }}" alt="">
+                    <img class="img-avatar" src="{{ asset(Auth::user()->dp) }}" alt="">
                 </a>
                 <ul class="list-inline mt-10">
                     <li class="list-inline-item">
@@ -80,29 +80,29 @@
         <div class="content-side content-side-full">
             <ul class="nav-main">
                 <li>
-                    <a href="/"><i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span></a>
+                    <a href="/" class="link-effect "><i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('staffs.view') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Staff Directory</span></a>
+                    <a href="{{ route('staffs.view') }}" class="link-effect "><i class="si si-cup"></i><span class="sidebar-mini-hide">Staff Directory</span></a>
                 </li>
             @if ($access == '1')
                 <li>
-                    <a href="{{ route('staffs.add') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Add User</span></a>
+                    <a href="{{ route('staffs.add') }}" class="link-effect "><i class="si si-cup"></i><span class="sidebar-mini-hide">Add User</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('subdesig') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Subsidiries and designation</span></a>
+                    <a href="{{ route('subdesig') }}" class="link-effect "><i class="si si-cup"></i><span class="sidebar-mini-hide">Subsidiries and designation</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('fmi') }}"><i class="si si-folder"></i><span class="sidebar-mini-hide">Filemanager</span></a>
+                    <a href="{{ route('fmi') }}" class="link-effect"><i class="si si-folder"></i><span class="sidebar-mini-hide">Filemanager</span></a>
                 </li>
                 <li>
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Admin</span></a>
                     <ul>
                         <li>
-                            <a class="" data-toggle="" href="{{ route('admin.add') }}"><span class="sidebar-mini-hide">Add new</span></a>
+                            <a class="link-effect" data-toggle="" href="{{ route('admin.add') }}"><span class="sidebar-mini-hide">Add new</span></a>
                         </li>
                         <li>
-                            <a class="" data-toggle="" href="{{ route('admin.manage') }}"><span class="sidebar-mini-hide">Manage Admins</span></a>
+                            <a class="link-effect" data-toggle="" href="{{ route('admin.manage') }}"><span class="sidebar-mini-hide">Manage Admins</span></a>
                         </li>
                     </ul>
                 </li>
@@ -111,10 +111,10 @@
                 <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Profile</span></a>
                 <ul>
                     <li>
-                            <a class="" data-toggle="" href="{{ route('profile.view') }}"><span class="sidebar-mini-hide">View</span></a>
+                            <a class=" link-effect" data-toggle="" href="{{ route('profile.view') }}"><span class="sidebar-mini-hide">View</span></a>
                         </li>
                         <li>
-                            <a class="" data-toggle="" href="{{ route('profile.edit') }}"><span class="sidebar-mini-hide">Edit</span></a>
+                            <a class=" link-effect" data-toggle="" href="{{ route('profile.edit') }}"><span class="sidebar-mini-hide">Edit</span></a>
                         </li>
                     </ul>
                 </li>
@@ -126,10 +126,10 @@
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Announcements</span></a>
                     <ul>
                         <li>
-                            <a class="" data-toggle="" href="{{ route('ann.create') }}"><span class="sidebar-mini-hide">Add new</span></a>
+                            <a class=" link-effect" data-toggle="" href="{{ route('ann.create') }}"><span class="sidebar-mini-hide">Add new</span></a>
                         </li>
                         <li>
-                            <a class="" data-toggle="" href="{{ route('ann.manage') }}"><span class="sidebar-mini-hide">Manage</span></a>
+                            <a class=" link-effect" data-toggle="" href="{{ route('ann.manage') }}"><span class="sidebar-mini-hide">Manage</span></a>
                         </li>
                     </ul>
                 </li>

@@ -55,17 +55,41 @@ class HomeController extends Controller
 
     public function profileView() {
         $sub = Auth::user()->subsidiary;
-        $colleagues = User::where('subsidiary', 'LIKE', '%'.$sub.'%')->get();
+
+        $colleagues = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
+                        ->leftjoin('designations as des', 'designation', 'des.id')
+                        ->where([
+                            ['users.subsidiary', $sub],
+                            ['users.subsidiary', '<>', 0],
+                            ['users.id', '<>', Auth::user()->id]
+                        ])
+                        ->select('users.*', 'sub.name as subname', 'des.name as desname')->get() ;
+        $profile = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
+                        ->leftjoin('designations as des', 'designation', 'des.id')
+                        ->where([
+                            ['users.id', Auth::user()->id]
+                        ])
+                        ->select('users.*', 'sub.name as subname', 'des.name as desname')->first() ;
         return view('pages.profileview')
-                ->with('colleagues', $colleagues);
+                ->with([
+                    'colleagues' => $colleagues,
+                    'profile' => $profile,
+                ]);
     }
 
     public function profileEdit() {
         $subs = Subsidiary::all();
         $desigs = Designation::all();
+        $profile = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
+                        ->leftjoin('designations as des', 'designation', 'des.id')
+                        ->where([
+                            ['users.id', Auth::user()->id]
+                        ])
+                        ->select('users.*', 'sub.name as subname', 'des.name as desname')->first() ;
         return view('pages.profileedit')->with([
             'subs' => $subs,
-            'desigs' => $desigs
+            'desigs' => $desigs,
+            'profile' => $profile
         ]);
     }
 
@@ -84,11 +108,19 @@ class HomeController extends Controller
     }
 
     public function profileDoEdit(Request $request) {
+        // return $_FILES;
         $file = $request->file('dp');
         $data = $request->except(['dp', '_token']);
         if($file) {
+            $validate = $request->validate([
+                'dp' => 'file|max:2000'
+            ], [
+                'dp.uploaded' => 'Maximum file size for DP is 2mb',
+                'dp.max' => 'Maximum file size for DP is 2mb'
+            ]);
+            // return $validate->errors();
             $mime = explode('/', $file->getClientMimeType())[1];
-            if($mime == 'jpeg') $mime = 'jpg';
+            if($mime == 'jpeg' || $mime == 'octet-stream') $mime = 'jpg';
             $path = 'assets/media/users/';
             $fileName = $request->firstname.'_'.$request->lastname.'_'.time().'.'.$mime;
             $file->move($path, $fileName);

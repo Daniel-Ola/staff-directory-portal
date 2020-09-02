@@ -13,8 +13,8 @@
             <form action="{{ route('folder.goback') }}" id="goback" method="post"> @csrf  <input type="hidden" name="slug" value="{{ Request::segment(2) }}"> </form>
             <div class="col-12 my-5">
                 @if (Request::segment(1) != 'filemanagement')
-                <button type="submit" form="goback" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> Up one level</button>
-                <a href="{{ route('fmi') }}" class="btn btn-primary"><i class="fa fa-home" aria-hidden="true"></i> Go root folder</a>
+                    <button type="submit" form="goback" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> Up one level</button>
+                    <a href="{{ route('fmi') }}" class="btn btn-primary"><i class="fa fa-home" aria-hidden="true"></i> Go root folder</a>
                 @endif
                 <button class="btn btn-primary float-right mx-2" data-toggle="modal" data-target="#addFolder"><i class="fa fa-plus" aria-hidden="true"></i>  New Folder</button>
                 @if (Request::segment(1) != 'filemanagement')
@@ -28,7 +28,7 @@
                 ])
             @endif
         </div>
-        <div class="row invisible" data-toggle="appear">
+        <div class="row invisible mt-5 pt-5" data-toggle="appear">
             @php
                 $k = 0;
             @endphp
@@ -36,7 +36,7 @@
             @php
                 $k += 1;
             @endphp
-            <div class="col-md-3 m-3 p-3" style="border: 1px ridge grey; border-radius: 5px;">
+            <div class="col-md-3 m-3 p-3 bg-white shadow" style="border: 0px groove #bb0903; border-radius: 5px;">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-4">
@@ -63,7 +63,7 @@
                                         <a href="#" class="dropdown-item disabled">Copy to</a>
                                         <a href="#" class="dropdown-item disabled">Move to</a>
                                         <a href="#" class="dropdown-item disabled">Rename</a> --}}
-                                        <form action="{{ route('folder.delete') }}" id="deletefile{{ $k }}" method="post">
+                                        <form action="{{ route('folder.delete') }}" id="deletefolder{{ $k }}" method="post">
                                             @csrf
                                             <input type="hidden" name="owner" value="{{ $folder->user_id }}">
                                             <input type="hidden" name="folder_id" value="{{ $folder->id }}">
@@ -72,7 +72,7 @@
                                         <a href="#" class="dropdown-item" 
                                         onclick="
                                             if(confirm('Are you sure you want to delete {{ $folder->name }}?')) {
-                                                document.querySelector('#deletefile{{ $k }}').submit();
+                                                document.querySelector('#deletefolder{{ $k }}').submit();
                                             }
                                         ">Delete</a>
                                     </div>
@@ -86,68 +86,61 @@
             @empty
             You no have folder in this directory
             @endforelse
+        </div>
             
             
-            <div class="row invisible m-4" data-toggle="appear">
+        <div class="row invisible m-4" data-toggle="appear">
+            @php
+                $count = 0;
+            @endphp
+            @forelse ($files as $file)
                 @php
-                    $count = 1;
+                    $count += 1;
                 @endphp
-                @forelse ($files as $file)
-                    @php
-                        $count += 1;
-                    @endphp
-                    <div class="col-2 card p-3 m-3" style="border: 1px ridge grey; border-radius: 5px;">
-                        <div class="card-body mb-3 d-flex justify-content-between flex-row">
-                            <div>
-                                <a href="#">
-                                    <i class="fa fa-file-o mr-2"></i> {{ $file->name }}
-                                    {{-- fa-file-text-o --}}
-                                </a>
-                                <span class="ml-3 small" style="filter: blur(2px); -webkit-filter: blur(2px);">70 KB</span>
-                            </div>
-                            <div>
-
-                                <form action="{{ route('file.download') }}" id="downloadfile{{ $count }}" method="post">
-                                    @csrf
-                                    <input type="hidden" name="owner" value="{{ $file->user_id }}">
-                                    <input type="hidden" name="file_id" value="{{ $file->id }}">
-                                    <input type="hidden" name="file" value="{{ $file->path }}">
-                                </form>
-                                <a href="#" title="Download file" onclick="document.getElementById('downloadfile{{ $count }}').submit()">
-                                    <i class="fa fa-arrow-down"></i>
-                                </a>
-                                <a href="{{ asset($file->path) }}" title="View file">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-
-                                <form action="{{ route('file.delete') }}" id="deletefile{{ $count }}" method="post">
-                                    @csrf
-                                    <input type="hidden" name="owner" value="{{ $file->user_id }}">
-                                    <input type="hidden" name="file_id" value="{{ $file->id }}">
-                                    <input type="hidden" name="file" value="{{ $file->path }}">
-                                </form>
-                                <a href="#" title="Delete file" 
+                    <div class="col-md-6 col-xl-3" data-category="books">
+                        <div class="block block-rounded block-link-shadow">
+                            <div class="block-content block-content-full text-center">
+                                <div class="item item-circle bg-warning-light text-warning mx-auto my-20">
+                                    <a href="{{ $file->path }}"><i class="fa fa-book"></i></a>
+                                </div>
+                                <div class="font-size-lg"><a href="{{ asset($file->path) }}" target="_blank">{{ $file->name }}</a></div>
+                                <div class="font-size-sm text-muted">
+                                    <i class="fa fa-trash" title="Delete file" 
                                     onclick="
                                         if(confirm('Are you sure you want to delete {{ $file->name }}?')) {
                                             document.querySelector('#deletefile{{ $count }}').submit();
                                         }
-                                    ">
-                                    
-                                    <i class="fa fa-trash"></i>
-                                </a>
+                                    " style="pointer: cursor;"></i>
+                                    |
+                                    <i class="fa fa-arrow-down" title="Download File" onclick="document.getElementById('downloadfile{{ $count }}').submit()" style="pointer: cursor;"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
-                @empty
-                    @if (Request::segment(1) != 'filemanagement')
-                        You have no file in this directory
-                    @else
-                        You cannot create file in the root directory
-                    @endif
-                @endforelse
-            </div>
 
+                    <form action="{{ route('file.download') }}" id="downloadfile{{ $count }}" method="post">
+                        @csrf
+                        <input type="hidden" name="owner" value="{{ $file->user_id }}">
+                        <input type="hidden" name="file_id" value="{{ $file->id }}">
+                        <input type="hidden" name="file" value="{{ asset($file->path) }}">
+                    </form>
+
+                    <form action="{{ route('file.delete') }}" id="deletefile{{ $count }}" method="post">
+                        @csrf
+                        <input type="hidden" name="owner" value="{{ $file->user_id }}">
+                        <input type="hidden" name="file_id" value="{{ $file->id }}">
+                        <input type="hidden" name="file" value="{{ $file->path }}">
+                    </form>
+            @empty
+                @if (Request::segment(1) != 'filemanagement')
+                    You have no file in this directory
+                @else
+                    You cannot create file in the root directory
+                @endif
+            @endforelse
         </div>
+
+    </div>
 </main>
 
 @include('modals.addfolder')

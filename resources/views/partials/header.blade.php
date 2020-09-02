@@ -1,4 +1,10 @@
-<header id="page-header">
+<header id="page-header shadow" style="
+    background: #F8F8F8; 
+    border: solid #BDBDBD 0; 
+    box-shadow: 0 14px 20px rgba(0, 0, 0, 0.1)  ; 
+    -webkit-box-shadow: 0 14px 20px rgba(0, 0, 0, 0.1)  ; 
+    -moz-box-shadow: 0 14px 20px rgba(0, 0, 0, 0.1)  ; 
+">
                     <!-- Header Content -->
                     <div class="content-header">
                         <!-- Left Section -->

@@ -30,39 +30,28 @@
     @endif
 
     <style>
-        /* #sidebar {
-            background-image: url('https://via.placeholder.com/200x1000/bb0903/FFF?text=CITITRUST') center center no-repeat;
-            background-size: cover;
-            color: white !important;
-            -webkit-box-shadow: 1px 0 10px 1px #d23 !important;
-            box-shadow: 1px 0 10px 1px #d23 !important;
-            border-top-right-radius: 100px;
-            border-bottom-right-radius: 100px;
-            border-right: white !important;
+        #sidebar {
+            border-left: 5px solid #bb0903 !important;
         }
 
-        #sidebar:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background-image: linear-gradient(to bottom right,#bb0903,#c10);
-            opacity: .7; 
+        .fa, .si, a.nav-submenu::after, a.nav-submenu::before {
+            color: #bb0903 !important;
         }
 
-        .nav-main a {
-            color: #fff;
+        .btn-primary .fa {
+            color: #ffffff !important;
         }
 
-        .nav-main a:hover {
-            color: #d23;
+        #page-header{
+            /*start ------------*/
+            /* width: [object Object]px; 
+            height: [object Object]px;  */
+            background: #F8F8F8; 
+            border: solid #BDBDBD 0; 
+            box-shadow: 0 14px 20px rgba(0, 0, 0, 0.1)  ; 
+            -webkit-box-shadow: 0 14px 20px rgba(0, 0, 0, 0.1)  ; 
+            -moz-box-shadow: 0 14px 20px rgba(0, 0, 0, 0.1)  ; 
         }
-
-        .nav-main i {
-            color: #fff !important;
-        } */
     </style>
 
 
