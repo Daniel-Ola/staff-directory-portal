@@ -42,6 +42,15 @@
                 <strong>{{ $message }}</strong>
             </div>
         @enderror
+        @if (Session::has('profileErr'))
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <strong>{{ Session::get('profileErr') }}</strong>
+            </div>
+        @endif
         <!-- User Profile -->
         <div class="block">
             <div class="block-header block-header-default">
@@ -75,6 +84,7 @@
                                 <div class="col-12">
                                     <label for="profile-settings-lname">Lastname</label>
                                     <input type="text" class="form-control form-control-lg" id="profile-settings-lname" name="lastname" placeholder="Enter your name.." value="{{ Auth::user()->lastname }}" required>
+                                    <input type="hidden" name="profile" value="1" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -113,13 +123,13 @@
                                     <label for="profile-settings-sub">Birthday info</label>
                                 </div>
                                 <div class="col-6">
-                                    <input type="hidden" value="{{ Auth::user()->day }}" id="sday">
+                                    {{-- <input type="hidden" value="{{ Auth::user()->day }}" id="sday" required> --}}
                                     <label for="profile-settings-sub">Day</label>
                                     @php
-                                        $theday = 0;
+                                        $theday = 1;
                                     @endphp
-                                    <select name="day" id="day" class="form-control">
-                                        <option value="0" disabled hidden @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>Select day</option>
+                                    <select name="day" id="day" class="form-control" required>
+                                        <option value="" disabled @if (Auth::user()->month == '0') {{ 'selected' }} @endif>Select day</option>
                                         <option value="1" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>01</option>
                                         <option value="2" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>02</option>
                                         <option value="3" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>03</option>
@@ -154,13 +164,13 @@
                                     </select>
                                 </div>
                                 <div class="col-6">
-                                    <input type="hidden" id="smon" value="{{ Auth::user()->month }}">
+                                    {{-- <input type="hidden" id="smon" value="{{ Auth::user()->month }}" required> --}}
                                     <label for="profile-settings-sub">Month</label>
                                     @php
-                                        $themonth = 0;
+                                        $themonth = 1;
                                     @endphp
-                                    <select name="month" id="month" class="form-control">
-                                        <option value="0" disabled hidden @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Select month</option>
+                                    <select name="month" id="month" class="form-control" required>
+                                        <option value="" disabled @if (Auth::user()->month == '0') {{ 'selected' }} @endif>Select month</option>
                                         <option value="1" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Jan</option>
                                         <option value="2" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Feb</option>
                                         <option value="3" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Mar</option>
@@ -172,7 +182,7 @@
                                         <option value="9" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Sep</option>
                                         <option value="10" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Oct</option>
                                         <option value="11" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Nov</option>
-                                        <option value="12" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Dec</option>
+                                        <option value="12" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Dec{{ $themonth++ }}</option>
                                     </select>
                                 </div>
                             </div>

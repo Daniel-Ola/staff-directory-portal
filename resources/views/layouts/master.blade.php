@@ -1,3 +1,9 @@
+@php
+    use Carbon\Carbon;
+    $user = Auth::user();
+    $today = Carbon::now();
+@endphp
+
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -117,6 +123,15 @@
                 document.getElementById('day').selectedIndex = sday;
                 let smon = $('#smon').val();
                 document.getElementById('month').selectedIndex = smon;
+            </script>
+        @endif
+
+        @if ($user->day == $today->day && $user->month && $today->month && Request::segment('1') == 'birthday')
+            <script>
+                $('#birthdayModal').modal('show');
+                $('#birthdayModal').on('hide.bs.modal', function () {
+                    location.replace('/profile/view');
+                });
             </script>
         @endif
 </html>

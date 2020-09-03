@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -41,7 +42,11 @@ class HomeController extends Controller
         $birthdays = User::where([
             ['day', $day],
             ['month', $month],
+            // ['id', '<>', Auth::user()->id],
         ])->get();
+        // if($birthdays->count() != 0) {
+        //     $wishes = some random selection;
+        // }
         $announcements = Announcement::join('users as u', 'u.id', 'announcements.user_id')
                             ->whereBetween('announcements.created_at', [$week, $now])
                             ->select('firstname', 'lastname', 'announcements.created_at as created_at', 'details', 'subject', 'email', 'announcements.id as id')
@@ -54,7 +59,7 @@ class HomeController extends Controller
     }
 
     public function profileView() {
-        $sub = Auth::user()->subsidiary;
+        $sub = Auth::user()->designation;
 
         $colleagues = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
                         ->leftjoin('designations as des', 'designation', 'des.id')
@@ -86,10 +91,18 @@ class HomeController extends Controller
                             ['users.id', Auth::user()->id]
                         ])
                         ->select('users.*', 'sub.name as subname', 'des.name as desname')->first() ;
+        $auth = Auth::user();
+        $errmsg = '';
+        if($auth->profile == 0) {
+            $errmsg = 'Please update your profile';
+        } else if($auth->dp == 'assets/media/avatars/avatar15.jpg') {
+            $errmsg = 'Please update your profile picture';
+        }
+        Session::flash('profileErr', $errmsg);
         return view('pages.profileedit')->with([
             'subs' => $subs,
             'desigs' => $desigs,
-            'profile' => $profile
+            'profile' => $profile,
         ]);
     }
 

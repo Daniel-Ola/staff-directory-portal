@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
 
 class LoginController extends Controller
 {
@@ -27,6 +30,15 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+
+    protected function redirectTo() {    
+        $user = Auth::user();
+        $today = Carbon::now();
+        if($user->day == $today->day && $user->month && $today->month) {
+            return '/birthday';
+        }
+        return RouteServiceProvider::HOME;
+    }
 
     /**
      * Create a new controller instance.
