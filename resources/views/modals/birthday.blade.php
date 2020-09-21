@@ -28,7 +28,7 @@
                             <strong>Dear {{ Auth::user()->firstname.' '.Auth::user()->lastname }}, </strong>
                         </p>
                         <p>
-                            Happy Birthday to you, Long life and prosperity
+                            {{ $wish }}
                         </p>
                     </div>
                 </div>

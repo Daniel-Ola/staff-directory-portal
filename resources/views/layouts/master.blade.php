@@ -126,12 +126,21 @@
             </script>
         @endif
 
-        @if ($user->day == $today->day && $user->month && $today->month && Request::segment('1') == 'birthday')
-            <script>
-                $('#birthdayModal').modal('show');
-                $('#birthdayModal').on('hide.bs.modal', function () {
+        @if(Request::segment('1') == 'birthday')
+            @if (
+                    $user->day == $today->day &&
+                    $user->month == $today->month
+                )
+                <script>
+                    $('#birthdayModal').modal('show');
+                    $('#birthdayModal').on('hide.bs.modal', function () {
+                        location.replace('/profile/view');
+                    });
+                </script>
+            @else
+                <script>
                     location.replace('/profile/view');
-                });
-            </script>
+                </script>
+            @endif
         @endif
 </html>

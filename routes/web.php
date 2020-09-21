@@ -88,6 +88,11 @@ Route::group(['prefix' => 'announcements', 'middleware' => ['admins', 'profile']
     Route::get('/policies', 'HomeController@policy')->name('pol.view');
     Route::post('/policies/add', 'HomeController@policyAdd')->name('pol.add');
     Route::post('/policies/delete', 'HomeController@policyDel')->name('pol.del');
+
+    // wishes
+    Route::get('/wishes', 'HomeController@showWishes')->name('wish.show');
+    Route::post('/make-wishes', 'HomeController@makeWish')->name('wish.make');
+    Route::post('/remove-wishes', 'HomeController@removeWish')->name('wish.del');
 });
 
 

@@ -9,9 +9,9 @@
             <div class="content content-full text-center">
                 <!-- Avatar -->
                 <div class="mb-15">
-                    <a class="img-link" href="£">
+                    <a class="img-link" href="#">
                         <img class="img-avatar img-avatar96 img-avatar-thumb" src="{{ asset($profile->dp) }}" alt="">
-                    </a>x
+                    </a>
                 </div>
                 <!-- END Avatar -->
 

@@ -7,6 +7,7 @@ use App\Designation;
 use App\Policy;
 use App\Subsidiary;
 use App\User;
+use App\Wish;
 use Illuminate\Http\Request;
 use Gufy\PdfToHtml\Pdf;
 use Carbon\Carbon;
@@ -326,5 +327,33 @@ class HomeController extends Controller
             Subsidiary::find($id)->update($name);
         }
         return back()->with('status', 'Item Updated Successfully');
+    }
+
+    public function showWishes() {
+        $wishes = Wish::orderBy('created_at', 'DESC')->get();
+        return view('pages.wishes')->with([
+            'wishes' => $wishes,
+        ]);
+    }
+
+    public function makeWish(Request $request) {
+        $data = $request->except('_token');
+        try {
+            Wish::create($data);
+            return back()->with('status', 'Wish saved successfully');
+        } catch (\Throwable $th) {
+            return back()->with('status', 'Your wish could not be saved');
+            throw $th;
+        }
+    }
+
+    public function removeWish(Request $request) {
+        try {
+            Wish::find($request->id)->delete();
+            return back()->with('status', 'Wish was deleted successfully');
+        } catch (\Throwable $th) {
+            throw $th;
+            return back()->with('status', 'Wish could not be deleted');
+        }
     }
 }

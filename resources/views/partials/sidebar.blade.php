@@ -133,6 +133,9 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="{{ route('wish.show') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Manage Wishes</span></a>
+                </li>
             @endif
             </ul>
         </div>
