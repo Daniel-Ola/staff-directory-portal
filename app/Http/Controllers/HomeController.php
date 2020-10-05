@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Announcement;
+use App\Department;
 use App\Designation;
 use App\Policy;
 use App\Subsidiary;
@@ -60,13 +61,13 @@ class HomeController extends Controller
     }
 
     public function profileView() {
-        $sub = Auth::user()->designation;
+        $sub = Auth::user()->department;
 
         $colleagues = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
                         ->leftjoin('designations as des', 'designation', 'des.id')
                         ->where([
-                            ['users.subsidiary', $sub],
-                            ['users.subsidiary', '<>', 0],
+                            ['users.department', $sub],
+                            ['users.department', '<>', 0],
                             ['users.id', '<>', Auth::user()->id]
                         ])
                         ->select('users.*', 'sub.name as subname', 'des.name as desname')->get() ;
@@ -86,6 +87,7 @@ class HomeController extends Controller
     public function profileEdit() {
         $subs = Subsidiary::all();
         $desigs = Designation::all();
+        $depts = Department::all();
         $profile = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
                         ->leftjoin('designations as des', 'designation', 'des.id')
                         ->where([
@@ -95,7 +97,7 @@ class HomeController extends Controller
         $auth = Auth::user();
         $errmsg = '';
         if($auth->profile == 0) {
-            $errmsg = 'Please update your profile';
+            $errmsg = 'Update your profile to complete registration. <br>Please note that some details can only be edited once';
         } else if($auth->dp == 'assets/media/avatars/avatar15.jpg') {
             $errmsg = 'Please update your profile picture';
         }
@@ -104,6 +106,7 @@ class HomeController extends Controller
             'subs' => $subs,
             'desigs' => $desigs,
             'profile' => $profile,
+            'depts' => $depts
         ]);
     }
 
@@ -299,9 +302,11 @@ class HomeController extends Controller
     public function subDesig() {
         $subs = Subsidiary::all();
         $desigs = Designation::all();
+        $depts = Department::all();
         return view('pages.subdeg')->with([
             'subs' => $subs,
-            'desigs' => $desigs
+            'desigs' => $desigs,
+            'depts' => $depts
         ]);
     }
 
@@ -310,9 +315,12 @@ class HomeController extends Controller
         $type = $request->type;
         $name = $request->only('name');
         if($type == 1) {
-            Designation::create($name);
+            $save = $request->except(['_token', 'type']);
+            Designation::create($save);
         } else if($type == 0) {
             Subsidiary::create($name);
+        } else if($type == 2) {
+            Department::create($name);
         }
         return back()->with('status', 'Item Added Successfully');
     }

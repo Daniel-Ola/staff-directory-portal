@@ -42,13 +42,13 @@
                 <strong>{{ $message }}</strong>
             </div>
         @enderror
-        @if (Session::has('profileErr'))
+        @if (Session::has('profileErr') && strlen(Session::get('profileErr')) > 0)
             <div class="alert alert-primary alert-dismissible fade show" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     <span class="sr-only">Close</span>
                 </button>
-                <strong>{{ Session::get('profileErr') }}</strong>
+                <strong>{!! Session::get('profileErr') !!}</strong>
             </div>
         @endif
         <!-- User Profile -->
@@ -93,99 +93,114 @@
                                     <input type="text" class="form-control form-control-lg" id="profile-settings-phone" name="phone" value="{{ Auth::user()->phone }}" required>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-12">
-                                    <label for="profile-settings-desig">Designation</label>
-                                    <select name="designation" id="profile-desig-edit" class="form-control" required>
-                                        <option value="0" disabled hidden @if(Auth::user()->designation == 0) {{ 'selected' }} @endif>Select One</option>
-                                        @foreach ($desigs as $desig)
-                                            <option value="{{ $desig->id }}" @if($desig->id == Auth::user()->designation) {{ 'selected' }} @endif>{{ $desig->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <input type="hidden" class="form-contr
-                                    ol form-control-lg" id="profile-settings-desig" value="{{ Auth::user()->designation ?? '0' }}" required>
+                            @if (Auth::user()->profile == 0)
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        <label for="profile-settings-desig">Department</label>
+                                        <select name="department" id="profile-dept-edit" class="form-control" required>
+                                            <option value="0" disabled hidden @if(Auth::user()->department == 0) {{ 'selected' }} @endif>Select One</option>
+                                            @foreach ($depts as $dept)
+                                                <option value="{{ $dept->id }}" @if($dept->id == Auth::user()->department) {{ 'selected' }} @endif>{{ $dept->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <input type="hidden" class="form-contr
+                                        ol form-control-lg" id="profile-settings-desig" value="{{ Auth::user()->department ?? '0' }}" required>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-12">
-                                    <label for="profile-settings-sub">Subsidiary</label>
-                                    <select name="subsidiary" id="profile-sub-edit" class="form-control" required>
-                                        <option value="0" disabled hidden @if(Auth::user()->designation == 0) {{ 'selected' }} @endif>Select One</option>
-                                        @foreach ($subs as $sub)
-                                            <option value="{{ $sub->id }}" @if($sub->id == Auth::user()->subsidiary) {{ 'selected' }} @endif>{{ $sub->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <input type="hidden" class="form-control form-control-lg" id="profile-settings-sub" value="{{ Auth::user()->subsidiary ?? '0' }}" required>
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        <label for="profile-settings-desig">Designation</label>
+                                        <select name="designation" id="profile-desig-edit" class="form-control" required>
+                                            <option value="0" disabled hidden @if(Auth::user()->designation == 0) {{ 'selected' }} @endif>Select One</option>
+                                            @foreach ($desigs as $desig)
+                                                <option value="{{ $desig->id }}" @if($desig->id == Auth::user()->designation) {{ 'selected' }} @endif>{{ $desig->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <input type="hidden" class="form-contr
+                                        ol form-control-lg" id="profile-settings-desig" value="{{ Auth::user()->designation ?? '0' }}" required>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-12">
-                                    <label for="profile-settings-sub">Birthday info</label>
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        <label for="profile-settings-sub">Subsidiary</label>
+                                        <select name="subsidiary" id="profile-sub-edit" class="form-control" required>
+                                            <option value="0" disabled hidden @if(Auth::user()->designation == 0) {{ 'selected' }} @endif>Select One</option>
+                                            @foreach ($subs as $sub)
+                                                <option value="{{ $sub->id }}" @if($sub->id == Auth::user()->subsidiary) {{ 'selected' }} @endif>{{ $sub->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <input type="hidden" class="form-control form-control-lg" id="profile-settings-sub" value="{{ Auth::user()->subsidiary ?? '0' }}" required>
+                                    </div>
                                 </div>
-                                <div class="col-6">
-                                    {{-- <input type="hidden" value="{{ Auth::user()->day }}" id="sday" required> --}}
-                                    <label for="profile-settings-sub">Day</label>
-                                    @php
-                                        $theday = 1;
-                                    @endphp
-                                    <select name="day" id="day" class="form-control" required>
-                                        <option value="" disabled @if (Auth::user()->month == '0') {{ 'selected' }} @endif>Select day</option>
-                                        <option value="1" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>01</option>
-                                        <option value="2" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>02</option>
-                                        <option value="3" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>03</option>
-                                        <option value="4" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>04</option>
-                                        <option value="5" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>05</option>
-                                        <option value="6" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>06</option>
-                                        <option value="7" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>07</option>
-                                        <option value="8" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>08</option>
-                                        <option value="9" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>09</option>
-                                        <option value="10" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>10</option>
-                                        <option value="11" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>11</option>
-                                        <option value="12" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>12</option>
-                                        <option value="13" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>13</option>
-                                        <option value="14" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>14</option>
-                                        <option value="15" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>15</option>
-                                        <option value="16" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>16</option>
-                                        <option value="17" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>17</option>
-                                        <option value="18" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>18</option>
-                                        <option value="19" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>19</option>
-                                        <option value="20" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>20</option>
-                                        <option value="21" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>21</option>
-                                        <option value="22" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>22</option>
-                                        <option value="23" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>23</option>
-                                        <option value="24" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>24</option>
-                                        <option value="25" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>25</option>
-                                        <option value="26" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>26</option>
-                                        <option value="27" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>27</option>
-                                        <option value="28" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>28</option>
-                                        <option value="29" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>29</option>
-                                        <option value="30" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>30</option>
-                                        <option value="31" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>31</option>
-                                    </select>
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        <label for="profile-settings-sub">Birthday info</label>
+                                    </div>
+                                    <div class="col-6">
+                                        {{-- <input type="hidden" value="{{ Auth::user()->day }}" id="sday" required> --}}
+                                        <label for="profile-settings-sub">Day</label>
+                                        @php
+                                            $theday = 1;
+                                        @endphp
+                                        <select name="day" id="day" class="form-control" required>
+                                            <option value="" disabled @if (Auth::user()->month == '0') {{ 'selected' }} @endif>Select day</option>
+                                            <option value="1" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>01</option>
+                                            <option value="2" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>02</option>
+                                            <option value="3" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>03</option>
+                                            <option value="4" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>04</option>
+                                            <option value="5" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>05</option>
+                                            <option value="6" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>06</option>
+                                            <option value="7" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>07</option>
+                                            <option value="8" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>08</option>
+                                            <option value="9" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>09</option>
+                                            <option value="10" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>10</option>
+                                            <option value="11" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>11</option>
+                                            <option value="12" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>12</option>
+                                            <option value="13" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>13</option>
+                                            <option value="14" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>14</option>
+                                            <option value="15" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>15</option>
+                                            <option value="16" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>16</option>
+                                            <option value="17" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>17</option>
+                                            <option value="18" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>18</option>
+                                            <option value="19" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>19</option>
+                                            <option value="20" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>20</option>
+                                            <option value="21" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>21</option>
+                                            <option value="22" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>22</option>
+                                            <option value="23" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>23</option>
+                                            <option value="24" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>24</option>
+                                            <option value="25" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>25</option>
+                                            <option value="26" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>26</option>
+                                            <option value="27" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>27</option>
+                                            <option value="28" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>28</option>
+                                            <option value="29" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>29</option>
+                                            <option value="30" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>30</option>
+                                            <option value="31" @if (Auth::user()->day == $theday++) {{ 'selected' }} @endif>31</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        {{-- <input type="hidden" id="smon" value="{{ Auth::user()->month }}" required> --}}
+                                        <label for="profile-settings-sub">Month</label>
+                                        @php
+                                            $themonth = 1;
+                                        @endphp
+                                        <select name="month" id="month" class="form-control" required>
+                                            <option value="" disabled @if (Auth::user()->month == '0') {{ 'selected' }} @endif>Select month</option>
+                                            <option value="1" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Jan</option>
+                                            <option value="2" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Feb</option>
+                                            <option value="3" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Mar</option>
+                                            <option value="4" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Apr</option>
+                                            <option value="4" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>May</option>
+                                            <option value="5" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Jun</option>
+                                            <option value="7" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Jul</option>
+                                            <option value="8" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Aug</option>
+                                            <option value="9" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Sep</option>
+                                            <option value="10" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Oct</option>
+                                            <option value="11" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Nov</option>
+                                            <option value="12" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Dec{{ $themonth++ }}</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-6">
-                                    {{-- <input type="hidden" id="smon" value="{{ Auth::user()->month }}" required> --}}
-                                    <label for="profile-settings-sub">Month</label>
-                                    @php
-                                        $themonth = 1;
-                                    @endphp
-                                    <select name="month" id="month" class="form-control" required>
-                                        <option value="" disabled @if (Auth::user()->month == '0') {{ 'selected' }} @endif>Select month</option>
-                                        <option value="1" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Jan</option>
-                                        <option value="2" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Feb</option>
-                                        <option value="3" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Mar</option>
-                                        <option value="4" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Apr</option>
-                                        <option value="4" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>May</option>
-                                        <option value="5" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Jun</option>
-                                        <option value="7" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Jul</option>
-                                        <option value="8" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Aug</option>
-                                        <option value="9" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Sep</option>
-                                        <option value="10" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Oct</option>
-                                        <option value="11" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Nov</option>
-                                        <option value="12" @if (Auth::user()->month == $themonth++) {{ 'selected' }} @endif>Dec{{ $themonth++ }}</option>
-                                    </select>
-                                </div>
-                            </div>
+                            @endif
                             <div class="form-group row">
                                 <div class="col-md-10 col-xl-6">
                                     <div class="push">

@@ -23,6 +23,10 @@ Route::get('/', function () {
     }
 });
 
+Route::get('dashboard.html/accounts', function() {
+    return view('pages.mainmenu');
+})->name('general.dashboard')->middleware('auth');
+
 // Route::get('/auth-login/with-phone', function(){ return 'hello phone'; })->name('auth.phone');
 
 Auth::routes();
@@ -120,3 +124,14 @@ Route::group(['middleware' => 'profile'], function () {
 Route::get('/birthday', function (){
     return view('pages.birthday');
 })->name('bday');
+
+
+
+// One-click/magic login
+Route::group(['prefix' => 'magiclogin', 'middleware' => 'auth', 'namespace' => 'Magiclogin'], function () {
+    Route::get('documentation', 'AuthController@documentation')->name('documentation');
+});
+
+$documentation = config('portals.documentation.url');
+Route::get('...'.$documentation.'/auth/wand/login/{harry}/{potter}/{wizard}', 'AuthController@docuWand')->name('docu.wand');
+// Route::get('?redirectTo='.$documentation.'/auth/wand/login/{harry}/{potter?}', 'AuthController@docuWand')->name('docu.wand');

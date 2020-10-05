@@ -90,7 +90,7 @@
                     <a href="{{ route('staffs.add') }}" class="link-effect "><i class="si si-cup"></i><span class="sidebar-mini-hide">Add User</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('subdesig') }}" class="link-effect "><i class="si si-cup"></i><span class="sidebar-mini-hide">Subsidiries and designation</span></a>
+                    <a href="{{ route('subdesig') }}" class="link-effect "><i class="si si-cup"></i><span class="sidebar-mini-hide">Office Details</span></a>
                 </li>
                 <li>
                     <a href="{{ route('fmi') }}" class="link-effect"><i class="si si-folder"></i><span class="sidebar-mini-hide">Filemanager</span></a>

@@ -37,7 +37,8 @@ class LoginController extends Controller
         if($user->day == $today->day && $user->month && $today->month) {
             return '/birthday';
         }
-        return RouteServiceProvider::HOME;
+        return '/dashboard.html/accounts';
+        // return RouteServiceProvider::HOME;
     }
 
     /**

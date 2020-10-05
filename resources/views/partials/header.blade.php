@@ -79,6 +79,10 @@
                                         <h6 class="dropdown-header">Main Content</h6>
                                         <button type="button" class="btn btn-sm btn-block btn-alt-secondary mb-10" data-toggle="layout" data-action="content_layout_toggle">Toggle Layout</button>
                                     </div>
+                                    <div class="d-none d-xl-block">
+                                        <h6 class="dropdown-header">Main Menu</h6>
+                                        <a href="{{ route('general.dashboard') }}" class="btn btn-sm btn-block btn-alt-secondary mb-10" data-toggle="layout" data-action="content_layout_toggle">Main Menu</a>
+                                    </div>
                                     {{-- <div class="dropdown-divider"></div> --}}
                                 </div>
                             </div>
