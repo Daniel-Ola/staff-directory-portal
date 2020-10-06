@@ -58,8 +58,29 @@
             -webkit-box-shadow: 0 14px 20px rgba(0, 0, 0, 0.1)  ; 
             -moz-box-shadow: 0 14px 20px rgba(0, 0, 0, 0.1)  ; 
         }
+        
+        /*Scrollbar styling*/
+            /* width */
+            ::-webkit-scrollbar {
+              width: 10px;
+            }
+            
+            /* Track */
+            ::-webkit-scrollbar-track {
+              background: #f1f1f1;
+            }
+            
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+              background: #888;
+            }
+            
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+              background: #555;
+            }
     </style>
-
+    @yield('styles')
 
 </head>
 <body>
@@ -143,4 +164,5 @@
                 </script>
             @endif
         @endif
+        @stack('scripts')
 </html>

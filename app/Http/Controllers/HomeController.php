@@ -86,8 +86,18 @@ class HomeController extends Controller
 
     public function profileEdit() {
         $subs = Subsidiary::all();
-        $desigs = Designation::all();
-        $depts = Department::all();
+        $des = Designation::join('departments as dept', 'dept.id', 'dept_id')->select('designations.*', 'dept.name as deptname')->get();
+        $desigs = [];
+        foreach ($des as $de) {
+            $deptname = $de->deptname;
+            $newItem = ['name' => $de->name, 'id'=> $de->id];
+            if(!array_key_exists($deptname, $desigs)) {
+                $desigs[$deptname] = [];// $newItem;
+            }
+            array_push($desigs[$deptname], $newItem);
+        }
+        
+        $depts = Department::all();        
         $profile = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
                         ->leftjoin('designations as des', 'designation', 'des.id')
                         ->where([
@@ -301,7 +311,7 @@ class HomeController extends Controller
 
     public function subDesig() {
         $subs = Subsidiary::all();
-        $desigs = Designation::all();
+        $desigs = Designation::orderBy('dept_id')->get();
         $depts = Department::all();
         return view('pages.subdeg')->with([
             'subs' => $subs,
@@ -318,11 +328,17 @@ class HomeController extends Controller
             $save = $request->except(['_token', 'type']);
             Designation::create($save);
         } else if($type == 0) {
-            Subsidiary::create($name);
+            $names = explode(',', $request->name);
+            foreach($names as $name) {
+                Subsidiary::create(['name' => trim($name)]);
+            }
         } else if($type == 2) {
-            Department::create($name);
+            $names = explode(',', $request->name);
+            foreach($names as $name) {
+                Department::create(['name' => trim($name)]);
+            }
         }
-        return back()->with('status', 'Item Added Successfully');
+        return back()->with('status', 'Item(s) Added Successfully');
     }
 
     public function editSubDesig(Request $request) {
@@ -330,9 +346,12 @@ class HomeController extends Controller
         $name = $request->only('name');
         $id = $request->id;
         if($type == 1) {
-            Designation::find($id)->update($name);
+            $save = $request->except(['_token', 'type']);
+            Designation::find($id)->update($save);
         } else if($type == 0) {
             Subsidiary::find($id)->update($name);
+        } else if($type == 2) {
+            Department::find($id)->update($name);
         }
         return back()->with('status', 'Item Updated Successfully');
     }

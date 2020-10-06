@@ -3,6 +3,16 @@
 @endphp
 @extends('layouts.master')
 
+@section('styles')
+    <style>
+        /*custom styles can go here sir*/
+        .core-container{
+            border: 2px dashed red;
+            height: 200px !important;
+        }
+    </style>
+@endsection
+
 @section('content')
 <main id="main-container">
     <!-- Page Content -->
@@ -10,46 +20,46 @@
         <div class="row invisible" data-toggle="appear">
             <!-- Row #1 -->
             <div class="col-6 col-xl-3">
-                <a class="block block-link-shadow text-right" href="javascript:void(0)">
+                <a class="block block-link-shadow text-right core-container" href="javascript:void(0)">
                     <div class="block-content block-content-full clearfix">
                         <div class="float-left mt-10 d-none d-sm-block" style="height:65px; width:65px;">
                             <img src="{{ asset('assets/media/values/empathy.svg') }}" alt="" class="img-fluid">
                         </div>
                         <div class="font-size-h3 font-w600" data-toggle="countTos" data-speed="1000" data-to="1500">Empathy</div>
-                        <div class="font-size-sm font-w600 text-uppercase text-muted">Core Value</div>
+                        <div class="core">We understand and feel the needs of all stakeholders because we work together to achieve a common goal and we strive harder to meet their expectations.</div>
                     </div>
                 </a>
             </div>
             <div class="col-6 col-xl-3">
-                <a class="block block-link-shadow text-right" href="javascript:void(0)">
+                <a class="block block-link-shadow text-right core-container" href="javascript:void(0)">
                     <div class="block-content block-content-full clearfix">
                         <div class="float-left mt-10 d-none d-sm-block" style="height:65px; width:65px;">
                             <img src="{{ asset('assets/media/values/chess.svg') }}" alt="" class="img-fluid">
                         </div>
                         <div class="font-size-h3 font-w600" data-toggle="countTos" data-speed="1000" data-to="780">Nobility</div>
-                        <div class="font-size-sm font-w600 text-uppercase text-muted">Core Value</div>
+                        <div class="core">We treat our customers like Royalty and continually upgrade our Customer Experience to First-Class.</div>
                     </div>
                 </a>
             </div>
             <div class="col-6 col-xl-3">
-                <a class="block block-link-shadow text-right" href="javascript:void(0)">
+                <a class="block block-link-shadow text-right core-container" href="javascript:void(0)">
                     <div class="block-content block-content-full clearfix">
                         <div class="float-left mt-10 d-none d-sm-block" style="height:65px; width:65px;">
                             <img src="{{ asset('assets/media/values/correct.svg') }}" alt="" class="img-fluid">
                         </div>
                         <div class="font-size-h3 font-w600" data-toggle="countTos" data-speed="1000" data-to="15">Assurance</div>
-                        <div class="font-size-sm font-w600 text-uppercase text-muted">Core Value</div>
+                        <div class="core">We have confidence that we will provide the best services at all times in all ways.</div>
                     </div>
                 </a>
             </div>
             <div class="col-6 col-xl-3">
-                <a class="block block-link-shadow text-right" href="javascript:void(0)">
+                <a class="block block-link-shadow text-right core-container" href="javascript:void(0)">
                     <div class="block-content block-content-full clearfix">
                         <div class="float-left mt-10 d-none d-sm-block" style="height:65px; width:65px;">
                             <img src="{{ asset('assets/media/values/seal.svg') }}" alt="" class="img-fluid">
                         </div>
                         <div class="font-size-h3 font-w600" data-toggle="countTos" data-speed="1000" data-to="4252">Integrity</div>
-                        <div class="font-size-sm font-w600 text-uppercase text-muted">Core Value</div>
+                        <div class="core">We carry out all business in a strict, and in compliance with the best practices in the word. We never compromise in our dealings with all stakeholders.</div>
                     </div>
                 </a>
             </div>
@@ -161,6 +171,11 @@
             </div>
         </div>
     </div>
+    
+    
+
+    
+    
 </main>
 
 
@@ -168,3 +183,6 @@
 @include('modals.news')
 
 @endsection
+
+
+

@@ -83,14 +83,14 @@
                     <a href="/" class="link-effect "><i class="si si-cup"></i><span class="sidebar-mini-hide">Dashboard</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('staffs.view') }}" class="link-effect "><i class="si si-cup"></i><span class="sidebar-mini-hide">Staff Directory</span></a>
+                    <a href="{{ route('staffs.view') }}" class="link-effect "><i class="si si-list"></i><span class="sidebar-mini-hide">Staff Directory</span></a>
                 </li>
             @if ($access == '1')
                 <li>
-                    <a href="{{ route('staffs.add') }}" class="link-effect "><i class="si si-cup"></i><span class="sidebar-mini-hide">Add User</span></a>
+                    <a href="{{ route('staffs.add') }}" class="link-effect "><i class="si si-user-follow"></i><span class="sidebar-mini-hide">Add User</span></a>
                 </li>
                 <li>
-                    <a href="{{ route('subdesig') }}" class="link-effect "><i class="si si-cup"></i><span class="sidebar-mini-hide">Office Details</span></a>
+                    <a href="{{ route('subdesig') }}" class="link-effect "><i class="si si-mouse"></i><span class="sidebar-mini-hide">Office Details</span></a>
                 </li>
                 <li>
                     <a href="{{ route('fmi') }}" class="link-effect"><i class="si si-folder"></i><span class="sidebar-mini-hide">Filemanager</span></a>
@@ -108,7 +108,7 @@
                 </li>
             @endif
             <li>
-                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Profile</span></a>
+                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-size-fullscreen"></i><span class="sidebar-mini-hide">Profile</span></a>
                 <ul>
                     <li>
                             <a class=" link-effect" data-toggle="" href="{{ route('profile.view') }}"><span class="sidebar-mini-hide">View</span></a>
@@ -120,10 +120,10 @@
                 </li>
                 @if ($access == '2' || $access == '1')
                 <li>
-                    <a href="{{ route('pol.view') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Policy</span></a>
+                    <a href="{{ route('pol.view') }}"><i class="si si-energy"></i><span class="sidebar-mini-hide">Policy</span></a>
                 </li>
                 <li>
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Announcements</span></a>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-notebook"></i><span class="sidebar-mini-hide">Announcements</span></a>
                     <ul>
                         <li>
                             <a class=" link-effect" data-toggle="" href="{{ route('ann.create') }}"><span class="sidebar-mini-hide">Add new</span></a>
@@ -134,7 +134,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ route('wish.show') }}"><i class="si si-cup"></i><span class="sidebar-mini-hide">Manage Wishes</span></a>
+                    <a href="{{ route('wish.show') }}"><i class="si si-rocket"></i><span class="sidebar-mini-hide">Manage Wishes</span></a>
                 </li>
             @endif
             </ul>

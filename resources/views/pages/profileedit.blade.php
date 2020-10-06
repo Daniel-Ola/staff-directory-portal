@@ -93,7 +93,7 @@
                                     <input type="text" class="form-control form-control-lg" id="profile-settings-phone" name="phone" value="{{ Auth::user()->phone }}" required>
                                 </div>
                             </div>
-                            @if (Auth::user()->profile == 0)
+                            {{-- @if (Auth::user()->profile == 0) --}}
                                 <div class="form-group row">
                                     <div class="col-12">
                                         <label for="profile-settings-desig">Department</label>
@@ -112,9 +112,17 @@
                                         <label for="profile-settings-desig">Designation</label>
                                         <select name="designation" id="profile-desig-edit" class="form-control" required>
                                             <option value="0" disabled hidden @if(Auth::user()->designation == 0) {{ 'selected' }} @endif>Select One</option>
-                                            @foreach ($desigs as $desig)
-                                                <option value="{{ $desig->id }}" @if($desig->id == Auth::user()->designation) {{ 'selected' }} @endif>{{ $desig->name }}</option>
-                                            @endforeach
+                                            @forelse ($desigs as $desig => $des)
+                                                <optgroup label="{{ $desig }}">
+                                                    @forelse ($des as $de)
+                                                        <option value="{{ $de['id'] }}" @if($de['id'] == Auth::user()->designation) {{ 'selected' }} @endif>{{ $de['name'] }}</option>
+                                                    @empty
+                                                        <option value="">Nill</option>
+                                                    @endforelse
+                                                </optgroup>
+                                            @empty
+                                                <option value='0' selected disabled>No designations found</option>
+                                            @endforelse
                                         </select>
                                         <input type="hidden" class="form-contr
                                         ol form-control-lg" id="profile-settings-desig" value="{{ Auth::user()->designation ?? '0' }}" required>
@@ -200,11 +208,11 @@
                                         </select>
                                     </div>
                                 </div>
-                            @endif
+                            {{-- @endif --}}
                             <div class="form-group row">
                                 <div class="col-md-10 col-xl-6">
                                     <div class="push">
-                                        <img class="img-avatar" src="{{ asset(Auth::user()->dp) }}" alt="">
+                                        <img class="img-avatar" id="dpPreview" src="{{ asset(Auth::user()->dp) }}" alt="">
                                     </div>
                                     <div class="custom-file">
                                         <!-- Populating custom file input label with the selected filename (data-toggle="custom-file-input" is initialized in Helpers.coreBootstrapCustomFileInput()) -->
@@ -229,3 +237,44 @@
     <!-- END Page Content -->
 </main>
 @endsection
+
+@push('scripts')
+    <script>
+        function readURL(input) {
+            const preview = $('#dpPreview');
+            if (input.files && input.files[0]) {
+                let fileType = input.files[0].type;
+                console.log(fileType);
+                let reader = new FileReader();
+                
+                // preview.append("<span id='prevMsg' class='text-info'></span>");
+                // prevMsg = $(document).find('span#prevMsg');
+                reader.onload = function(e) {
+                    if(fileType == 'image/jpeg' || fileType == 'image/png') {
+                        // prevMsg.text('Loading Preview');
+                        preview.attr('src', e.target.result);
+                        preview.removeClass('img-avatar');
+                        preview.addClass('img-fluid');
+                    } else {
+                        alert('Invalid file type');
+                        input = '';
+                        // prevMsg.text('Invalid file type');
+                        preview.attr('src', "{{ asset(Auth::user()->dp) }}");
+                        preview.removeClass('img-fluid');
+                        preview.addClass('img-avatar');
+                    }
+                }
+                
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            } else {
+                preview.attr('src', "{{ asset(Auth::user()->dp) }}");
+                preview.removeClass('img-fluid');
+                preview.addClass('img-avatar');
+            }
+        }
+
+        $("#profile-settings-avatar").change(function() {
+            readURL(this);
+        });
+    </script> 
+@endpush

@@ -26,10 +26,10 @@
                         <a class="nav-link active" href="#search-classic">Subsidiaries</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#search-photos">Designation</a>
+                        <a class="nav-link" href="#search-users">Department</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#search-users">Department</a>
+                        <a class="nav-link" href="#search-photos">Designation</a>
                     </li>
                 </ul>
                 <div class="block-content block-content-full tab-content overflow-hidden">
@@ -87,9 +87,9 @@
                                                 @endphp
                                             @forelse ($subs as $sub)
                                                 <tr>
-                                                    <td class="d-none d-sm-table-cell font-w600">{{ $subCount++ }}</td>
-                                                    <td class="d-none d-sm-table-cell font-w600">{{ $sub->name }}</td>
-                                                    <td class="font-w600s"><button class="btn btn-link btn-lg editsubdesig" target-name="{{ $sub->name }}" target-type="0" target-id="{{ $sub->id }}" data-toggle="modal" data-target="#modal-subdesigedit"> Edit</button></td>
+                                                    <td class="font-w600">{{ $subCount++ }}</td>
+                                                    <td class="font-w600">{{ $sub->name }}</td>
+                                                    <td class="font-w600s"><button class="btn btn-link btn-lg editsubdesig" data-targetname="{{ $sub->name }}" data-targettype="0" data-targetid="{{ $sub->id }}" data-toggle="modal" data-target="#modal-subdesigedit"> Edit</button></td>
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -172,9 +172,9 @@
                                                 @endphp
                                             @forelse ($desigs as $desig)
                                                 <tr>
-                                                    <td class="d-none d-sm-table-cell font-w600">{{ $desigCount++ }}</td>
-                                                    <td class="d-none d-sm-table-cell font-w600">{{ $desig->name }}</td>
-                                                    <td class="font-w600s"><button class="btn btn-link btn-lg editsubdesig" target-name="{{ $desig->name }}" target-type="1" target-id="{{ $desig->id }}" data-toggle="modal" data-target="#modal-subdesigedit"> Edit</button></td>
+                                                    <td class="font-w600">{{ $desigCount++ }}</td>
+                                                    <td class="font-w600">{{ $desig->name }}</td>
+                                                    <td class="font-w600s"><button class="btn btn-link btn-lg editsubdesig" data-targetname="{{ $desig->name }}" data-targettype="1" data-targetid="{{ $desig->id }}" data-targetdept="{{ $desig->dept_id }}" data-toggle="modal" data-target="#modal-desigedit"> Edit</button></td>
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -245,9 +245,9 @@
                                                 @endphp
                                             @forelse ($depts as $dept)
                                                 <tr>
-                                                    <td class="d-none d-sm-table-cell font-w600">{{ $deptCount++ }}</td>
-                                                    <td class="d-none d-sm-table-cell font-w600">{{ $dept->name }}</td>
-                                                    <td class="font-w600s"><button class="btn btn-link btn-lg editsubdesig" target-name="{{ $dept->name }}" target-type="1" target-id="{{ $dept->id }}" data-toggle="modal" data-target="#modal-subdesigedit"> Edit</button></td>
+                                                    <td class="font-w600">{{ $deptCount++ }}</td>
+                                                    <td class="font-w600">{{ $dept->name }}</td>
+                                                    <td class="font-w600s"><button class="btn btn-link btn-lg editsubdesig" data-targetname="{{ $dept->name }}" data-targettype="1" data-targetid="{{ $dept->id }}" data-toggle="modal" data-target="#modal-subdesigedit"> Edit</button></td>
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -272,3 +272,30 @@
 @include('modals.subdesigedit')
 
 @endsection
+
+@push('scripts')
+    <script>
+        $('#modal-subdesigedit').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var targetname = button.data('targetname') // Extract info from data-* attributes
+            var targettype = button.data('targettype') // Extract info from data-* attributes
+            var targetid = button.data('targetid') // Extract info from data-* attributes
+            var modal = $(this)
+            modal.find('.targetname').val(targetname)
+            modal.find('.targettype').val(targettype)
+            modal.find('.targetid').val(targetid)
+        });
+        $('#modal-desigedit').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var targetname = button.data('targetname') // Extract info from data-* attributes
+            var targettype = button.data('targettype') // Extract info from data-* attributes
+            var targetid = button.data('targetid') // Extract info from data-* attributes
+            var targetdept = button.data('targetdept') // Extract info from data-* attributes
+            var modal = $(this)
+            document.getElementById('editdesig').value = targetdept;
+            modal.find('.targetname').val(targetname)
+            modal.find('.targettype').val(targettype)
+            modal.find('.targetid').val(targetid)
+        });
+    </script>
+@endpush
