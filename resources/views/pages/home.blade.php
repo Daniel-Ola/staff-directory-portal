@@ -166,6 +166,7 @@
                         <span aria-hidden="true">&times;</span>
                       </button>
                       <strong>Stay tuned for our handbooks</strong> 
+
                     </div>
                 @endforelse
             </div>
