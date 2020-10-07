@@ -7,8 +7,15 @@
     <style>
         /*custom styles can go here sir*/
         .core-container{
-            border: 2px dashed red;
+            border: 1px dashed red;
             height: 200px !important;
+        }
+        
+        @media screen and (max-width: 600px) {
+          .core-container{
+                border: none;
+                height: auto;
+            }
         }
     </style>
 @endsection
@@ -19,10 +26,10 @@
     <div class="content">
         <div class="row invisible" data-toggle="appear">
             <!-- Row #1 -->
-            <div class="col-6 col-xl-3">
+            <div class="col-xl-3 col-12">
                 <a class="block block-link-shadow text-right core-container" href="javascript:void(0)">
                     <div class="block-content block-content-full clearfix">
-                        <div class="float-left mt-10 d-none d-sm-block" style="height:65px; width:65px;">
+                        <div class="float-left mt-10 p-10" style="height:65px; width:65px;">
                             <img src="{{ asset('assets/media/values/empathy.svg') }}" alt="" class="img-fluid">
                         </div>
                         <div class="font-size-h3 font-w600" data-toggle="countTos" data-speed="1000" data-to="1500">Empathy</div>
@@ -30,10 +37,10 @@
                     </div>
                 </a>
             </div>
-            <div class="col-6 col-xl-3">
+            <div class="col-12 col-xl-3">
                 <a class="block block-link-shadow text-right core-container" href="javascript:void(0)">
                     <div class="block-content block-content-full clearfix">
-                        <div class="float-left mt-10 d-none d-sm-block" style="height:65px; width:65px;">
+                        <div class="float-left mt-10 p-10" style="height:65px; width:65px;">
                             <img src="{{ asset('assets/media/values/chess.svg') }}" alt="" class="img-fluid">
                         </div>
                         <div class="font-size-h3 font-w600" data-toggle="countTos" data-speed="1000" data-to="780">Nobility</div>
@@ -41,10 +48,10 @@
                     </div>
                 </a>
             </div>
-            <div class="col-6 col-xl-3">
+            <div class="col-12 col-xl-3">
                 <a class="block block-link-shadow text-right core-container" href="javascript:void(0)">
                     <div class="block-content block-content-full clearfix">
-                        <div class="float-left mt-10 d-none d-sm-block" style="height:65px; width:65px;">
+                        <div class="float-left mt-10 p-10" style="height:65px; width:65px;">
                             <img src="{{ asset('assets/media/values/correct.svg') }}" alt="" class="img-fluid">
                         </div>
                         <div class="font-size-h3 font-w600" data-toggle="countTos" data-speed="1000" data-to="15">Assurance</div>
@@ -52,10 +59,10 @@
                     </div>
                 </a>
             </div>
-            <div class="col-6 col-xl-3">
+            <div class="col-12 col-xl-3">
                 <a class="block block-link-shadow text-right core-container" href="javascript:void(0)">
                     <div class="block-content block-content-full clearfix">
-                        <div class="float-left mt-10 d-none d-sm-block" style="height:65px; width:65px;">
+                        <div class="float-left mt-10 p-10" style="height:65px; width:65px;">
                             <img src="{{ asset('assets/media/values/seal.svg') }}" alt="" class="img-fluid">
                         </div>
                         <div class="font-size-h3 font-w600" data-toggle="countTos" data-speed="1000" data-to="4252">Integrity</div>
@@ -166,7 +173,6 @@
                         <span aria-hidden="true">&times;</span>
                       </button>
                       <strong>Stay tuned for our handbooks</strong> 
-
                     </div>
                 @endforelse
             </div>
@@ -184,6 +190,3 @@
 @include('modals.news')
 
 @endsection
-
-
-
