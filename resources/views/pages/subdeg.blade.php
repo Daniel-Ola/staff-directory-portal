@@ -231,7 +231,7 @@
                                 <div class="block">
                                     <div class="block-header block-header-default">
                                         <div class="block-title">
-                                            <strong>Designations <span class="badge badge-primary">{{ count($depts) }}</span> </strong>
+                                            <strong>Departments <span class="badge badge-primary">{{ count($depts) }}</span> </strong>
                                         </div>
                                     </div>
                                     <div class="block-content">
@@ -247,7 +247,7 @@
                                                 <tr>
                                                     <td class="font-w600">{{ $deptCount++ }}</td>
                                                     <td class="font-w600">{{ $dept->name }}</td>
-                                                    <td class="font-w600s"><button class="btn btn-link btn-lg editsubdesig" data-targetname="{{ $dept->name }}" data-targettype="1" data-targetid="{{ $dept->id }}" data-toggle="modal" data-target="#modal-subdesigedit"> Edit</button></td>
+                                                    <td class="font-w600s"><button class="btn btn-link btn-lg editsubdesig" data-targetname="{{ $dept->name }}" data-targettype="2" data-targetid="{{ $dept->id }}" data-toggle="modal" data-target="#modal-subdesigedit"> Edit</button></td>
                                                 </tr>
                                             @empty
                                                 <tr>

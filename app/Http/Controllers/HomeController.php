@@ -86,7 +86,7 @@ class HomeController extends Controller
 
     public function profileEdit() {
         $subs = Subsidiary::all();
-        $des = Designation::join('departments as dept', 'dept.id', 'dept_id')->select('designations.*', 'dept.name as deptname')->get();
+        $des = Designation::join('departments as dept', 'dept.id', 'dept_id')->select('designations.*', 'dept.name as deptname')->orderBy('deptname')->get();
         $desigs = [];
         foreach ($des as $de) {
             $deptname = $de->deptname;
@@ -149,7 +149,7 @@ class HomeController extends Controller
             $mime = explode('/', $file->getClientMimeType())[1];
             if($mime == 'jpeg' || $mime == 'octet-stream') $mime = 'jpg';
             $path = 'assets/media/users/';
-            $fileName = $request->firstname.'_'.$request->lastname.'_'.time().'.'.$mime;
+            $fileName = $request->firstname.''.$request->lastname.''.time().'.'.$mime;
             $file->move($path, $fileName);
             $dp = $path.$fileName;
         } else {

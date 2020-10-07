@@ -113,7 +113,7 @@
                                         <select name="designation" id="profile-desig-edit" class="form-control" required>
                                             <option value="0" disabled hidden @if(Auth::user()->designation == 0) {{ 'selected' }} @endif>Select One</option>
                                             @forelse ($desigs as $desig => $des)
-                                                <optgroup label="{{ $desig }}">
+                                                <optgroup label="{{ $desig }} Department">
                                                     @forelse ($des as $de)
                                                         <option value="{{ $de['id'] }}" @if($de['id'] == Auth::user()->designation) {{ 'selected' }} @endif>{{ $de['name'] }}</option>
                                                     @empty
