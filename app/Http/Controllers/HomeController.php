@@ -310,9 +310,9 @@ class HomeController extends Controller
     }
 
     public function subDesig() {
-        $subs = Subsidiary::all();
+        $subs = Subsidiary::orderBy('name')->get();
         $desigs = Designation::orderBy('dept_id')->get();
-        $depts = Department::all();
+        $depts = Department::orderBy('name')->get();
         return view('pages.subdeg')->with([
             'subs' => $subs,
             'desigs' => $desigs,
@@ -342,16 +342,30 @@ class HomeController extends Controller
     }
 
     public function editSubDesig(Request $request) {
+        // return $request;
         $type = $request->type;
         $name = $request->only('name');
         $id = $request->id;
+        $action = $request->action;
         if($type == 1) {
             $save = $request->except(['_token', 'type']);
-            Designation::find($id)->update($save);
+            if($action == 'delete') {
+                Designation::find($id)->delete();
+            } else {
+                Designation::find($id)->update($save);
+            }
         } else if($type == 0) {
-            Subsidiary::find($id)->update($name);
+            if($action == 'delete') {
+                Subsidiary::find($id)->delete();
+            } else {
+                Subsidiary::find($id)->update($name);
+            }
         } else if($type == 2) {
-            Department::find($id)->update($name);
+            if($action == 'delete') {
+                Department::find($id)->delete();
+            } else {
+                Department::find($id)->update($name);
+            }
         }
         return back()->with('status', 'Item Updated Successfully');
     }

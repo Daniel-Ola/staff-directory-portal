@@ -98,7 +98,7 @@
                                     <div class="col-12">
                                         <label for="profile-settings-desig">Department</label>
                                         <select name="department" id="profile-dept-edit" class="form-control" required>
-                                            <option value="0" disabled hidden @if(Auth::user()->department == 0) {{ 'selected' }} @endif>Select One</option>
+                                            <option value="" disabled hidden @if(Auth::user()->department == 0) {{ 'selected' }} @endif>Select One</option>
                                             @foreach ($depts as $dept)
                                                 <option value="{{ $dept->id }}" @if($dept->id == Auth::user()->department) {{ 'selected' }} @endif>{{ $dept->name }}</option>
                                             @endforeach
@@ -111,7 +111,7 @@
                                     <div class="col-12">
                                         <label for="profile-settings-desig">Designation</label>
                                         <select name="designation" id="profile-desig-edit" class="form-control" required>
-                                            <option value="0" disabled hidden @if(Auth::user()->designation == 0) {{ 'selected' }} @endif>Select One</option>
+                                            <option value="" disabled hidden @if(Auth::user()->designation == 0) {{ 'selected' }} @endif>Select One</option>
                                             @forelse ($desigs as $desig => $des)
                                                 <optgroup label="{{ $desig }} Department">
                                                     @forelse ($des as $de)
@@ -132,7 +132,7 @@
                                     <div class="col-12">
                                         <label for="profile-settings-sub">Subsidiary</label>
                                         <select name="subsidiary" id="profile-sub-edit" class="form-control" required>
-                                            <option value="0" disabled hidden @if(Auth::user()->designation == 0) {{ 'selected' }} @endif>Select One</option>
+                                            <option value="" disabled hidden @if(Auth::user()->designation == 0) {{ 'selected' }} @endif>Select One</option>
                                             @foreach ($subs as $sub)
                                                 <option value="{{ $sub->id }}" @if($sub->id == Auth::user()->subsidiary) {{ 'selected' }} @endif>{{ $sub->name }}</option>
                                             @endforeach

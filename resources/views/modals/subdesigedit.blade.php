@@ -24,8 +24,11 @@
                         </div>
                         <div class="form-group row mt-4">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-alt-info">
+                                <button type="submit" class="btn btn-alt-info" name="action" value="update">
                                     Update
+                                </button>
+                                <button type="submit" class="btn btn-alt-danger" name="action" value="delete">
+                                    Delete
                                 </button>
                             </div>
                         </div>
