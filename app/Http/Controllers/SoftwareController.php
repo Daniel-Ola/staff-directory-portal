@@ -50,6 +50,14 @@ class SoftwareController extends Controller
         }
     }
 
+    public function createModule()
+    {
+        $softwares = Software::all();
+        return view('pages.createmodule')->with([
+                'softwares' => $softwares,
+            ]);
+    }
+
     /**
      * Display the specified resource.
      *

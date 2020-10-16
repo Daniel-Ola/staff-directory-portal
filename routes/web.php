@@ -95,6 +95,12 @@ Route::group(['middleware' => ['superadmin', 'profile']], function () {
     Route::group(['prefix' => 'settings'], function() {
         Route::get('createSoftware', 'SoftwareController@create')->name('software.create');
         Route::post('createSoftware', 'SoftwareController@store')->name('software.store');
+
+        Route::get('createModule', 'SoftwareController@createModule')->name('module.create');
+        Route::post('createModule', 'SoftwareController@storeModule')->name('module.store');
+
+        Route::get('user-proviledges', 'UserController@showPriviledges')->name('show.priviledges');
+        Route::post('user-proviledges', 'UserController@setPriviledges')->name('set.priviledges');
     });
 
 });

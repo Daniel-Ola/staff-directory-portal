@@ -139,6 +139,9 @@
                             <li>
                                 <a class="link-effect" data-toggle="" href="{{ route('softwares.assign') }}"><span class="sidebar-mini-hide">Add softwares</span></a>
                             </li>
+                            <li>
+                                <a class="link-effect" data-toggle="" href="{{ route('show.priviledges') }}"><span class="sidebar-mini-hide">Set Priviledges</span></a>
+                            </li>
                         </ul>
                     </li>
                     <li>
@@ -147,9 +150,9 @@
                             <li>
                                 <a href="{{ route('software.create') }}" class="link-effect"><span class="sidebar-mini-hide">Add Software</span></a>
                             </li>
-                            {{-- <li>
-                                <a class="link-effect" data-toggle="" href="{{ route('softwares.assign') }}"><span class="sidebar-mini-hide">Add softwares</span></a>
-                            </li> --}}
+                            <li>
+                                <a href="{{ route('module.create') }}" class="link-effect"><span class="sidebar-mini-hide">Add Software Module</span></a>
+                            </li>
                         </ul>
                     </li>
                 @endcan

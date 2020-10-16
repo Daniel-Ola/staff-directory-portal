@@ -10,6 +10,7 @@ use App\UserSoftware;
 class SearchUser extends Component
 {
     public $users, $query, $selected, $data, $softwares, $isLoading, $showList, $added;
+    public $user_id;
 
     public function mount() 
     {
@@ -19,6 +20,7 @@ class SearchUser extends Component
         $this->users = [];
         $this->softwares = [];
         $this->added = []; //softwares owned by a user originally
+        $this->user_id = null;
     }
 
     public function updatedQuery()
@@ -46,6 +48,8 @@ class SearchUser extends Component
         $this->selected = true;
         $this->isLoading = true;
         $this->data = $this->users[$id];
+        $this->user_id = $this->data['id'];
+        session()->flash('user_id', $this->user_id);
         $this->softwares = Software::all();
         $this->added = UserSoftware::where('user_id', $this->data['id'])->pluck('software_id')->toArray();
         $this->isLoading = false;

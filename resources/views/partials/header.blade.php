@@ -103,7 +103,10 @@
                                     <h5 class="h6 text-center py-10 mb-5 border-b text-uppercase">User</h5>
                                     <a class="dropdown-item" href="{{ route('profile.view') }}">
                                         <i class="si si-user mr-5"></i> Profile
-                                    </a>    
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('general.dashboard') }}">
+                                        <i class="si si-user mr-5"></i> Main menu
+                                    </a>
             
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item"  href="{{ route('logout') }}"

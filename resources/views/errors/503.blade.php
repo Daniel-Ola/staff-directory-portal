@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-        <title>Page Expired</title>
+        <title>Service Unavailable</title>
         <meta name="robots" content="noindex, nofollow">
 
         <!-- Icons -->
@@ -29,12 +29,12 @@
                             <div class="py-30 text-center">
                                 <div class="display-3 text-primary">
                                     {{-- text-corporate --}}
-                                    <i class="fa fa-ban"></i> 419
+                                    <i class="fa fa-ban"></i> 503
                                 </div>
                                 <h1 class="h2 font-w700 mt-30 mb-10">Oops.. You just found an error page..</h1>
-                                <h2 class="h3 font-w400 text-muted mb-50">Your session has expired!</h2>
-                                <a class="btn btn-hero btn-rounded btn-alt-secondary" href="{{ URL::previous() }}">
-                                    <i class="fa fa-arrow-left mr-10"></i> Go back to continue
+                                <h2 class="h3 font-w400 text-muted mb-50">Sorry this service is unvailable at the moment</h2>
+                                <a class="btn btn-hero btn-rounded btn-alt-secondary" href="{{ route('general.dashboard') }}">
+                                    <i class="fa fa-arrow-left mr-10"></i> Back to main menu
                                 </a>
                             </div>
                         </div>

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\ConfigController as Config;
+use App\Http\Controllers\ConfigController as Conf;
 use App\Software;
 use App\UserSoftware;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -38,5 +40,40 @@ class UserController extends Controller
         }
         
         return back();
+    }
+
+    public function showPriviledges()
+    {
+        return view('pages.setpriviledges');
+    }
+
+    public function setPriviledges(Request $request)
+    {
+        try {
+            $conn = $this->getDb($request->software);
+            $conn->beginTransaction();
+            $table = $conn->table('module_permissions');
+            $table->insert([
+                $request->except(['_token', 'software'])
+            ]);
+            $table->where('user_id', $request->user_id)->update([
+                'user_type' => $request->user_type
+            ]);
+            $conn->commit();
+            return back()->with('status', 'Task Completed');
+        } catch (\Throwable $th) {
+            $conn->rollBack();
+            return back()->with('status', 'Could not complete task');
+            // throw $th;
+        }
+        return $request;
+    }
+
+    public function getDb($software)
+    {
+        $soft = strtolower($software);
+        $dbName = config('portals.'.$soft.'.database');
+        Config::set('database.connections.tenant.database', $dbName);
+        return DB::connection('tenant');
     }
 }
