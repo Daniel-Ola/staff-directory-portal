@@ -1,6 +1,3 @@
-@php
-    $access = Auth::user()->access;
-@endphp
 <nav id="sidebar">
     <!-- Sidebar Content -->
     <div class="sidebar-content">
@@ -85,32 +82,10 @@
                 <li>
                     <a href="{{ route('staffs.view') }}" class="link-effect "><i class="si si-list"></i><span class="sidebar-mini-hide">Staff Directory</span></a>
                 </li>
-            @if ($access == '1')
                 <li>
-                    <a href="{{ route('staffs.add') }}" class="link-effect "><i class="si si-user-follow"></i><span class="sidebar-mini-hide">Add User</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('subdesig') }}" class="link-effect "><i class="si si-mouse"></i><span class="sidebar-mini-hide">Office Details</span></a>
-                </li>
-                <li>
-                    <a href="{{ route('fmi') }}" class="link-effect"><i class="si si-folder"></i><span class="sidebar-mini-hide">Filemanager</span></a>
-                </li>
-                <li>
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Admin</span></a>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-size-fullscreen"></i><span class="sidebar-mini-hide">Profile</span></a>
                     <ul>
                         <li>
-                            <a class="link-effect" data-toggle="" href="{{ route('admin.add') }}"><span class="sidebar-mini-hide">Add new</span></a>
-                        </li>
-                        <li>
-                            <a class="link-effect" data-toggle="" href="{{ route('admin.manage') }}"><span class="sidebar-mini-hide">Manage Admins</span></a>
-                        </li>
-                    </ul>
-                </li>
-            @endif
-            <li>
-                <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-size-fullscreen"></i><span class="sidebar-mini-hide">Profile</span></a>
-                <ul>
-                    <li>
                             <a class=" link-effect" data-toggle="" href="{{ route('profile.view') }}"><span class="sidebar-mini-hide">View</span></a>
                         </li>
                         <li>
@@ -118,25 +93,66 @@
                         </li>
                     </ul>
                 </li>
-                @if ($access == '2' || $access == '1')
-                <li>
-                    <a href="{{ route('pol.view') }}"><i class="si si-energy"></i><span class="sidebar-mini-hide">Policy</span></a>
-                </li>
-                <li>
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-notebook"></i><span class="sidebar-mini-hide">Announcements</span></a>
-                    <ul>
-                        <li>
-                            <a class=" link-effect" data-toggle="" href="{{ route('ann.create') }}"><span class="sidebar-mini-hide">Add new</span></a>
-                        </li>
-                        <li>
-                            <a class=" link-effect" data-toggle="" href="{{ route('ann.manage') }}"><span class="sidebar-mini-hide">Manage</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="{{ route('wish.show') }}"><i class="si si-rocket"></i><span class="sidebar-mini-hide">Manage Wishes</span></a>
-                </li>
-            @endif
+                @can('admins')
+                    <li>
+                        <a href="{{ route('pol.view') }}"><i class="si si-energy"></i><span class="sidebar-mini-hide">Policy</span></a>
+                    </li>
+                    <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-notebook"></i><span class="sidebar-mini-hide">Announcements</span></a>
+                        <ul>
+                            <li>
+                                <a class=" link-effect" data-toggle="" href="{{ route('ann.create') }}"><span class="sidebar-mini-hide">Add new</span></a>
+                            </li>
+                            <li>
+                                <a class=" link-effect" data-toggle="" href="{{ route('ann.manage') }}"><span class="sidebar-mini-hide">Manage</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="{{ route('wish.show') }}"><i class="si si-rocket"></i><span class="sidebar-mini-hide">Manage Wishes</span></a>
+                    </li>
+                @endcan
+                @can('superadmin')
+                    <li>
+                        <a href="{{ route('subdesig') }}" class="link-effect "><i class="si si-mouse"></i><span class="sidebar-mini-hide">Office Details</span></a>
+                    </li>
+                    <li>
+                        <a href="{{ route('fmi') }}" class="link-effect"><i class="si si-folder"></i><span class="sidebar-mini-hide">Filemanager</span></a>
+                    </li>
+                    <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-badge"></i><span class="sidebar-mini-hide">Admin Management</span></a>
+                        <ul>
+                            <li>
+                                <a class="link-effect" data-toggle="" href="{{ route('admin.add') }}"><span class="sidebar-mini-hide">Add new</span></a>
+                            </li>
+                            <li>
+                                <a class="link-effect" data-toggle="" href="{{ route('admin.manage') }}"><span class="sidebar-mini-hide">Manage Admins</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-user-follow"></i><span class="sidebar-mini-hide">User Management</span></a>
+                        <ul>
+                            <li>
+                                <a href="{{ route('staffs.add') }}" class="link-effect"><span class="sidebar-mini-hide">Add New</span></a>
+                            </li>
+                            <li>
+                                <a class="link-effect" data-toggle="" href="{{ route('softwares.assign') }}"><span class="sidebar-mini-hide">Add softwares</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-cog"></i><span class="sidebar-mini-hide">Settings</span></a>
+                        <ul>
+                            <li>
+                                <a href="{{ route('software.create') }}" class="link-effect"><span class="sidebar-mini-hide">Add Software</span></a>
+                            </li>
+                            {{-- <li>
+                                <a class="link-effect" data-toggle="" href="{{ route('softwares.assign') }}"><span class="sidebar-mini-hide">Add softwares</span></a>
+                            </li> --}}
+                        </ul>
+                    </li>
+                @endcan
             </ul>
         </div>
         <!-- END Side Navigation -->

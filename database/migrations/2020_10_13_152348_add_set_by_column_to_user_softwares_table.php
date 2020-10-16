@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class AddSetByColumnToUserSoftwaresTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('user_softwares', function (Blueprint $table) {
+            $table->unsignedBigInteger('set_by')->nullable()->after('attribute');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('user_softwares', function (Blueprint $table) {
+            $table->dropColumn('set_by');
+        });
+    }
+}

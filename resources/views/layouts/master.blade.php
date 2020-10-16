@@ -82,6 +82,8 @@
     </style>
     @yield('styles')
 
+    @livewireStyles
+
 </head>
 <body>
     <div id="app">
@@ -165,4 +167,7 @@
             @endif
         @endif
         @stack('scripts')
+
+        @livewireScripts
+        
 </html>

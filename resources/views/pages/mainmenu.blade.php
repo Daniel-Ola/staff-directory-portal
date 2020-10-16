@@ -369,7 +369,17 @@
 
             </div>
 
-             <div class="main-menu-divs-inner local" target="#">
+            @forelse ($softwares as $soft)
+              <div class="main-menu-divs-inner gateway" target='{{ route(strtolower($soft->name)) }}'>
+                <img src="{{ asset($soft->icon) }}" />
+                <div class="title">{{ $soft->name }}</div>
+                <div class="description">{{ $soft->description }}</div>
+              </div>
+            @empty
+                
+            @endforelse
+
+             {{-- <div class="main-menu-divs-inner local" target="#">
               
               <img src="{{ asset('main_menu/images/inventory.svg') }}" />
               <div class="title">Inventory</div>
@@ -391,7 +401,7 @@
               <div class="title">Procurement</div>
               <div class="description">Upload your procurement process</div>
 
-            </div>
+            </div> --}}
 
 
         </div>

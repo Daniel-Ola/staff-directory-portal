@@ -1,7 +1,11 @@
 <?php
 
+use App\Software;
+use App\User;
+use App\UserSoftware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,10 +28,12 @@ Route::get('/', function () {
 });
 
 Route::get('dashboard.html/accounts', function() {
-    return view('pages.mainmenu');
+    $id = Auth::user()->id;
+    $softwares = Software::join('user_softwares as us', 'softwares.id', 'us.software_id')
+                        ->where('us.user_id', $id)->get();
+    return view('pages.mainmenu')->with('softwares', $softwares);
 })->name('general.dashboard')->middleware('auth');
 
-// Route::get('/auth-login/with-phone', function(){ return 'hello phone'; })->name('auth.phone');
 
 Auth::routes();
 
@@ -69,6 +75,11 @@ Route::group(['middleware' => ['superadmin', 'profile']], function () {
         Route::post('remove', 'HomeController@adminRemove')->name('admin.remove');
     });
 
+    Route::group(['prefix' => 'user'], function() {
+        Route::get('software', 'UserController@assignSoftwares')->name('softwares.assign');
+        Route::post('software', 'UserController@doAssignSoftwares')->name('dosoftwares.assign');
+    });
+
     // profile
     Route::post('deleteProfile', 'HomeController@deleteProfile')->name('del.profile');
     Route::post('updateProfile', 'HomeController@updateProfile')->name('up.profile');
@@ -78,6 +89,13 @@ Route::group(['middleware' => ['superadmin', 'profile']], function () {
     Route::post('sub-desig', 'HomeController@saveSubDesig')->name('subdesig');
 
     Route::post('edit-sub-desig', 'HomeController@editSubDesig')->name('editsubdesig');
+    
+
+    // settings
+    Route::group(['prefix' => 'settings'], function() {
+        Route::get('createSoftware', 'SoftwareController@create')->name('software.create');
+        Route::post('createSoftware', 'SoftwareController@store')->name('software.store');
+    });
 
 });
 
@@ -127,11 +145,24 @@ Route::get('/birthday', function (){
 
 
 
+
+
+
 // One-click/magic login
 Route::group(['prefix' => 'magiclogin', 'middleware' => 'auth', 'namespace' => 'Magiclogin'], function () {
     Route::get('documentation', 'AuthController@documentation')->name('documentation');
+    Route::get('approval', 'AuthController@approval')->name('approval');
+    $documentation = config('portals.documentation.url');
+    Route::get('...'.$documentation.'/auth/wand/login/{harry}/{potter}/{wizard}', 'AuthController@docuWand')->name('docuwand');
 });
 
-$documentation = config('portals.documentation.url');
-Route::get('...'.$documentation.'/auth/wand/login/{harry}/{potter}/{wizard}', 'AuthController@docuWand')->name('docu.wand');
+$approval = config('portals.approval.url');
+Route::get('...'.$approval.'/auth/wand/login/{harry}/{potter}/{wizard}', 'AuthController@appWand')->name('approval.wand');
+
+// error from magic login
+Route::get('secure-login-to/{portal}/{status}', function () {
+    abort(403);
+}); // access denied
+
+
 // Route::get('?redirectTo='.$documentation.'/auth/wand/login/{harry}/{potter?}', 'AuthController@docuWand')->name('docu.wand');
