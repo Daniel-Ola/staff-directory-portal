@@ -90,6 +90,7 @@
 
         <main class="">
             <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header-modern main-content-boxed">
+                {{-- side-trans-enabled sidebar-o-xs --}}
                 <!-- Side Overlay-->
                 @include('partials.sideoverlay')
                 <!-- END Side Overlay -->
@@ -129,9 +130,19 @@
 <script src="{{ asset('assets/js/codebase.core.min.js') }}"></script>
 <script src="{{ asset('assets/js/codebase.app.min.js') }}"></script>
 <script src="{{ asset('assets/js/pages/citi_profile.js') }}"></script>
-{{-- <script src="{{ asset('js/mdb.min.js') }}"></script> --}}
 
-        <script>jQuery(function(){ Codebase.helpers('table-tools'); });</script>
+        <script>
+            jQuery(function(){
+                Codebase.helpers('table-tools');
+                Codebase.helpers('notify', {
+                align: 'right',             // 'right', 'left', 'center'
+                from: 'top',                // 'top', 'bottom'
+                type: "info",               // 'info', 'success', 'warning', 'danger'
+                icon: 'fa fa-info mr-5',    // Icon class
+                message: "hello world"
+            });
+            });
+        </script>
 
         @if (Request::segment('1') == 'staffs' && Request::segment('2') == 'view')
             <script src="{{ asset('assets/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>

@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
@@ -301,7 +302,8 @@ class HomeController extends Controller
         try {
             $pol = Policy::find($request->id);
             $path = $pol->path;
-            unlink($path);
+            File::delete($path);
+            // unlink($path);
             $delete = $pol->delete();
             return back()->with('status', 'Policy has been deleted successfully');
         } catch (Exception $e) {
@@ -322,6 +324,7 @@ class HomeController extends Controller
 
     public function saveSubDesig(Request $request) {
         // return $request;
+        // creates a folder for the file system while creating this
         $type = $request->type;
         $name = $request->only('name');
         if($type == 1) {

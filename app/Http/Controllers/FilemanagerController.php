@@ -8,7 +8,9 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File as Filemanager;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class FilemanagerController extends Controller
 {
@@ -23,27 +25,32 @@ class FilemanagerController extends Controller
             try {
                 mkdir($userFolder);
             } catch (\Throwable $th) {
+                return back();
                 throw $th;
                 return;
             }
         }
         $folder = Folder::where([
             ['parent', 0],
+            ['scope', 'private'],
             ['user_id', Auth::user()->id]
         ])->get();
         $files = File::where([
             ['folder_id', 0],
             ['user_id', Auth::user()->id]
         ])->get();
+        $createdGroups = \App\Group::where('created_by', Auth::user()->id)->get();
         $allfolders = Folder::where('user_id', Auth::user()->id)->get();
         return view('pages.filemanager')->with([
             'folders' => $folder,
             'files' => $files,
             'allfolders' => $allfolders,
+            'createdGroups' => $createdGroups
         ]);
     }
 
     function createFolder(Request $request) {
+        // return $request;
         $userRootFolder = 'filemanager/'.Auth::user()->email;
         $data = $request->except('_token');
         $validate = Validator::make($data, [
@@ -69,10 +76,10 @@ class FilemanagerController extends Controller
                 }
                 mkdir($createPath);
             } else {
-                $parentPath = Folder::find($request->parent)->path;
-                $path = $parentPath.'/'.$request->name;
-                // return $parentPath;
-                if(file_exists('filemanager/'.$parentPath)) {
+                $parent = Folder::find($request->parent);
+                $path = $parent->path.'/'.$request->name;
+                // return $parent->path;
+                if(file_exists('filemanager/'.$parent->path)) {
                     if(file_exists('filemanager/'.$path)) {
                         return back()->with([
                             'status' => 'warning',
@@ -87,14 +94,28 @@ class FilemanagerController extends Controller
                     ]);
                 }
             }
-            // 
-            Folder::create([
-                'parent' => $request->parent,
-                'name' => $request->name,
-                'user_id' => Auth::user()->id,
-                'slug' => rand(999, 9999).time().Auth::user()->id.'-'.Auth::user()->email,
-                'path' => $path,
-            ]);
+            if($parent->scope != 'private')
+            {
+                Folder::create([
+                    'parent' => $request->parent,
+                    'name' => $request->name,
+                    'user_id' => Auth::user()->id,
+                    'slug' => Str::uuid().'-'.time().'-'.Str::slug($request->name),
+                    'path' => $path,
+                    'scope' => $parent->scope,
+                    'dept' => $parent->dept,
+                    'sub' => $parent->sub
+                ]);
+            } else {
+                Folder::create([
+                    'parent' => $request->parent,
+                    'name' => $request->name,
+                    'user_id' => Auth::user()->id,
+                    'slug' => Str::uuid().'-'.time().'-'.Auth::user()->email,
+                    'path' => $path,
+                ]);
+            }
+            
             return back()->with([
                     'status' => 'success',
                     'message' => 'Folder created successfully',
@@ -111,7 +132,6 @@ class FilemanagerController extends Controller
 
     function getFolder($slug) {
         try {
-
             $parent = Folder::where('slug', $slug)->select('id')->get();
             if(count($parent) == 0) { abort(404); }
             $pid = $parent[0]->id;
@@ -123,11 +143,13 @@ class FilemanagerController extends Controller
                 ['folder_id', $pid],
                 ['user_id', Auth::user()->id]
             ])->get();
+            $createdGroups = \App\Group::where('created_by', Auth::user()->id)->get();
             $allfolders = Folder::where('user_id', Auth::user()->id)->get();
             return view('pages.filemanager')->with([
                 'folders' => $folder,
                 'files' => $files,
                 'allfolders' => $allfolders,
+                'createdGroups' => $createdGroups
             ]);
             
         } catch (\Throwable $th) {
@@ -137,11 +159,11 @@ class FilemanagerController extends Controller
     }
 
     function gobackfolder(Request $request) {
+        // return $request;
         $slug = $request->slug;
         $parent = Folder::where('slug', $slug)->get()[0]->parent;
         if($parent != 0) {
             $back = Folder::find($parent)->slug;
-            // return $back;
             return redirect('myfolder/'.$back);
         } else {
             return redirect('filemanagement');
@@ -149,6 +171,7 @@ class FilemanagerController extends Controller
     }
 
     function createFile(Request $request) {
+        // return $request;
         $pid = $request->parent;
         $root = 'filemanager/'.Auth::user()->email;
         $saveTo = $root.'/';
@@ -171,7 +194,7 @@ class FilemanagerController extends Controller
                 $fileDet = $file->getClientOriginalName();
                 $fileName = pathinfo($fileDet,PATHINFO_FILENAME);
                 $fileExt = pathinfo($fileDet,PATHINFO_EXTENSION );
-                $fileDet = $fileName.'-'.time().Auth::user()->id.rand(999,9999).'.'.$fileExt;
+                $fileDet = $fileName.'-'.Str::uuid().Auth::user()->id.rand(999,9999).'.'.$fileExt;
                 $file->move($saveTo, $fileDet);
                 $data = [
                     'name' => $fileName,
@@ -262,6 +285,227 @@ class FilemanagerController extends Controller
             'status' => 'warning',
             'message' => 'You dont have access to this file'
         ]);
+    }
+
+    public function publicFolders($slug = null)
+    {
+        $createdGroups = \App\Group::where('created_by', Auth::user()->id)->get();
+        if($slug)
+        {
+            $data = $this->subPublicFolder($slug);
+        } else {
+            $data = $this->rootPublicFolder();
+        }
+        $data = array_merge($data, ['createdGroups' => $createdGroups]);
+        return view('pages.publicfilemanager')->with($data);
+    }
+
+    public function rootPublicFolder()
+    {
+        $this->createPublicFolders();
+        $folders = Folder::where([
+            ['parent', 0],
+            ['sub', Auth::user()->subsidiary],
+            ['dept', Auth::user()->department],
+        ])
+        ->where(function($query) {
+            $query->where('scope', 'sub')
+                ->orWhere('scope', 'dept');
+        })->get();
+        $allfolders = Folder::where('user_id', Auth::user()->id)->get();
+        return [
+            'folders' => $folders,
+            'files' => [],
+            'allfolders' => $folders
+        ];
+    }
+
+    public function subPublicFolder($slug)
+    {
+        // return $slug;
+        $userSub = Auth::user()->subsidiary;
+        $userDept = Auth::user()->department;
+        try {
+            $parent = Folder::where('slug', $slug);//->first();//->select('id')->get();
+            if(!$parent->exists()) abort(404);
+            $parent = $parent->first();
+            $scope = $parent->scope; // defines the scope of the selected folder, whether departmental of subsidiary based
+            if($scope == 'sub')
+            {
+                if($parent->sub != $userSub) abort(403);
+            } elseif ($scope = 'dept') {
+                if($parent->sub != $userSub &&
+                    $parent->dept != $userDept) abort(403);
+            }
+            $pid = $parent->id;
+            $folder = Folder::where([
+                ['parent', $pid]
+            ])->get();
+            $files = File::where([
+                ['folder_id', $pid],
+            ])->get();
+            $allfolders = Folder::where('scope', $scope)->get();
+            return [
+                'folders' => $folder,
+                'files' => $files,
+                'allfolders' => $allfolders,
+            ];
+            
+        } catch (\Throwable $th) {
+            abort(404);
+            throw $th;
+        }
+    }
+
+
+    function createPublicFolders()
+    {
+        DB::beginTransaction();
+        try {
+            $dept = \App\Department::find(Auth::user()->department);
+            $sub = \App\Subsidiary::find(Auth::user()->subsidiary);
+            $subName = $sub->name;
+            $deptName = $dept->name;
+
+            $subFolder = "_Public/{$sub->name}";
+            $deptFolder = $subFolder."/{$deptName}";
+            $path = 'filemanager/'.$deptFolder;
+
+            if(file_exists($path)) return;
+
+            $subsidiary = Folder::create([
+                'name' => $subName,
+                'user_id' => Auth::user()->id,
+                'slug' => Str::uuid().'-'.time().'-'.Str::slug($subName),
+                'path' => $subFolder,
+                'scope' => 'sub',
+                'dept' => $dept->id,
+                'sub' => $sub->id
+            ]);
+            
+
+            $subsidiary = Folder::create([
+                'name' => $deptName,
+                'user_id' => Auth::user()->id,
+                'slug' => Str::uuid().'-'.time().'-'.Str::slug($deptName),
+                'path' => $deptFolder,
+                'scope' => 'dept',
+                'dept' => $dept->id,
+                'sub' => $sub->id
+            ]);
+            Filemanager::makeDirectory($path, 0755, true, false);
+            DB::commit();
+            return;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Filemanager::deleteDirectory($path);
+            return back()->with([
+                'status' => 'warning',
+                'message' => 'Public Folder could not be created'
+            ]);
+            throw $th;
+        }
+    }
+
+    public function sharedFolders($slug = null)
+    {
+        if($slug)
+        {
+            $data = $this->subSharedDocs($slug);
+        } else {
+            $data = $this->rootSharedDocs();
+        }
+        return view('pages.sharedfilemanager')->with($data);
+
+        
+    }
+
+    public function subSharedDocs($slug)
+    {
+        try {
+            $folder = Folder::where('slug', $slug);
+            if(!$folder->exists()) abort(404);
+            $folder = $folder->first();
+            $folderId = $folder->id;
+            $userid = Auth::user()->id;
+            $myGroups = \App\GroupMember::join('groups as g', 'g.id', 'group_members.group_id')->where('user_id', $userid)->select('g.*');
+            $groupIds = $myGroups->pluck('id');
+            $shared = \App\FileShare::join('folders as fold', 'fold.id', 'file_shares.item_id')->where([
+                ['shared_with', $userid],
+                ['shared_type', 'single'],
+                ['type', 'folders'],
+                ['item_id', $folderId]
+            ])->orWhere(function($query) use($groupIds, $folderId) {
+                $query->where('shared_type', 'group')->where('type', 'folders')->where('item_id', $folderId)->whereIn('shared_with', $groupIds);
+            });
+
+            if(!$shared->exists()) abort(403);
+
+            $folder = Folder::where([
+                ['parent', $folderId]
+            ])->get();
+            $files = File::where([
+                ['folder_id', $folderId],
+            ])->get();
+            $allfolders = $folder;
+            return [
+                'folders' => $folder,
+                'files' => $files,
+                'allfolders' => $allfolders,
+                'sharedDocs' => []
+            ];
+            
+        } catch (\Throwable $th) {
+            abort(404);
+            throw $th;
+        }
+    }
+
+    public function rootSharedDocs()
+    {
+        $userid = Auth::user()->id;
+        $myGroups = \App\GroupMember::join('groups as g', 'g.id', 'group_members.group_id')->where('user_id', $userid)->select('g.*');
+        $groupIds = $myGroups->pluck('id');
+        $sharedDocs = \App\FileShare::join('folders as fold', 'fold.id', 'file_shares.item_id')->where([
+                        ['shared_with', $userid],
+                        ['shared_type', 'single'],
+                        ['type', 'folders']
+                    ])->orWhere(function($query) use($groupIds) {
+                        $query->where('shared_type', 'group')->where('type', 'folders')->whereIn('shared_with', $groupIds);
+                    })->get();
+        return [
+            'folders' => [],
+            'files' => [],
+            'allfolders' => [],
+            'groups' => $myGroups,
+            'sharedDocs' => $sharedDocs
+        ];
+    }
+
+    public function shareFolder(Request $request)
+    {
+        if($request->shared_type == 'single')
+        {
+            if($user = \App\User::where('email', $request->shared_with)->first())
+            {
+                $data = $request->except(['_token']);
+                $data['shared_with'] = $user->id;
+                $saved = \App\FileShare::create($data);
+            } else {
+                return back()->with([
+                    'status' => 'warning',
+                    'message' => 'Folder shared successfully',
+                    'notify' => true
+                ]);
+            }
+        } else {
+            $saved = \App\FileShare::create($request->except('_token'));
+        }
+        return back()->with([
+                'status' => 'info',
+                'message' => 'Folder shared successfully',
+                'notify' => true
+            ]);
     }
 
 }

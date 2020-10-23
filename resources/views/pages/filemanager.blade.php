@@ -29,6 +29,27 @@
             @endif
         </div>
         <div class="row invisible mt-5 pt-5" data-toggle="appear">
+
+
+            <div class="col-md-3 m-3 p-3 bg-white shadow" style="border: 0px groove #bb0903; border-radius: 5px;">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-4">
+                            <div>
+                                <i class="fa fa-folder text-primary" style="font-size: 22px;"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ route('public.folders') }}"><h5>Public Folders</h5></a>
+                        </div>
+                        {{-- <p class="small text-muted mb-0" style="filter: blur(2px); -webkit-filter: blur(2px);">1.754 Files</p> --}}
+                    </div>
+                </div>
+            </div>
+
+
+
+
             @php
                 $k = 0;
             @endphp
@@ -36,7 +57,7 @@
             @php
                 $k += 1;
             @endphp
-            <div class="col-md-3 m-3 p-3 bg-white shadow" style="border: 0px groove #bb0903; border-radius: 5px;">
+            <div class="col-md-3 m-3 p-3 bg-white shadow foldercard" menu="#folder{{ $k }}" href="{{ route('folder.get', [$folder->slug]) }}" style="border: 0px groove #bb0903; border-radius: 5px;">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-4">
@@ -47,7 +68,7 @@
                         <div class="d-flex justify-content-between">
                             <a href="{{ route('folder.get', [$folder->slug]) }}"><h5>{{ $folder->name }}</h5></a>
                             <div class="dropdown">
-                                <a href="#" class="btn btn-floating" data-toggle="dropdown">
+                                <a href="#" class="btn btn-floating" id="folder{{ $k }}" data-toggle="dropdown">
                                     <i class="fa fa-ellipsis-h text-primary"></i>
                                 </a>
                                 {{-- remove the padding --}}
@@ -56,7 +77,15 @@
                                     
                                     {{-- <a href="#" class="dropdown-item disabled text-center" style="position: absolute; height: 100%; width: 100%; margin-left: 0; opacity: .5; z-index: 9999; font-weight: bolder; color: red;">C<br>o<br>m<br>i<br>n<br>g <br>S<br>o<br>o<br>n</a> --}}
 
-                                    <div *style="filter: blur(2px); -webkit-filter: blur(2px);">
+                                    <div style="*filter: blur(2px); -webkit-filter*: blur(2px); z-index: 9999;">
+                                        <a href="{{ route('public.folders', [$folder->slug]) }}" class="dropdown-item" data-sidebar-target="#view-detail">Open Folder</a>
+                                        <a href="#" class="dropdown-item"
+                                            data-toggle="modal"
+                                            data-target="#shareItem"
+                                            data-header="Share {{ $folder->name }} folder"
+                                            data-item="{{ $folder->id }}"
+                                            data-type="folders"
+                                        >Share Folder</a>
                                         {{-- <a href="#" class="dropdown-item disabled" data-sidebar-target="#view-detail">View Details</a>
                                         <a href="#" class="dropdown-item disabled">Share</a>
                                         <a href="#" class="dropdown-item disabled">Download</a>
@@ -144,5 +173,67 @@
 </main>
 
 @include('modals.addfolder')
+
+
+
+@push('scripts')
+    <script>
+        $('.foldercard').contextmenu(function(e){
+            e.preventDefault();
+            $($(this).attr('menu'))
+            .dropdown('toggle');
+        });
+
+        $('.foldercard').dblclick(function(e) {
+            e.preventDefault();
+            window.location.href = $(this).attr('href');
+        });
+
+        $('#shareItem').on('show.bs.modal', function(e) {
+            const button = $(e.relatedTarget);
+            const item = button.data('item');
+            const header = button.data('header');
+            const type = button.data('type');
+            const modal = $(this);
+            modal.find('.block-title').text(header);
+            modal.find('input[name="item_id"]').val(item);
+            modal.find('input[name="type"]').val(type);
+        });
+
+        $('#sharedType').change(function(e) {
+            select = $(this);
+            form = '';
+            if(select.val() == 'single')
+            {
+                form = '<input type="text" name="shared_with" placeholder="Enter User Email" class="form-control" required>';
+            } else if(select.val() == 'group')
+            {
+                form = '<select class="custom-select" name="shared_with" required>'
+                                +'<option value="" selected disable hidden>Select a group</option>'
+                                @forelse($createdGroups as $cg)
+                                    +'<option value="{{ $cg->id }}">{{ $cg->name }}</option>'
+                                @empty
+                                    '<option value="">You have created no group</option>'
+                                @endforelse
+                            +'</select>';
+            }
+            $('#sharedWith').html(form);
+        });
+
+        @if(Session::has(['status', 'notify']) && Session::get('notify') == true)
+        <script src="{{ asset('assets/js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+            Codebase.helpers('notify', {
+                align: 'right',             // 'right', 'left', 'center'
+                from: 'top',                // 'top', 'bottom'
+                type: "{{ session('status') }}",               // 'info', 'success', 'warning', 'danger'
+                icon: 'fa fa-info mr-5',    // Icon class
+                message: "{{ Session('message') }}"
+            });
+        @endif
+    </script>
+@endpush
+
+
+
 
 @endsection

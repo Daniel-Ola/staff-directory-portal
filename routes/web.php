@@ -142,6 +142,14 @@ Route::group(['middleware' => 'profile'], function () {
     Route::post('/folderdelete', 'FilemanagerController@folderDelete')->name('folder.delete');
     
     Route::get('/myfolder/{slug}', 'FilemanagerController@getFolder')->name('folder.get');
+
+    // public files
+    Route::get('publicfolder/{slug?}', 'FilemanagerController@publicFolders')->name('public.folders');
+    Route::get('sharedfolders/{slug?}', 'FilemanagerController@sharedFolders')->name('shared.folders');
+    Route::post('share-folder/{slug?}', 'FilemanagerController@shareFolder')->name('share.folder');
+
+    // create Groups
+    Route::post('create-group', 'UserController@createGroup')->name('group.create');
 });
 
 

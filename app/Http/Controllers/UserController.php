@@ -76,4 +76,30 @@ class UserController extends Controller
         Config::set('database.connections.tenant.database', $dbName);
         return DB::connection('tenant');
     }
+
+    public function createGroup(Request $request)
+    {
+        DB::beginTransaction();
+        $data = array_merge($request->only(['name', 'type']), ['created_by' => Auth::user()->id]);
+        $createdGroup = \App\Group::create($data);
+        try {
+            $members = $request->user_id;
+            foreach ($members as $i => $member) {
+                $toSave = ['user_id' => $member, 'group_id' => $createdGroup->id];
+                \App\GroupMember::create($toSave);
+            }
+            DB::commit();
+            return back()->with([
+                'status' => 'success',
+                'message' => 'User group created successfully'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+            return back()->with([
+                'status' => 'warning',
+                'message' => 'User group could not be created'
+            ]);
+        }
+    }
 }
