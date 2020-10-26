@@ -89,6 +89,10 @@ Route::group(['middleware' => ['superadmin', 'profile']], function () {
     Route::post('sub-desig', 'HomeController@saveSubDesig')->name('subdesig');
 
     Route::post('edit-sub-desig', 'HomeController@editSubDesig')->name('editsubdesig');
+
+    Route::post('sub-group', 'HomeController@createSubsidiaryubGroup')->name('sub.group');
+
+    Route::post('assign-grouprole', 'HomeController@assignGroupRole')->name('grouprole.assign');
     
 
     // settings
@@ -150,6 +154,10 @@ Route::group(['middleware' => 'profile'], function () {
 
     // create Groups
     Route::post('create-group', 'UserController@createGroup')->name('group.create');
+
+    Route::get('audit', function (){
+        return view('pages.audit');
+    })->middleware('can:superadmin');
 });
 
 

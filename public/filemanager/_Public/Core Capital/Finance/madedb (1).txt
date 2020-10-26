@@ -1,0 +1,41 @@
+properties_table
+	id
+	name
+	slug
+	type
+	price
+	area
+	rooms
+	address
+	city
+	state
+	zip
+	description
+	prop_attr_id
+	prop_gallery_id
+
+prop_gallery
+	id
+	prop_id
+	path
+
+prop_attr
+	id
+	prop_id
+	attr_id
+	attr_count (e.g the number of bath or air con)
+
+attributes
+	id
+	name
+	has_option (true/1 for the ones that have the select tag)
+	options
+	
+
+api key
+741332164158461
+sec
+2zQZ8AB_4G1cKQNVjRkqXSEGpDk
+env
+cloudinary://741332164158461:2zQZ8AB_4G1cKQNVjRkqXSEGpDk@danielola
+	

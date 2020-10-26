@@ -27,10 +27,10 @@
                 @if (Request::segment(1) == 'publicfolder' && !empty(Request::segment(2)))
                     <a href="{{ route('public.folders') }}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> Public Folders</a>
                     <a href="{{ route('fmi') }}" class="btn btn-primary"><i class="fa fa-home" aria-hidden="true"></i> Go root folder</a>
-                {{-- @endif --}}
-                <button class="btn btn-primary float-right mx-2" data-toggle="modal" data-target="#addFolder"><i class="fa fa-plus" aria-hidden="true"></i>  New Folder</button>
-                {{-- @if (Request::segment(1) == 'publicfolder' && !empty(Request::segment(2))) --}}
-                    <button class="btn btn-primary float-right" data-toggle="modal" data-target="#addFile"><i class="fa fa-plus" aria-hidden="true"></i>  New File in this directory</button>
+                    @if ($parentSub == Auth::user()->subsidiary)
+                        <button class="btn btn-primary float-right mx-2" data-toggle="modal" data-target="#addFolder"><i class="fa fa-plus" aria-hidden="true"></i>  New Folder</button>
+                        <button class="btn btn-primary float-right" data-toggle="modal" data-target="#addFile"><i class="fa fa-plus" aria-hidden="true"></i>  New File in this directory</button>
+                    @endif
                 @endif
             </div>
             @if (Session::has('status'))
@@ -208,6 +208,54 @@
                 @endif
             @endforelse
         </div>
+
+        @can('grouphead')
+            @if ( ! empty($Subsidiaryfolders))
+                <h4>Group Files</h4>
+                @forelse ($Subsidiaryfolders as $j => $subsidiaryFolder)
+                    <div class="col-md-3 m-3 p-3 bg-white shadow foldercard" menu="#folder{{ $j }}" href="{{ route('public.folders', [$subsidiaryFolder->slug]) }}" style="border: 0px groove #bb0903; border-radius: 5px;">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-4">
+                                    <div>
+                                        <i class="fa fa-folder text-primary" style="font-size: 22px;"></i>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <a href="{{ route('public.folders', [$subsidiaryFolder->slug]) }}"><h5>{{ $subsidiaryFolder->name }}</h5></a>
+                                    <div class="dropdown">
+                                        <a href="#" class="btn btn-floating" id="folder{{ $j }}" data-toggle="dropdown">
+                                            <i class="fa fa-ellipsis-h text-primary"></i>
+                                        </a>
+                                        {{-- remove the padding --}}
+                                        <div class="dropdown-menu dropdown-menu-right p-0">
+                                            <a href="{{ route('public.folders', [$subsidiaryFolder->slug]) }}" class="dropdown-item" data-sidebar-target="#view-detail">Open Folder</a>
+                                            <a href="#" class="dropdown-item"
+                                                data-toggle="modal"
+                                                data-target="#shareItem"
+                                                data-header="Share {{ $subsidiaryFolder->name }} folder"
+                                                data-item="{{ $subsidiaryFolder->id }}"
+                                                data-type="folders"
+                                            >Share Folder</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="small text-muted mb-0" style="filter: blur(2px); -webkit-filter: blur(2px);">1.754 Files</p>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    @if (Request::segment(2))
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong>There are no folders in this directory</strong> 
+                        </div>
+                    @endif
+                @endforelse
+            @endif
+        @endcan
 
     </div>
     

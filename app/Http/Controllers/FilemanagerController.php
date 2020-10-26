@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File as Filemanager;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -289,18 +290,24 @@ class FilemanagerController extends Controller
 
     public function publicFolders($slug = null)
     {
+        $headings = \App\GroupHead::where('user_id', Auth::user()->id)->pluck('group_id')->toArray();
+        $subs = [intval(Auth::user()->subsidiary), 2];
+        $Subsidiaryfolders = []; //initializes and changes is isAnyGroupHead 
+        $subs = array_merge($subs, $headings);
+        $subs = array_unique($subs, SORT_NUMERIC);
+        $isAnyGroupHead = Gate::allows('grouphead');
         $createdGroups = \App\Group::where('created_by', Auth::user()->id)->get();
         if($slug)
         {
-            $data = $this->subPublicFolder($slug);
+            $data = $this->subPublicFolder($slug, $isAnyGroupHead, $headings, $subs);
         } else {
-            $data = $this->rootPublicFolder();
+            $data = $this->rootPublicFolder($isAnyGroupHead, $headings, $subs);
         }
         $data = array_merge($data, ['createdGroups' => $createdGroups]);
         return view('pages.publicfilemanager')->with($data);
     }
 
-    public function rootPublicFolder()
+    public function rootPublicFolder($isAnyGroupHead, $headings, $subs)
     {
         $this->createPublicFolders();
         $folders = Folder::where([
@@ -309,36 +316,50 @@ class FilemanagerController extends Controller
             ['dept', Auth::user()->department],
         ])
         ->where(function($query) {
-            $query->where('scope', 'sub')
-                ->orWhere('scope', 'dept');
+            $query->where('scope', 'dept');
         })->get();
+
+        if($isAnyGroupHead) {
+            // join('subsidiaries as s', 's.id', 'folders.sub')->
+            $Subsidiaryfolders = Folder::where('parent', 0)->whereIn('sub', $subs)
+            ->where(function($SubFoldquery) {
+                $SubFoldquery->where('scope', 'sub');
+            })->get();
+            // ['folders.*', 's.name']
+        }
+
         $allfolders = Folder::where('user_id', Auth::user()->id)->get();
         return [
             'folders' => $folders,
             'files' => [],
-            'allfolders' => $folders
+            'allfolders' => $folders,
+            'Subsidiaryfolders' => $Subsidiaryfolders,
+            'parentSub' => Auth::user()->subsidiary
         ];
     }
 
-    public function subPublicFolder($slug)
+    public function subPublicFolder($slug, $isAnyGroupHead, $headings, $subs)
     {
-        // return $slug;
         $userSub = Auth::user()->subsidiary;
         $userDept = Auth::user()->department;
         try {
             $parent = Folder::where('slug', $slug);//->first();//->select('id')->get();
-            if(!$parent->exists()) abort(404);
+            if(!$parent->exists()) abort(404, '404');
             $parent = $parent->first();
             $scope = $parent->scope; // defines the scope of the selected folder, whether departmental of subsidiary based
             if($scope == 'sub')
             {
-                if($parent->sub != $userSub) abort(403);
+                if( ! in_array($parent->sub, $subs)) abort(403, '403');
             } elseif ($scope = 'dept') {
-                if($parent->sub != $userSub &&
-                    $parent->dept != $userDept) abort(403);
+                if($isAnyGroupHead) {
+                    if(! in_array($parent->sub, $subs)) abort(403, '403');
+                } else {
+                    if($parent->sub != $userSub &&
+                        $parent->dept != $userDept) abort(403, '403');
+                }
             }
             $pid = $parent->id;
-            $folder = Folder::where([
+            $folders = Folder::where([
                 ['parent', $pid]
             ])->get();
             $files = File::where([
@@ -346,14 +367,21 @@ class FilemanagerController extends Controller
             ])->get();
             $allfolders = Folder::where('scope', $scope)->get();
             return [
-                'folders' => $folder,
+                'folders' => $folders,
                 'files' => $files,
                 'allfolders' => $allfolders,
+                'Subsidiaryfolders' => [],
+                'parentSub' => $parent->sub
             ];
             
         } catch (\Throwable $th) {
-            abort(404);
-            throw $th;
+            if(is_numeric($th->getMessage()))
+            {
+                $code = $th->getMessage();
+                abort($code);
+            } else {
+                abort(500);
+            }
         }
     }
 

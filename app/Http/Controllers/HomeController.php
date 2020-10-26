@@ -315,10 +315,16 @@ class HomeController extends Controller
         $subs = Subsidiary::orderBy('name')->get();
         $desigs = Designation::orderBy('dept_id')->get();
         $depts = Department::orderBy('name')->get();
+        $grouped = \App\SubsidiaryGroupMember::pluck('sub_id');
+        $free = Subsidiary::whereNotIn('id', $grouped)->get(['id', 'name']);
+        $groups = \App\SubsidiaryGroup::orderBy('name')->get();
         return view('pages.subdeg')->with([
             'subs' => $subs,
             'desigs' => $desigs,
-            'depts' => $depts
+            'depts' => $depts,
+            'free' => $free,
+            'groups' => $groups,
+            'roles' => \App\GroupHeadRole::all()
         ]);
     }
 
@@ -371,6 +377,41 @@ class HomeController extends Controller
             }
         }
         return back()->with('status', 'Item Updated Successfully');
+    }
+
+    public function createSubsidiaryubGroup(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $group = \App\SubsidiaryGroup::create($request->only('name'));
+            foreach ($request->sub_id as $sub_id) {
+                \App\SubsidiaryGroupMember::create([
+                    'sub_id' => $sub_id,
+                    'group_id' => $group->id
+                ]);
+            }
+            DB::commit();
+            return back()->with('status', 'Group created successfully');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+            return back()->with('status', 'Group could not be created');
+        }
+        return $request;
+    }
+
+    public function assignGroupRole(Request $request)
+    {
+        $check = \App\GroupHead::where([
+            ['user_id', $request->user_id],
+            ['group_id', $request->group_id],
+            ['role_id', $request->role_id]
+        ])->exists();
+        if( ! $check)
+        {
+            \App\GroupHead::create($request->except('_token'));
+        }
+        return back()->with('status', 'Role assigned successfully');
     }
 
     public function showWishes() {

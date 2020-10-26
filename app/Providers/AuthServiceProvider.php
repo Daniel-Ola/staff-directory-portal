@@ -32,5 +32,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('superadmin', function($user) {
             return $user->access == 1;
         });
+
+        Gate::define('grouphead', function ($user) {
+            return $check = \App\SubsidiaryGroup::join('group_heads as gh', 'gh.group_id', 'subsidiary_groups.id')->where('gh.user_id', $user->id)->exists();
+        });
     }
 }
