@@ -52,6 +52,7 @@ class FilemanagerController extends Controller
 
     function createFolder(Request $request) {
         // return $request;
+        $prev = \URL::previous();
         $userRootFolder = 'filemanager/'.Auth::user()->email;
         $data = $request->except('_token');
         $validate = Validator::make($data, [
@@ -67,6 +68,7 @@ class FilemanagerController extends Controller
         try {
             // 
             if($request->parent == 0) {
+                // return 'root';
                 $createPath = $userRootFolder.'/'.$request->name;
                 $path = Auth::user()->email.'/'.$request->name;
                 if(file_exists($createPath)) {
@@ -77,9 +79,11 @@ class FilemanagerController extends Controller
                 }
                 mkdir($createPath);
             } else {
+                // return 'notroot';
                 $parent = Folder::find($request->parent);
                 $path = $parent->path.'/'.$request->name;
                 // return $parent->path;
+                // create folder in directory
                 if(file_exists('filemanager/'.$parent->path)) {
                     if(file_exists('filemanager/'.$path)) {
                         return back()->with([
@@ -94,8 +98,16 @@ class FilemanagerController extends Controller
                         'message' => 'Parent folder cannot be found',
                     ]);
                 }
+
+                // moved here
+                
             }
-            if($parent->scope != 'private')
+            // was here
+                if(strpos($prev, 'filemanagement')) { $scope = 'private'; }
+                else { $scope = 'dept'; }//'$parent->scope';
+            // create folder in db
+            // return $scope;
+            if($scope != 'private')
             {
                 Folder::create([
                     'parent' => $request->parent,
@@ -114,6 +126,7 @@ class FilemanagerController extends Controller
                     'user_id' => Auth::user()->id,
                     'slug' => Str::uuid().'-'.time().'-'.Auth::user()->email,
                     'path' => $path,
+                    'scope' => $scope
                 ]);
             }
             
@@ -122,7 +135,7 @@ class FilemanagerController extends Controller
                     'message' => 'Folder created successfully',
                 ]);
         } catch (Exception $e) {
-            throw $e;
+            throw $e->getMessage();
             return back()->with([
                 'status' => 'warning',
                 'message' => 'Folder not created successfully',
@@ -326,6 +339,8 @@ class FilemanagerController extends Controller
                 $SubFoldquery->where('scope', 'sub');
             })->get();
             // ['folders.*', 's.name']
+        } else {
+            $Subsidiaryfolders = [];
         }
 
         $allfolders = Folder::where('user_id', Auth::user()->id)->get();
