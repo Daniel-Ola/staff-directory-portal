@@ -96,40 +96,6 @@
                             {{-- @if (Auth::user()->profile == 0) --}}
                                 <div class="form-group row">
                                     <div class="col-12">
-                                        <label for="profile-settings-desig">Department</label>
-                                        <select name="department" id="profile-dept-edit" class="form-control" required>
-                                            <option value="" disabled hidden @if(Auth::user()->department == 0) {{ 'selected' }} @endif>Select One</option>
-                                            @foreach ($depts as $dept)
-                                                <option value="{{ $dept->id }}" @if($dept->id == Auth::user()->department) {{ 'selected' }} @endif>{{ $dept->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <input type="hidden" class="form-contr
-                                        ol form-control-lg" id="profile-settings-desig" value="{{ Auth::user()->department ?? '0' }}" required>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-12">
-                                        <label for="profile-settings-desig">Designation</label>
-                                        <select name="designation" id="profile-desig-edit" class="form-control" required>
-                                            <option value="" disabled hidden @if(Auth::user()->designation == 0) {{ 'selected' }} @endif>Select One</option>
-                                            @forelse ($desigs as $desig => $des)
-                                                <optgroup label="{{ $desig }} Department">
-                                                    @forelse ($des as $de)
-                                                        <option value="{{ $de['id'] }}" @if($de['id'] == Auth::user()->designation) {{ 'selected' }} @endif>{{ $de['name'] }}</option>
-                                                    @empty
-                                                        <option value="">Nill</option>
-                                                    @endforelse
-                                                </optgroup>
-                                            @empty
-                                                <option value='0' selected disabled>No designations found</option>
-                                            @endforelse
-                                        </select>
-                                        <input type="hidden" class="form-contr
-                                        ol form-control-lg" id="profile-settings-desig" value="{{ Auth::user()->designation ?? '0' }}" required>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-12">
                                         <label for="profile-settings-sub">Subsidiary</label>
                                         <select name="subsidiary" id="profile-sub-edit" class="form-control" required>
                                             <option value="" disabled hidden @if(Auth::user()->designation == 0) {{ 'selected' }} @endif>Select One</option>
@@ -140,6 +106,9 @@
                                         <input type="hidden" class="form-control form-control-lg" id="profile-settings-sub" value="{{ Auth::user()->subsidiary ?? '0' }}" required>
                                     </div>
                                 </div>
+                                @livewire('profile-edit', [
+                                    'depts' => $depts
+                                ])
                                 <div class="form-group row">
                                     <div class="col-12">
                                         <label for="profile-settings-sub">Birthday info</label>

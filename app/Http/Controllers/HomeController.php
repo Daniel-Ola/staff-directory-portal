@@ -45,7 +45,7 @@ class HomeController extends Controller
         $birthdays = User::where([
             ['day', $day],
             ['month', $month],
-            // ['id', '<>', Auth::user()->id],
+            // ['id', '<>', Auth::id()],
         ])->get();
         // if($birthdays->count() != 0) {
         //     $wishes = some random selection;
@@ -62,20 +62,20 @@ class HomeController extends Controller
     }
 
     public function profileView() {
-        $sub = Auth::user()->department;
+        $dept = Auth::user()->department;
 
         $colleagues = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
                         ->leftjoin('designations as des', 'designation', 'des.id')
                         ->where([
-                            ['users.department', $sub],
+                            ['users.department', $dept],
                             ['users.department', '<>', 0],
-                            ['users.id', '<>', Auth::user()->id]
+                            ['users.id', '<>', Auth::id()]
                         ])
                         ->select('users.*', 'sub.name as subname', 'des.name as desname')->get() ;
         $profile = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
                         ->leftjoin('designations as des', 'designation', 'des.id')
                         ->where([
-                            ['users.id', Auth::user()->id]
+                            ['users.id', Auth::id()]
                         ])
                         ->select('users.*', 'sub.name as subname', 'des.name as desname')->first() ;
         return view('pages.profileview')
@@ -102,7 +102,7 @@ class HomeController extends Controller
         $profile = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
                         ->leftjoin('designations as des', 'designation', 'des.id')
                         ->where([
-                            ['users.id', Auth::user()->id]
+                            ['users.id', Auth::id()]
                         ])
                         ->select('users.*', 'sub.name as subname', 'des.name as desname')->first() ;
         $auth = Auth::user();
@@ -157,7 +157,7 @@ class HomeController extends Controller
             $dp = Auth::user()->dp;
         }
         $data = array_merge($data, ['dp' => $dp]);
-        $updateDetails = User::where('id', Auth::user()->id)->update($data);
+        $updateDetails = User::where('id', Auth::id())->update($data);
         return back();
     }
 
@@ -174,7 +174,7 @@ class HomeController extends Controller
         // return $request;
         $id = $request->id;
         $data = $request->except(['id', '_token', 'name']);
-        $data = array_merge($data, ['updated_by' => Auth::user()->id]);
+        $data = array_merge($data, ['updated_by' => Auth::id()]);
         User::find($id)->update($data);
         return User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
                         ->leftjoin('designations as des', 'designation', 'des.id')
@@ -208,7 +208,7 @@ class HomeController extends Controller
             foreach ($emails as $email) {
                 User::create([
                     'email' => trim($email),
-                    'updated_by' => Auth::user()->id,
+                    'updated_by' => Auth::id(),
                     ]);
             }
             DB::commit();
@@ -233,7 +233,7 @@ class HomeController extends Controller
         try {
             User::where('email', $request->email)->update([
                 'access' => $request->access,
-                'updated_by' => Auth::user()->id
+                'updated_by' => Auth::id()
             ]);
             return back()->with('status', 'Role assigned successfully');
         } catch (Exception $e) {
@@ -257,7 +257,7 @@ class HomeController extends Controller
         try {
             $data = [
                 'access' => '0',
-                'updated_by' => Auth::user()->id
+                'updated_by' => Auth::id()
             ];
             User::find($user)->update($data);
             return back()->with('status', 'Admin has been removed successfully');

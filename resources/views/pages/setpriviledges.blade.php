@@ -17,7 +17,7 @@
     <div class="content">
         <div class="row invisible" data-toggle="appear">
             <div class="col-12">
-                @livewire('module-manager')
+                @livewire('set-privileges')
             </div>
         </div>
 </main>
