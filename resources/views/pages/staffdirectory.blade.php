@@ -6,14 +6,15 @@
     <div class="content">
         <h2 class="content-heading">Staff Directory</h2>
 
+        @livewire('staff-directory')
         <!-- Dynamic Table Full -->
-        <div class="block">
+        <div class="block d-none">
             <div class="block-header block-header-default">
                 <h3 class="block-title">All Staffs <small></small></h3>
             </div>
             <div class="block-content block-content-full">
                 <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
-                <table class="table table-responsive table-bordered table-striped table-vcenter js-dataTable-full">
+                {{-- <table class="table table-responsive table-bordered table-striped table-vcenter js-dataTable-full">
                     <thead>
                         <tr>
                             <th class="text-center"></th>
@@ -38,7 +39,6 @@
                     @endphp
                         <tr id="user{{ $staff->id }}">
                             <form id="editUser{{$count}}" method="post">
-                                {{-- <input type="hidden" value="" name="_token"> --}}
                             <td class="text-center">
                                 <span class="">{{ $count }}</span>
                                 <input type="hidden" class="form-control editable" value="{{ $staff->id }}" name="id" readonly form="editUser{{$count}}">
@@ -105,9 +105,7 @@
                                         deselect1="#profile-desig-edit{{ $count }}"
                                         deselect2="#profile-settings-desig{{ $count }}"
                                         title="Edit Profile">
-                                        {{--  --}}
                                         <i class="fa fa-pencil"></i>
-                                        {{--  --}}
                                     </button>
                                     <button type="submit" style="display: none;" form="editUser{{ $count }}" class="btn btn-sm btn-primary updateProfile m-1" count="{{ $count }}" title="Update Profile"
                                     in=".input{{ $count }}"
@@ -123,7 +121,7 @@
                         </tr>
                     @endforeach
                     </tbody>
-                </table>
+                </table> --}}
             </div>
         </div>
         <!-- END Dynamic Table Full -->

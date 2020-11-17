@@ -44,7 +44,10 @@ class AnnouncementController extends Controller
      */
     public function create()
     {
-        return view('pages.createann');
+        return view('pages.createann', [
+            'subs' => \App\Subsidiary::all(),
+            'depts' => \App\Department::all()
+        ]);
     }
 
     /**
@@ -56,14 +59,11 @@ class AnnouncementController extends Controller
     public function store(Request $request)
     {
         try {
-            Announcement::create([
-                'user_id' => Auth::user()->id,
-                'subject' => $request->subject,
-                'details' => $request->details
-            ]);
+            $data = array_merge($request->except('_token'), ['user_id' => Auth::id()]);
+            Announcement::create($data);
             return back()->with('status', 'Announcement has been sent');
         } catch (Exception $e) {
-            return $e;
+            // return $e->getMessage();
             return back()->with('status', 'Announcement could not be created');
         }
     }

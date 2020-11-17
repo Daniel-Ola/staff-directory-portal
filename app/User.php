@@ -41,4 +41,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserSoftware::class);
     }
+
+    public function scopeSubsidiary($query)
+    {
+        return $query->leftJoin('subsidiaries as sub', 'sub.id', 'users.subsidiary');//->select(['sub.name as subsidiary', 'users.*']);
+    }
+
+    public function scopeDesignation($query)
+    {
+        return $query->leftJoin('designations as desig', 'desig.id', 'users.designation');//->select(['sub.name as subsidiary', 'users.*']);
+    }
 }

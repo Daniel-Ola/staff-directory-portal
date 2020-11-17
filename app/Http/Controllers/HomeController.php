@@ -47,12 +47,20 @@ class HomeController extends Controller
             ['month', $month],
             // ['id', '<>', Auth::id()],
         ])->get();
-        // if($birthdays->count() != 0) {
-        //     $wishes = some random selection;
-        // }
+        $userSub = Auth::user()->subsidiary;
+        $userDept = Auth::user()->department;
         $announcements = Announcement::join('users as u', 'u.id', 'announcements.user_id')
                             ->whereBetween('announcements.created_at', [$week, $now])
-                            ->select('firstname', 'lastname', 'announcements.created_at as created_at', 'details', 'subject', 'email', 'announcements.id as id')
+                            ->orWhere(function($subAnn) use($userSub) {
+                                $subAnn->where('sub', $userSub)->orWhere('all_of_us', 1);
+                            })
+                            ->orWhere(function($subDeptAnn) use($userSub, $userDept) {
+                                $subDeptAnn->where([
+                                        ['sub', $userSub],
+                                        ['dept', $userDept]
+                                    ])->orWhere('all_of_us', 1);
+                            })
+                            ->select('firstname', 'lastname', 'announcements.*')
                             ->orderBy('created_at', 'DESC')->get();
         return view('pages.home')->with([
             'anns' => $announcements,

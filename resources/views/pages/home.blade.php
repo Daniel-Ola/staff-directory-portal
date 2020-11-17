@@ -98,7 +98,7 @@
                             <strong>Anouncements</strong>
                         </div>
                         <div class="block-options">
-                            <button type="button" class="btn-block-option" data-toggle="block-option">
+                            {{-- <button type="button" class="btn-block-option" data-toggle="block-option">
                                 <i class="si si-arrow-left"></i>
                             </button>
                             <button type="button" class="btn-block-option" data-toggle="block-option">
@@ -106,7 +106,7 @@
                             </button>
                             <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
                                 <i class="si si-refresh"></i>
-                            </button>
+                            </button> --}}
                             <button type="button" class="btn-block-option" data-toggle="block-option" data-action="fullscreen_toggle"></button>
                         </div>
                     </div>
@@ -131,6 +131,11 @@
                         <!-- Messages -->
                         <!-- Checkable Table (.js-table-checkable class is initialized in Helpers.tableToolsCheckable()) -->
                         <table class="js-table-checkable table table-hover table-vcenter">
+                            <thead>
+                                <th>Posted by</th>
+                                <th>Details</th>
+                                <th>Date</th>
+                            </thead>
                             <tbody>
                             @forelse ($anns as $ann)
                                 @php

@@ -16,7 +16,8 @@
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
-        "livewire/livewire": "^2.2"
+        "livewire/livewire": "^2.2",
+        "mtownsend/progress": "^2.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
