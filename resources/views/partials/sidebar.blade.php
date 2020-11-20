@@ -37,15 +37,15 @@
         <!-- Side User -->
         <div class="content-side content-side-full content-side-user px-10 align-parent">
             <!-- Visible only in mini mode -->
-            <div class="sidebar-mini-visible-b align-v animated fadeIn">
-                <img class="img-avatar img-avatar32" src="{{ asset(Auth::user()->dp) }}" alt="">
+            <div class="sidebar-mini-visible-b align-v animated fadeIn" style="border: 2px solid red !important;">
+                <img class="img-avatar img-avatar32" src="{{ asset(Auth::user()->dp) }}" alt="" style="border: 2px solid blue !important;">
             </div>
             <!-- END Visible only in mini mode -->
 
             <!-- Visible only in normal mode -->
             <div class="sidebar-mini-hidden-b text-center">
-                <a class="img-link" href="/profile/view">
-                    <img class="img-avatar" src="{{ asset(Auth::user()->dp) }}" alt="">
+                <a class="img-link" href="/profile/view" style="width: 100%; height: 100%;">
+                    <img class="img-avatar img-fluid" src="{{ asset(Auth::user()->dp) }}" alt="" style="border-radius: 0 !important; width: 100%; object-fit: contain !important;">
                 </a>
                 <ul class="list-inline mt-10">
                     <li class="list-inline-item">
