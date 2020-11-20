@@ -13,11 +13,11 @@ class StaffDirectory extends Component
     protected $paginationTheme = 'bootstrap';
     protected $searchResults;
 
-    public $limit, $query, $fname;//, //, $staffs;
+    public $limit, $query;
 
     public function mount()
     {
-        $this->limit = 4;
+        $this->limit = 20;
     }
 
     public function updatedQuery()
@@ -30,14 +30,12 @@ class StaffDirectory extends Component
 
     public function getStaffs()
     {
-        return \App\User::subsidiary()->designation()->paginate($this->limit);
+        return \App\User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
+        ->leftjoin('designations as des', 'designation', 'des.id')
+        ->select('users.*', 'sub.name as subname', 'des.name as desname')
+        ->paginate($this->limit); //subsidiary()->designation()->paginate($this->limit);
     }
-
-    public function openModal($i)
-    {
-        $this->fname = $i;
-    }
-
+    
     public function render()
     {
         if($this->query == '')

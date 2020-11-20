@@ -20,10 +20,19 @@
     <div class="row" wire:loading.remove wire:target="query">
         @forelse ($staffs as $i => $staff)
             <div class="col-md-6 col-xl-3">
-                <a class="block text-center" href="javascript:void(0)">
-                    @can('superadmin')
-                        <div class="ribbon-box"> <i class="fa fa-pencil" aria-hidden="true" data-toggle="modal" wire:click="openModal({{ $i }})" data-target="#modal-edituser"></i> </div>
+                <a class="block text-center @can('superadmin') openEditUserModal @endcan" href="javascript:void(0)"
+                    @can('superadmin') 
+                        data-fname="{{ $staff->firstname }}"
+                        data-email="{{ $staff->email }}"
+                        data-id="{{ $staff->id }}"
+                        data-subsidiary="{{ $staff->subsidiary }}"
+                        data-department="{{ $staff->department }}"
+                        data-designation="{{ $staff->designation }}"
                     @endcan
+                >
+                {{-- 
+                        data-toggle="modal"
+                        data-target="#modal-edituser" --}}
                     <div class="block-content block-content-full bg-body-light">
                         <img class="img-avatar img-avatar-thumb" src="{{ asset($staff->dp) }}" alt="">
                     </div>
@@ -59,48 +68,8 @@
     </div>
 
     {{-- editing modal --}}
-
-        <div class="modal fade" id="modal-edituser" tabindex="-1" role="dialog" aria-labelledby="modal-message" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-popout" role="document" style="border-bottom: 5px solid #343a40;">
-                <div class="modal-content">
-                    <div class="block block-themed block-transparent mb-0">
-                        <div class="block-header bg-primary-dark">
-                            <h3 class="block-title">Edit User</h3>
-                            <div class="block-options">
-                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
-                                    <i class="si si-close"></i>
-                                </button>
-                            </div>
-                        </div>
-                        {{-- <div class="block-content block-content-full block-content-sm bg-body font-size-sm">
-                        </div> --}}
-                        <div class="block-content">
-                            <form action="{{ route('editsubdesig') }}" method="post">
-                                @csrf
-                                <div class="form-group row">
-                                    <label>Name</label>
-                                    <input type="text" class="form-control" name="firstname" value="{{ $fname }}">
-                                </div>
-                                <div class="form-group row mt-4">
-                                    <div class="col-12">
-                                        <button type="submit" class="btn btn-alt-info" name="action" value="update">
-                                            Update
-                                        </button>
-                                        <button type="submit" class="btn btn-alt-danger" name="action" value="delete">
-                                            Delete
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    {{-- editing modal --}}
-
-
-    {{-- blank --}}
+    <div wire:ignore>
+        @include('modals.staffdirectorymodal')
+    </div>
 
 </div>

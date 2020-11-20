@@ -92,7 +92,7 @@
             <div id="page-container" class="sidebar-o enable-page-overlay side-scroll page-header-modern main-content-boxed">
                 {{-- side-trans-enabled sidebar-o-xs --}}
                 <!-- Side Overlay-->
-                @include('partials.sideoverlay')
+                {{-- @include('partials.sideoverlay') --}}
                 <!-- END Side Overlay -->
             
                 <!-- Sidebar -->
@@ -132,16 +132,16 @@
 <script src="{{ asset('assets/js/pages/citi_profile.js') }}"></script>
 
         <script>
-            jQuery(function(){
-                Codebase.helpers('table-tools');
-                Codebase.helpers('notify', {
-                align: 'right',             // 'right', 'left', 'center'
-                from: 'top',                // 'top', 'bottom'
-                type: "info",               // 'info', 'success', 'warning', 'danger'
-                icon: 'fa fa-info mr-5',    // Icon class
-                message: "hello world"
-            });
-            });
+            // jQuery(function(){
+            //     Codebase.helpers('table-tools');
+            //     Codebase.helpers('notify', {
+            //     align: 'right',             // 'right', 'left', 'center'
+            //     from: 'top',                // 'top', 'bottom'
+            //     type: "info",               // 'info', 'success', 'warning', 'danger'
+            //     icon: 'fa fa-info mr-5',    // Icon class
+            //     message: "hello world"
+            // });
+            // });
         </script>
 
         @if (Request::segment('1') == 'staffs' && Request::segment('2') == 'view')

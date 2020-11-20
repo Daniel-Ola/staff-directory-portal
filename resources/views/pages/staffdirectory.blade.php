@@ -6,6 +6,13 @@
     <div class="content">
         <h2 class="content-heading">Staff Directory</h2>
 
+        @if ($sitRep = Session::get('status'))
+            @include('partials.showalert', [
+                'status' => $sitRep['type'],
+                'message' => $sitRep['message']
+            ])
+        @endif
+
         @livewire('staff-directory')
         <!-- Dynamic Table Full -->
         <div class="block d-none">
@@ -189,18 +196,34 @@
 
 
 
-
- 
-
-
-
-
-
 </main>
 @endsection
 
-<script>
-    function setVal(select, input) {
-        console.log(select);
-    }
-</script>
+@push('scripts')
+    <script>
+        let e;
+        $(document).on('click', '.openEditUserModal', function(ev) {   
+            e = $(this)[0].dataset;
+           $('#modal-edituser').modal('show');
+        });
+        $('#modal-edituser').on('show.bs.modal', function (event) {
+            var button = e;
+            var modal = $(this)
+            modal.find('.fname').val(button.fname)
+            modal.find('.email').val(button.email)
+            modal.find('.id').val(button.id)
+            modal.find('.subsidiary').val(button.subsidiary)
+            modal.find('.department').val(button.department)
+            modal.find('.designation').val(button.designation)
+        });
+
+        $('.department').change(function() {
+            dept = '#desiggroup'+$(this).val();
+            $('.designation').val('');
+            $('.desiggroup').attr('hidden', 'true');
+            $(dept).removeAttr('hidden');
+        });
+
+    </script>
+    
+@endpush

@@ -27,8 +27,7 @@ class FilemanagerController extends Controller
                 mkdir($userFolder);
             } catch (\Throwable $th) {
                 return back();
-                throw $th;
-                return;
+                return $th->getMessage();
             }
         }
         $folder = Folder::where([

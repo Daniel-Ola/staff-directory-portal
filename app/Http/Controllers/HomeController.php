@@ -179,22 +179,28 @@ class HomeController extends Controller
     }
 
     public function updateProfile(Request $request) {
-        // return $request;
         $id = $request->id;
-        $data = $request->except(['id', '_token', 'name']);
+        $data = $request->except(['id', '_token', 'name', 'action']);
         $data = array_merge($data, ['updated_by' => Auth::id()]);
         User::find($id)->update($data);
-        return User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
-                        ->leftjoin('designations as des', 'designation', 'des.id')
-                        ->where('users.id', $id)
-                        ->select('users.*', 'sub.name as subname', 'des.name as desname')->get() ; //User::all();
+        return back()->with('status', [
+            'type' => 'info', 
+            'message' => 'User profile updated successfully'
+        ]);
+        // return User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
+        //                 ->leftjoin('designations as des', 'designation', 'des.id')
+        //                 ->where('users.id', $id)
+        //                 ->select('users.*', 'sub.name as subname', 'des.name as desname')->get() ; //User::all();
         // return User::find($id);
     }
 
     public function deleteProfile(Request $request) {
         $id = $request->id;
         User::find($id)->delete();
-        return true;
+        return back()->with('status', [
+            'type' => 'info', 
+            'message' => 'User profile deleted successfully'
+        ]);
     }
 
     public function pdfhtml() {
