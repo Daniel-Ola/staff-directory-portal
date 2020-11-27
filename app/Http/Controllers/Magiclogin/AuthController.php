@@ -71,12 +71,63 @@ class AuthController extends Controller
         }
         
     }
+    
+    // public function attendance() {        
+    //     try {
+    //         $userEmail = Auth::user()->email;
+    //         $pass = Str::random(15).time();
+    //         $token = hash('sha256', Hash::make($pass));
+    //         $conn = $this->setDB('cititrust_attendance');
+    //         $conn->table('user_tokens')->insert([
+    //             'email' => $userEmail,
+    //             'token' => $token,
+    //             'portal' => 'approval'
+    //         ]);
+    //         $signedUrl = URL::temporarySignedRoute(
+    //             'attendance.wand', now()->addMinutes(60), ['harry' => $userEmail, 'potter' => 'attendance', 'wizard' => $token]
+    //         );
+    //         $formedFromSigned = explode('...', $signedUrl);
+    //         if(is_array($formedFromSigned) && count($formedFromSigned) == 2) {
+    //             $redirectTo = $formedFromSigned[1];
+    //             return redirect($redirectTo);
+    //         }
+    //         abort(403);
+    //     } catch (\Throwable $th) {
+    //         // abort(503);
+    //         throw $th;
+    //     }
+        
+    // }
 
-    public function docuWand(Request $request) {
-        return $request;
+    public function swingWand($appName)
+    {
+        $appDb = config('portals.'. $appName .'.database');
+        try {
+            $userEmail = Auth::user()->email;
+            $pass = Str::random(15).time();
+            $token = hash('sha256', Hash::make($pass));
+            $conn = $this->setDB($appDb);
+            $conn->table('user_tokens')->insert([
+                'email' => $userEmail,
+                'token' => $token,
+                'portal' => $appName
+            ]);
+            $signedUrl = URL::temporarySignedRoute(
+                $appName.'.wand', now()->addMinutes(60), ['harry' => $userEmail, 'potter' => $appName, 'wizard' => $token]
+            );
+            $formedFromSigned = explode('...', $signedUrl);
+            if(is_array($formedFromSigned) && count($formedFromSigned) == 2) {
+                $redirectTo = $formedFromSigned[1];
+                return redirect($redirectTo);
+            }
+            abort(403);
+        } catch (\Throwable $th) {
+            // abort(503);
+            throw $th;
+        }
     }
 
-    // public function Wand(Request $request) {
+    // public function docuWand(Request $request) {
     //     return $request;
     // }
     

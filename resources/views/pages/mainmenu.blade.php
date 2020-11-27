@@ -225,7 +225,7 @@
             @endcan
 
             @forelse ($softwares as $soft)
-              <div class="main-menu-divs-inner gateway col-lg-2 col-md-3 col-sm-4 col-6" target='{{ route(strtolower($soft->name)) }}'>
+              <div class="main-menu-divs-inner gateway col-lg-2 col-md-3 col-sm-4 col-6" target="{{ route('wand.swing', [strtolower($soft->name)]) }}">
                 <img src="{{ asset($soft->icon) }}" />
                 <div class="title">{{ $soft->name }}</div>
                 <div class="description">{{ $soft->description }}</div>

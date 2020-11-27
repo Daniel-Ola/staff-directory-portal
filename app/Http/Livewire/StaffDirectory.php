@@ -22,8 +22,6 @@ class StaffDirectory extends Component
 
     public function updatedQuery()
     {
-        $config = new Config;
-        $this->searchResults = $config->searchUserNoFullTextWithPagination($this->query, $this->limit);
         $this->resetPage();
         $this->render();
     }
@@ -38,15 +36,9 @@ class StaffDirectory extends Component
     
     public function render()
     {
-        if($this->query == '')
-        {
-            return view('livewire.staff-directory', [
-                'staffs' => $this->getStaffs(),
-            ]);
-        } else {
-            return view('livewire.staff-directory', [
-                'staffs' => $this->searchResults,
-            ]);
-        }
+        $config = new Config;
+        return view('livewire.staff-directory', [
+            'staffs' => $config->searchUserNoFullTextWithPagination($this->query, $this->limit),
+        ]);
     }
 }

@@ -30,9 +30,6 @@
                         data-designation="{{ $staff->designation }}"
                     @endcan
                 >
-                {{-- 
-                        data-toggle="modal"
-                        data-target="#modal-edituser" --}}
                     <div class="block-content block-content-full bg-body-light">
                         <img class="img-avatar img-avatar-thumb" src="{{ asset($staff->dp) }}" alt="">
                     </div>

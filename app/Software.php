@@ -11,4 +11,8 @@ class Software extends Model
     protected $fillable = [
         'icon', 'name', 'url', 'description',
     ];
+
+    protected $hidden = [
+        'dbname', 'dbuname', 'dbpass'
+    ];
 }

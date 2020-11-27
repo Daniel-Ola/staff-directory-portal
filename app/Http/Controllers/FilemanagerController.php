@@ -65,12 +65,13 @@ class FilemanagerController extends Controller
             ]);
         }
         try {
+            $folderExists = $this->checkFolderExistence($request->parent, $request->name, Auth::id());
             // 
             if($request->parent == 0) {
                 // return 'root';
                 $createPath = $userRootFolder.'/'.$request->name;
                 $path = Auth::user()->email.'/'.$request->name;
-                if(file_exists($createPath)) {
+                if(file_exists($createPath) || $folderExists) {
                     return back()->with([
                         'status' => 'warning',
                         'message' => 'Folder already exist',
@@ -84,7 +85,7 @@ class FilemanagerController extends Controller
                 // return $parent->path;
                 // create folder in directory
                 if(file_exists('filemanager/'.$parent->path)) {
-                    if(file_exists('filemanager/'.$path)) {
+                    if(file_exists('filemanager/'.$path) || $folderExists) {
                         return back()->with([
                             'status' => 'warning',
                             'message' => 'Folder already exist',
@@ -141,6 +142,15 @@ class FilemanagerController extends Controller
             ]);;
         }
         return $request;
+    }
+
+    public function checkFolderExistence($parent, $folderName, $owner)
+    {
+        return \App\Folder::where([
+            ['parent', $parent],
+            ['name', $folderName],
+            ['user_id', $owner]
+        ])->exists();
     }
 
     function getFolder($slug) {
@@ -234,7 +244,8 @@ class FilemanagerController extends Controller
         // add bulk download later
         if($request->owner == Auth::user()->id) {
             try {
-                $fileloc = public_path().'/'.$request->file;
+                // return filetype(explode(config('app.url'), $request->file)[1]);
+                $fileloc = public_path().'/'. explode(config('app.url'), $request->file)[1];
                 return response()->download($fileloc);
             } catch (\Throwable $th) {
                 return $th;
@@ -364,13 +375,19 @@ class FilemanagerController extends Controller
             if($scope == 'sub')
             {
                 if( ! in_array($parent->sub, $subs)) abort(403, '403');
-            } elseif ($scope = 'dept') {
-                if($isAnyGroupHead) {
-                    if(! in_array($parent->sub, $subs)) abort(403, '403');
+            }
+            elseif ($scope = 'dept') {
+                if( ! $isAnyGroupHead ) {
+                    if($parent->sub != $userSub && $parent->dept != $userDept) abort(403, '403');
                 } else {
-                    if($parent->sub != $userSub &&
-                        $parent->dept != $userDept) abort(403, '403');
+                    if(! in_array($parent->sub, $subs)) abort(403, '403');
                 }
+                // if($isAnyGroupHead) {
+                //     if(! in_array($parent->sub, $subs)) abort(403, '403');
+                // } else {
+                //     if($parent->sub != $userSub &&
+                //         $parent->dept != $userDept) abort(403, '403');
+                // }
             }
             $pid = $parent->id;
             $folders = Folder::where([
@@ -384,7 +401,7 @@ class FilemanagerController extends Controller
                 'folders' => $folders,
                 'files' => $files,
                 'allfolders' => $allfolders,
-                'Subsidiaryfolders' => [],
+                'Subsidiaryfolders' => $folders, // [],
                 'parentSub' => $parent->sub
             ];
             
@@ -433,7 +450,8 @@ class FilemanagerController extends Controller
                 'path' => $deptFolder,
                 'scope' => 'dept',
                 'dept' => $dept->id,
-                'sub' => $sub->id
+                'sub' => $sub->id,
+                'parent' => $sub->id // added this eventually
             ]);
             Filemanager::makeDirectory($path, 0755, true, false);
             DB::commit();

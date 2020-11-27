@@ -11,6 +11,11 @@ return [
         'url' => env('APPROVAL_URL', 'http://localhost:8020'),
         'database' => env('APPROVAL_DATABASE', 'cititrust_approval'),
     ],
+
+    'attendance' => [
+        'url' => env('ATTENDANCE_URL', 'http://localhost:8030'),
+        'database' => env('ATTENDANCE_DATABASE', 'cititrust_attendance')
+    ],
 ];
 
 

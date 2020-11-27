@@ -172,8 +172,9 @@ Route::get('/birthday', function (){
 
 // One-click/magic login
 Route::group(['prefix' => 'magiclogin', 'middleware' => 'auth', 'namespace' => 'Magiclogin'], function () {
-    Route::get('documentation', 'AuthController@documentation')->name('documentation');
-    Route::get('approval', 'AuthController@approval')->name('approval');
+    // Route::get('documentation', 'AuthController@documentation')->name('documentation');
+    // Route::get('approval', 'AuthController@approval')->name('approval');
+    Route::get('{appname}', 'AuthController@swingWand')->name('wand.swing');
     $documentation = config('portals.documentation.url');
     Route::get('...'.$documentation.'/auth/wand/login/{harry}/{potter}/{wizard}', 'AuthController@docuWand')->name('docuwand');
 });
@@ -181,9 +182,13 @@ Route::group(['prefix' => 'magiclogin', 'middleware' => 'auth', 'namespace' => '
 $approval = config('portals.approval.url');
 Route::get('...'.$approval.'/auth/wand/login/{harry}/{potter}/{wizard}', 'AuthController@appWand')->name('approval.wand');
 
+$attendance = config('portals.attendance.url');
+Route::get('...'.$attendance.'/auth/wand/login/{harry}/{potter}/{wizard}', 'AuthController@appWand')->name('attendance.wand');
+
 // error from magic login
-Route::get('secure-login-to/{portal}/{status}', function () {
-    abort(403);
+Route::get('secure-login-to/{portal}/{status}', function ($portal, $status) {
+    $status = explode('-', $status)[1];
+    abort($status);
 }); // access denied
 
 
