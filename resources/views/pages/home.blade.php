@@ -7,7 +7,7 @@
     <style>
         /*custom styles can go here sir*/
         .core-container{
-            border: 1px dashed red;
+            /* border: 1px dashed red; */
             height: 200px !important;
         }
         
