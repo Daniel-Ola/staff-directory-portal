@@ -93,7 +93,7 @@ Route::group(['middleware' => ['superadmin', 'profile']], function () {
     Route::post('sub-group', 'HomeController@createSubsidiaryubGroup')->name('sub.group');
 
     Route::post('assign-grouprole', 'HomeController@assignGroupRole')->name('grouprole.assign');
-    
+
 
     // settings
     Route::group(['prefix' => 'settings'], function() {
@@ -115,7 +115,7 @@ Route::group(['prefix' => 'announcements', 'middleware' => ['admins', 'profile']
     Route::post('create', 'AnnouncementController@store')->name('ann.store');
     Route::get('manage', 'AnnouncementController@index')->name('ann.manage');
     Route::post('delete', 'AnnouncementController@destroy')->name('ann.del');
-    
+
     // policies
     Route::get('/policies', 'HomeController@policy')->name('pol.view');
     Route::post('/policies/add', 'HomeController@policyAdd')->name('pol.add');
@@ -130,21 +130,21 @@ Route::group(['prefix' => 'announcements', 'middleware' => ['admins', 'profile']
 
 
 // filemanager
-Route::group(['middleware' => 'profile'], function () {
+Route::group(['middleware' => ['profile', 'subsidiary']], function () {
     Route::get('/filemanagement', 'FilemanagerController@index')->name('fmi');
-    
+
     Route::post('/createfolder', 'FilemanagerController@createFolder')->name('folder.create');
-    
+
     Route::post('/createfile', 'FilemanagerController@createFile')->name('file.create');
-    
+
     Route::post('/gobackfolder', 'FilemanagerController@gobackfolder')->name('folder.goback');
-    
+
     Route::post('/filedownload', 'FilemanagerController@download')->name('file.download');
-    
+
     Route::post('/filedelete', 'FilemanagerController@delete')->name('file.delete');
-    
+
     Route::post('/folderdelete', 'FilemanagerController@folderDelete')->name('folder.delete');
-    
+
     Route::get('/myfolder/{slug}', 'FilemanagerController@getFolder')->name('folder.get');
 
     // public files
