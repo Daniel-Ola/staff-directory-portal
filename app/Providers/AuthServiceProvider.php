@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Subsidiary;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -19,8 +20,7 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Register any authentication / authorization services.
      *
-     * @return void
-     */
+    web  */
     public function boot()
     {
         $this->registerPolicies();
@@ -35,6 +35,14 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('grouphead', function ($user) {
             return $check = \App\SubsidiaryGroup::join('group_heads as gh', 'gh.group_id', 'subsidiary_groups.id')->where('gh.user_id', $user->id)->exists();
+        });
+
+        Gate::define('subsidiary', function ($user) {
+//            create an interface where admin can add Modules(Routes, models, nav) for subsidiaries to have access to them
+            $allowed = [1];
+            return in_array($user->subsidiary, $allowed);
+//            dd($user);
+//            Subsidiary::whereName('CITITRUST Holdings Plc')->exists();
         });
     }
 }

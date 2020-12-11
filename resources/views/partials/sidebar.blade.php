@@ -112,9 +112,11 @@
                         <a href="{{ route('wish.show') }}"><i class="si si-rocket"></i><span class="sidebar-mini-hide">Manage Wishes</span></a>
                     </li>
                 @endcan
-                <li>
-                    <a href="{{ route('fmi') }}" class="link-effect"><i class="si si-folder"></i><span class="sidebar-mini-hide">Filemanager</span></a>
-                </li>
+                @can('subsidiary')
+                    <li>
+                        <a href="{{ route('fmi') }}" class="link-effect"><i class="si si-folder"></i><span class="sidebar-mini-hide">Filemanager</span></a>
+                    </li>
+                @endcan
                 @can('superadmin')
                     <li>
                         <a href="{{ route('subdesig') }}" class="link-effect "><i class="si si-mouse"></i><span class="sidebar-mini-hide">Office Details</span></a>
