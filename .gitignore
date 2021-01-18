@@ -5,6 +5,7 @@
 /vendor
 /.idea
 /.vscode
+bfg-1.13.0.jar
 .env
 .env.backup
 .phpunit.result.cache
