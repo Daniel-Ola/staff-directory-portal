@@ -39,7 +39,7 @@ class HomeController extends Controller
     {
         $now = Carbon::now();
         $week = $now->copy()->subDays(7);
-        $policies = Policy::all();
+        $policies = Policy::whereIn('id', [0, Auth::user()->subsidiary])->get();
         $day = $now->day;
         $month = $now->month;
         $birthdays = User::where([
@@ -282,7 +282,11 @@ class HomeController extends Controller
 
     public function policy() {
         $pols = Policy::all();
-        return view('pages.policy')->with('pols', $pols);
+        $subs = Subsidiary::all();
+        return view('pages.policy')->with([
+            'pols' => $pols,
+            'subs' => $subs
+        ]);
     }
 
     public function policyAdd(Request $request) {
@@ -294,21 +298,23 @@ class HomeController extends Controller
 
         $file = $request->file('file');
         try {
-            $filename = $file->getClientOriginalName();
+            $filename = \Str::uuid(). '.' .$file->getClientOriginalExtension();
             $saveTo = 'assets/media/citi_assets/policies/';
             $path = $saveTo.$filename;
             if(file_exists($path)){ 
                 unlink($path);
             }
-            $file->move($saveTo, $filename);
-            Policy::create([
+            File::move($saveTo, $filename);
+            // $file->move($saveTo, $filename);
+            return Policy::create([
                 'title' => $request->title,
-                'path' => $path
+                'path' => $path,
+                'subsidiary' => $request->subsidiary
             ]);
             return back()->with('status', 'Policy uploaded successfully');
         } catch (Exception $e) {
-            return $e;
             return back()->with('status', 'Policy not uploaded successfully');
+            return $e->getMessage();
         }
     }
 

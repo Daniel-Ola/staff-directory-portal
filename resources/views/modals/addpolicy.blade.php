@@ -18,13 +18,22 @@
                             @csrf
                             <div class="form-group row">
                                 <label class="col-12">Title</label>
+                                <select name="subsidiary" class="form-control">
+                                    <option value="">All subsidiary</option>
+                                    @foreach ($subs as $sub)
+                                        <option value="{{ $sub->id }}">{{ $sub->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12">Title</label>
                                 <input type="text" class="form-control" id="" name="title" required>
                             </div>
                             <div class="form-group row">
                                 <label class="col-12">Select File</label>
                                 <div class="col-8">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input js-custom-file-input-enabled" id="example-file-input-custom" name="file" data-toggle="custom-file-input" required>
+                                        <input type="file" class="custom-file-input js-custom-file-input-enabled" id="example-file-input-custom" accept="application/pdf" name="file" data-toggle="custom-file-input" required>
                                         <label class="custom-file-label" for="example-file-input-custom">Choose file (Allowed file - pdf)</label>
                                     </div>
                                 </div>
