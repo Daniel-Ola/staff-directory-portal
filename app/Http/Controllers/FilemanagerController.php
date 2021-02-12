@@ -66,7 +66,7 @@ class FilemanagerController extends Controller
         }
         try {
             $folderExists = $this->checkFolderExistence($request->parent, $request->name, Auth::id());
-            // 
+            //
             if($request->parent == 0) {
                 // return 'root';
                 $createPath = $userRootFolder.'/'.$request->name;
@@ -100,7 +100,7 @@ class FilemanagerController extends Controller
                 }
 
                 // moved here
-                
+
             }
             // was here
                 if(strpos($prev, 'filemanagement')) { $scope = 'private'; }
@@ -129,13 +129,13 @@ class FilemanagerController extends Controller
                     'scope' => $scope
                 ]);
             }
-            
+
             return back()->with([
                     'status' => 'success',
                     'message' => 'Folder created successfully',
                 ]);
         } catch (Exception $e) {
-            throw $e->getMessage();
+            dd($e->getMessage());
             return back()->with([
                 'status' => 'warning',
                 'message' => 'Folder not created successfully',
@@ -174,10 +174,10 @@ class FilemanagerController extends Controller
                 'allfolders' => $allfolders,
                 'createdGroups' => $createdGroups
             ]);
-            
+
         } catch (\Throwable $th) {
+            abort(404, $th->getMessage());
             throw $th;
-            abort(404);
         }
     }
 
@@ -238,7 +238,7 @@ class FilemanagerController extends Controller
                 'message' => 'File upload was not successful'
             ]);
         }
-    }   
+    }
 
     function download(Request $request) {
         // add bulk download later
@@ -248,7 +248,7 @@ class FilemanagerController extends Controller
                 $fileloc = public_path().'/'. explode(config('app.url'), $request->file)[1];
                 return response()->download($fileloc);
             } catch (\Throwable $th) {
-                return $th;
+                dd($th->getMessage());
                 return back()->with([
                     'status' => 'warning',
                     'message' => 'File download not successful'
@@ -260,7 +260,7 @@ class FilemanagerController extends Controller
             'status' => 'warning',
             'message' => 'You dont have access to this file'
         ]);
-    
+
     }
 
     function delete(Request $request) {
@@ -273,6 +273,7 @@ class FilemanagerController extends Controller
                     'message' => 'File deleted successfully'
                 ]);
             } catch (\Throwable $th) {
+                dd($th->getMessage());
                 return $th;
                 return back()->with([
                     'status' => 'warning',
@@ -297,7 +298,8 @@ class FilemanagerController extends Controller
                     'message' => 'File deleted successfully'
                 ]);
             } catch (\Throwable $th) {
-                return $th;
+                dd($th->getMessage());
+                throw $th;
                 return back()->with([
                     'status' => 'warning',
                     'message' => 'File could not be deleted'
@@ -315,7 +317,7 @@ class FilemanagerController extends Controller
     {
         $headings = \App\GroupHead::where('user_id', Auth::user()->id)->pluck('group_id')->toArray();
         $subs = [intval(Auth::user()->subsidiary), 2];
-        $Subsidiaryfolders = []; //initializes and changes is isAnyGroupHead 
+        $Subsidiaryfolders = []; //initializes and changes is isAnyGroupHead
         $subs = array_merge($subs, $headings);
         $subs = array_unique($subs, SORT_NUMERIC);
         $isAnyGroupHead = Gate::allows('grouphead');
@@ -334,13 +336,15 @@ class FilemanagerController extends Controller
     {
         $this->createPublicFolders();
         $folders = Folder::where([
-            ['parent', 0],
+            ['parent', Auth::user()->subsidiary],
             ['sub', Auth::user()->subsidiary],
             ['dept', Auth::user()->department],
+            ['scope', 'dept']
         ])
-        ->where(function($query) {
+        /*->where(function($query) {
             $query->where('scope', 'dept');
-        })->get();
+        })*/
+        ->get();
 
         if($isAnyGroupHead) {
             // join('subsidiaries as s', 's.id', 'folders.sub')->
@@ -404,7 +408,7 @@ class FilemanagerController extends Controller
                 'Subsidiaryfolders' => $folders, // [],
                 'parentSub' => $parent->sub
             ];
-            
+
         } catch (\Throwable $th) {
             if(is_numeric($th->getMessage()))
             {
@@ -441,7 +445,7 @@ class FilemanagerController extends Controller
                 'dept' => $dept->id,
                 'sub' => $sub->id
             ]);
-            
+
 
             $subsidiary = Folder::create([
                 'name' => $deptName,
@@ -459,6 +463,8 @@ class FilemanagerController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             Filemanager::deleteDirectory($path);
+            dd($th->getMessage());
+            throw $th;
             return back()->with([
                 'status' => 'warning',
                 'message' => 'Public Folder could not be created'
@@ -477,7 +483,7 @@ class FilemanagerController extends Controller
         }
         return view('pages.sharedfilemanager')->with($data);
 
-        
+
     }
 
     public function subSharedDocs($slug)
@@ -514,9 +520,9 @@ class FilemanagerController extends Controller
                 'allfolders' => $allfolders,
                 'sharedDocs' => []
             ];
-            
+
         } catch (\Throwable $th) {
-            abort(404);
+            abort(404, $th->getMessage());
             throw $th;
         }
     }

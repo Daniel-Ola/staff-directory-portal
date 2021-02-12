@@ -12,7 +12,7 @@ class ProfileEdit extends Component
 
     public function mount()
     {
-        $this->deptId = Auth::user()->department;
+        $this->deptId = Auth::user()->department? : 0;
         $this->desigs = $this->getDesignation();
         $this->deptName = $this->getDepartmentName();
         // $this->depts = [];
@@ -31,7 +31,11 @@ class ProfileEdit extends Component
 
     public function getDepartmentName()
     {
-        return \App\Department::find($this->deptId)->name;
+        // dd($this->deptId);
+        $dept = \App\Department::whereId($this->deptId);
+        if ($dept->exists())
+            return $dept->first()->name;
+        return 'invalid department name';
     }
 
     public function render()

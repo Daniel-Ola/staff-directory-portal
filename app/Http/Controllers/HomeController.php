@@ -223,13 +223,15 @@ class HomeController extends Controller
                 User::create([
                     'email' => trim($email),
                     'updated_by' => Auth::id(),
+                    'department' => NULL
                     ]);
             }
             DB::commit();
             return back()->with('status', count($emails).' emails added to users');
         } catch (Exception $e) {
             DB::rollBack();
-            return $e;
+            dd($e->getMessage());
+            // return $e;
             return back()->with('status', 'New users could not be created');
         }
     }

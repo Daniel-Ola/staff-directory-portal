@@ -129,8 +129,8 @@ Route::group(['prefix' => 'announcements', 'middleware' => ['admins', 'profile']
 
 
 
-// filemanager
-Route::group(['middleware' => ['profile', 'subsidiary']], function () {
+// filemanager, 'can:subsidiary'
+Route::group(['middleware' => ['profile']], function () {
     Route::get('/filemanagement', 'FilemanagerController@index')->name('fmi');
 
     Route::post('/createfolder', 'FilemanagerController@createFolder')->name('folder.create');
