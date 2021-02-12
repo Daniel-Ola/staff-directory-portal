@@ -44,6 +44,26 @@
                                 </div>
                             </div>
                         </form>
+                        <p class="h5">Upload CSV file instead</p>
+                        <form action="{{ route('staffs.add') }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <div class="form-material floating">
+                                        <input type="file" accept="text/csv" class="form-control" id="contact3-firstname" name="emails" value="{{ old('emails') }}" required>
+                                        <input type="hidden" value="file" name="type">
+                                        <div class="form-text text-muted text-rights">Use extracted csv file from Google admin, only firstname, lastname email and status columns are allowed in that order</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-alt-info">
+                                        <i class="fa fa-send mr-5"></i> Add Users
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <!-- END Material Contact -->

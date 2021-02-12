@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use function GuzzleHttp\Promise\all;
 
 class HomeController extends Controller
 {
@@ -105,8 +106,8 @@ class HomeController extends Controller
             }
             array_push($desigs[$deptname], $newItem);
         }
-        
-        $depts = Department::all();        
+
+        $depts = Department::all();
         $profile = User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
                         ->leftjoin('designations as des', 'designation', 'des.id')
                         ->where([
@@ -184,7 +185,7 @@ class HomeController extends Controller
         $data = array_merge($data, ['updated_by' => Auth::id()]);
         User::find($id)->update($data);
         return back()->with('status', [
-            'type' => 'info', 
+            'type' => 'info',
             'message' => 'User profile updated successfully'
         ]);
         // return User::leftjoin('subsidiaries as sub', 'subsidiary', 'sub.id')
@@ -198,7 +199,7 @@ class HomeController extends Controller
         $id = $request->id;
         User::find($id)->delete();
         return back()->with('status', [
-            'type' => 'info', 
+            'type' => 'info',
             'message' => 'User profile deleted successfully'
         ]);
     }
@@ -215,24 +216,64 @@ class HomeController extends Controller
     }
 
     public function staffCreate(Request $request) {
-        $data = $request->emails;
-        DB::beginTransaction();
-        try {
-            $emails = explode(',', $data);
-            foreach ($emails as $email) {
-                User::create([
-                    'email' => trim($email),
-                    'updated_by' => Auth::id(),
-                    'department' => NULL
-                    ]);
+        if ($request->type && $request->type == 'file')
+        {
+            $request->validate([
+                'emails' => 'required|mimes:csv'
+            ]);
+            DB::beginTransaction();
+            try {
+
+                $config = new ConfigController();
+                $data = $config->readCsvFile($request->file('emails'), ['firstname', 'lastname', 'email', 'status']);
+//            $data = array_map('make_case_insensitive_array', $data);
+//            $allUsers = User::get(['firstname', 'lastname', 'email'])->toArray()[0];
+//            $allUsers = array_map('make_case_insensitive_array', $allUsers);
+//            $merged = array_merge($data, $allUsers);
+//            $newUsers = array_unique($merged, SORT_REGULAR );
+//            return $newUsers;
+//            $newUsers = array_diff($data, $allUsers);
+                $count = 0;
+                foreach ($data as $user) {
+                    $check = User::whereEmail($user['email'])->exists();
+                    if (! $check) {
+                        User::create(array_merge($user, [
+                            'updated_by' => Auth::id(),
+                            'department' => NULL
+                        ]));
+                        $count++;
+                    }
+                }
+                DB::commit();
+                return back()->with('status', $count.' emails added to users');
+            } catch (Exception $e) {
+                DB::rollBack();
+                dd($e->getMessage());
+                return back()->with('status', 'New users could not be created');
             }
-            DB::commit();
-            return back()->with('status', count($emails).' emails added to users');
-        } catch (Exception $e) {
-            DB::rollBack();
-            dd($e->getMessage());
-            // return $e;
-            return back()->with('status', 'New users could not be created');
+
+        } else {
+            $data = $request->emails;
+            DB::beginTransaction();
+            try {
+                $emails = explode(',', $data);
+                foreach ($emails as $email) {
+                    User::create([
+                        'firstname' => '',
+                        'lastname' => '',
+                        'email' => trim($email),
+                        'updated_by' => Auth::id(),
+                        'department' => NULL
+                    ]);
+                }
+                DB::commit();
+                return back()->with('status', count($emails).' emails added to users');
+            } catch (Exception $e) {
+                DB::rollBack();
+                dd($e->getMessage());
+                // return $e;
+                return back()->with('status', 'New users could not be created');
+            }
         }
     }
 
@@ -303,7 +344,7 @@ class HomeController extends Controller
             $filename = \Str::uuid(). '.' .$file->getClientOriginalExtension();
             $saveTo = 'assets/media/citi_assets/policies/';
             $path = $saveTo.$filename;
-            if(file_exists($path)){ 
+            if(file_exists($path)){
                 unlink($path);
             }
             File::move($saveTo, $filename);
