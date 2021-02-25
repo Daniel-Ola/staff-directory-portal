@@ -38,7 +38,9 @@
                         <div class="font-size-sm text-muted">{{ $staff->desname ?? 'Not Set'  }}</div>
                     </div>
                     <div class="block-content block-content-full block-content-sm bg-body-light">
-                        <span class="font-w600 font-size-sm text-danger" style="word-wrap: break-word;">{{ $staff->email }}</span>
+                        <span class="font-w600 font-size-sm text-danger" style="word-wrap: break-word;"><i class="fa fa-envelope mr-1"></i> {{ $staff->email }}</span>
+                        <br />
+                        <span class="font-w600 font-size-sm text-danger" style="word-wrap: break-word;"><i class="fa fa-phone mr-1"></i> {{ $staff->phone?: 'Not set' }}</span>
                     </div>
                 </a>
             </div>

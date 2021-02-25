@@ -219,7 +219,7 @@ class HomeController extends Controller
         if ($request->type && $request->type == 'file')
         {
             $request->validate([
-                'emails' => 'required|mimes:csv'
+                'emails' => 'required|mimes:csv,txt'
             ]);
             DB::beginTransaction();
             try {

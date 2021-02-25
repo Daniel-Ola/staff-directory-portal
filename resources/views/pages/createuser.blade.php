@@ -17,6 +17,16 @@
                     </div>
                 @endif
 
+                @error('emails')
+                <div class="alert alert-primary alert-dismissable" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h3 class="alert-heading font-size-h4 font-w400">Message</h3>
+                    <p class="mb-0">{{ $message }}</p>
+                </div>
+                @enderror
+
                 <div class="block block-themed">
                     <div class="block-header bg-info">
                         <h3 class="block-title">Add Users</h3>
